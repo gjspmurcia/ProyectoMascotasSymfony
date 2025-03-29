@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuario{% endblock %}
+
+{% block body %}
+    <h1>Usuario</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ usuario.id }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ usuario.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ usuario.roles ? usuario.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ usuario.password }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ usuario.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Dni</th>
+                <td>{{ usuario.dni }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ usuario.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Calle</th>
+                <td>{{ usuario.calle }}</td>
+            </tr>
+            <tr>
+                <th>Num_calle</th>
+                <td>{{ usuario.numCalle }}</td>
+            </tr>
+            <tr>
+                <th>Cod_postal</th>
+                <td>{{ usuario.codPostal }}</td>
+            </tr>
+            <tr>
+                <th>Cuidad</th>
+                <td>{{ usuario.cuidad }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_usuario_index') }}">back to list</a>
+
+    <a href="{{ path('app_usuario_edit', {'id': usuario.id}) }}">edit</a>
+
+    {{ include('usuario/_delete_form.html.twig') }}
+{% endblock %}

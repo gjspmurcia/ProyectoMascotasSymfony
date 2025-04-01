@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuario index{% endblock %}
+
+{% block body %}
+   <div class="container mt-4">
+        <h2>Hola {{ app.user.nombre }}</h2>
+
+        <p>¿Qué te gustaría hacer?</p>
+
+        <div class="d-grid gap-3">
+            <a href="{{ path('app_mascota_new') }}" class="btn btn-primary">➕ Registrar nueva mascota</a>
+            <a href="{{ path('app_mascota_index') }}" class="btn btn-secondary">📋 Ver mis mascotas</a>
+            <a href="{{ path('app_mi_perfil')}}" class="btn btn-outline-info">👤 Ver mi perfil</a>
+        </div>
+    </div>
+{% endblock %}

@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class MascotaType extends AbstractType
 {
@@ -20,15 +21,12 @@ class MascotaType extends AbstractType
             ->add('nombre', TextType::class, ['attr' => ['class' => 'form-control']])
             ->add('num_chip', TextType::class, ['attr' => ['class' => 'form-control']])
             ->add('observaciones', TextType::class, ['attr' => ['class' => 'form-control']])
-            ->add('foto')
-            ->add('id_usuario', EntityType::class, [
-                'class' => Usuario::class,
-                'choice_label' => 'usuario',
-            ])
-            ->add('qr', EntityType::class, [
-                'class' => QR::class,
-                'choice_label' => 'id',
-            ])
+            ->add('foto', FileType::class, [
+                'label' => 'Foto de la mascota',
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['class' => 'form-control']
+            ]);
         ;
     }
 

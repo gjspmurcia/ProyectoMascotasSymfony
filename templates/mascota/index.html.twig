@@ -3,7 +3,7 @@
 {% block title %}Mascota index{% endblock %}
 
 {% block body %}
-    <h1>Mascota index</h1>
+    <h1>Listado MASCOTAS</h1>
 
     <table class="table">
         <thead>
@@ -17,16 +17,16 @@
             </tr>
         </thead>
         <tbody>
-        {% for mascotum in mascotas %}
+        {% for mascota in mascotas %}
             <tr>
-                <td>{{ mascotum.id }}</td>
-                <td>{{ mascotum.nombre }}</td>
-                <td>{{ mascotum.numChip }}</td>
-                <td>{{ mascotum.observaciones }}</td>
-                <td>{{ mascotum.foto }}</td>
+                <td>{{ mascota.id }}</td>
+                <td>{{ mascota.nombre }}</td>
+                <td>{{ mascota.numChip }}</td>
+                <td>{{ mascota.observaciones }}</td>
+                <td>{{ mascota.foto }}</td>
                 <td>
-                    <a href="{{ path('app_mascota_show', {'id': mascotum.id}) }}">show</a>
-                    <a href="{{ path('app_mascota_edit', {'id': mascotum.id}) }}">edit</a>
+                    <a href="{{ path('app_mascota_edit', {'id': mascota.id}) }}">edit</a>
+                    <a href="{{ path('app_mascota_delete', {'id': mascota.id}) }}">eliminar</a>
                 </td>
             </tr>
         {% else %}
@@ -38,4 +38,6 @@
     </table>
 
     <a href="{{ path('app_mascota_new') }}">Create new</a>
+    <br>
+    <a href="{{ path('app_usuario_index') }}">Mi perfil</a>
 {% endblock %}

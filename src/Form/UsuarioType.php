@@ -27,8 +27,8 @@ class UsuarioType extends AbstractType
             ->add('dni', TextType::class, ['attr' => ['class' => 'form-control'],'constraints' => [new DniNie()]])
             ->add('telefono', TextType::class, ['attr' => ['class' => 'form-control'], 'constraints' => [new Telefono()]])
             ->add('calle', TextType::class, ['attr' => ['class' => 'form-control']])
-            ->add('num_calle', IntegerType::class, ['attr' => ['class' => 'form-control']])
-            ->add('cod_postal', IntegerType::class, ['attr' => ['class' => 'form-control']])
+            ->add('num_calle', IntegerType::class, ['label' => 'Nº calle', 'attr' => ['class' => 'form-control']])
+            ->add('cod_postal', IntegerType::class, ['label' => 'Código postal', 'attr' => ['class' => 'form-control']])
             ->add('cuidad', TextType::class, ['attr' => ['class' => 'form-control']])
         ;
     }

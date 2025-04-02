@@ -5,76 +5,125 @@ namespace App\Controller;
 use App\Entity\Mascota;
 use App\Form\MascotaType;
 use App\Repository\MascotaRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-#[Route('/mascota')]
+
 final class MascotaController extends AbstractController{
-    #[Route(name: 'app_mascota_index', methods: ['GET'])]
+    
+    #[Route('/mi_mascota', name: 'app_mascota_index', methods: ['GET'])]
     public function index(MascotaRepository $mascotaRepository): Response
     {
+        $usuario = $this->getUser();
+        if (!$usuario) {
+            throw $this->createAccessDeniedException('Debes iniciar sesión para ver tus mascotas.');
+        }
+
         return $this->render('mascota/index.html.twig', [
-            'mascotas' => $mascotaRepository->findAll(),
+            'mascotas' => $mascotaRepository->findBy(['id_usuario' => $this->getUser()]),
         ]);
     }
 
-    #[Route('/new', name: 'app_mascota_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[IsGranted('ROLE_USER')]
+    #[Route('/mi_mascota_nueva', name: 'app_mascota_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
-        $mascotum = new Mascota();
-        $form = $this->createForm(MascotaType::class, $mascotum);
+        $mascota = new Mascota();
+        $form = $this->createForm(MascotaType::class, $mascota);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($mascotum);
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
+            $mascota->setIdUsuario($this->getUser());
+
+            $fotoFile = $form->get('foto')->getData();
+            if ($fotoFile) {
+                $newFilename = $this->subirFotoMascota($fotoFile, $mascota->getNombre(), $this->getUser()->getId(), $slugger);
+                $mascota->setFoto($newFilename);
+            }
+
+            $entityManager->persist($mascota);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('mascota/new.html.twig', [
-            'mascotum' => $mascotum,
+            'mascota' => $mascota,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_mascota_show', methods: ['GET'])]
-    public function show(Mascota $mascotum): Response
+    #[IsGranted('ROLE_USER')]
+    #[Route('/mi_mascota_editar/{id}', name: 'app_mascota_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Mascota $mascota, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
-        return $this->render('mascota/show.html.twig', [
-            'mascotum' => $mascotum,
-        ]);
-    }
+        if ($mascota->getIdUsuario() !== $this->getUser()) 
+        {
+            throw $this->createAccessDeniedException('No puedes editar una mascota que no es tuya.');
+        }
 
-    #[Route('/{id}/edit', name: 'app_mascota_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Mascota $mascotum, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(MascotaType::class, $mascotum);
+        $form = $this->createForm(MascotaType::class, $mascota);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $fotoFile = $form->get('foto')->getData();
+            if ($fotoFile) {
+                $newFilename = $this->subirFotoMascota($fotoFile, $mascota->getNombre(), $this->getUser()->getId(), $slugger);
+                $mascota->setFoto($newFilename);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('mascota/edit.html.twig', [
-            'mascotum' => $mascotum,
+            'mascota' => $mascota,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_mascota_delete', methods: ['POST'])]
-    public function delete(Request $request, Mascota $mascotum, EntityManagerInterface $entityManager): Response
+    #[Route('/mi_mascota_eliminar/{id}', name: 'app_mascota_delete', methods: ['POST'])]
+    public function delete(Request $request, Mascota $mascota, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$mascotum->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($mascotum);
+        if ($mascota->getIdUsuario() !== $this->getUser()) 
+        {
+            throw $this->createAccessDeniedException('No puedes eliminar una mascota que no es tuya.');
+        }
+
+        if ($this->isCsrfTokenValid('delete'.$mascota->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($mascota);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    private function subirFotoMascota(UploadedFile $fotoFile, string $nombreMascota, int $idUsuario, SluggerInterface $slugger): string
+    {
+        $fecha = (new \DateTime())->format('Ymd_His');
+        $extension = $fotoFile->guessExtension();
+        $safeNombre = $slugger->slug($nombreMascota);
+        $newFilename = $safeNombre . '_' . $idUsuario . '_' . $fecha . '.' . $extension;
+
+        $fotoFile->move(
+            $this->getParameter('fotos_mascotas_directory'),
+            $newFilename
+        );
+
+        return $newFilename;
+    }
+
+
+
 }

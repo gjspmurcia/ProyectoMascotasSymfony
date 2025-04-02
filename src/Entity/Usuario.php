@@ -58,7 +58,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Mascota>
      */
-    #[ORM\OneToMany(targetEntity: Mascota::class, mappedBy: 'id_usuario', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Mascota::class, mappedBy: 'id_usuario', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $mascotas;
 
     public function __construct()

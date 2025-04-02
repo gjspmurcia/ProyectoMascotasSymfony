@@ -16,9 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-final class MascotaController extends AbstractController{
+
+final class ApiMascotaController extends AbstractController{
     
     #[Route('/mi_mascota', name: 'app_mascota_index', methods: ['GET'])]
     public function index(MascotaRepository $mascotaRepository): Response

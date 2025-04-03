@@ -7,109 +7,140 @@ use App\Form\MascotaType;
 use App\Repository\MascotaRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
 
 
 
 final class ApiMascotaController extends AbstractController{
     
-    #[Route('/mi_mascota', name: 'app_mascota_index', methods: ['GET'])]
-    public function index(MascotaRepository $mascotaRepository): Response
+    #[Route('/api/mi_mascota', name: 'api_mascota_index', methods: ['GET'])]
+    public function index(MascotaRepository $mascotaRepository): JsonResponse
     {
         $usuario = $this->getUser();
         if (!$usuario) {
-            throw $this->createAccessDeniedException('Debes iniciar sesión para ver tus mascotas.');
+            
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'Debes iniciar sesión para ver tus mascotas.',
+            ], 403);
         }
 
-        return $this->render('mascota/index.html.twig', [
-            'mascotas' => $mascotaRepository->findBy(['id_usuario' => $this->getUser()]),
-        ]);
+        $mascota = $mascotaRepository->findBy(['id_usuario' => $this->getUser()]);
+
+        return $this->json([
+            'status' => 'success',
+            'mascota' => $mascota
+        ], 200, [], ['groups' => 'mascota:read']);
+        
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/mi_mascota_nueva', name: 'app_mascota_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('/api/mi_mascota_nueva', name: 'api_mascota_new', methods: ['POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
+
+        if (empty($data)){
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'No se enviado los datos',
+            ], 403);
+        }
+
         $mascota = new Mascota();
-        $form = $this->createForm(MascotaType::class, $mascota);
-        $form->handleRequest($request);
+        $mascota->setIdUsuario($this->getUser());
 
-        if ($form->isSubmitted() && $form->isValid()) 
+        if (!empty($data['nombre'])) { $mascota->setNombre($data['nombre']);}
+
+        if (!empty($data['num_chip'])) { $mascota->setNumChip($data['num_chip']);}
+    
+        if (!empty($data['observaciones'])) { $mascota->setObservaciones($data['observaciones']);}
+
+        $fotoFile = $request->files->get('foto');
+        if ($fotoFile) 
         {
-            $mascota->setIdUsuario($this->getUser());
+            $newFilename = $this->subirFotoMascota($fotoFile, $mascota->getNombre(), $this->getUser()->getId(), $slugger);
+            $mascota->setFoto($newFilename);
+        }    
 
-            $fotoFile = $form->get('foto')->getData();
-            if ($fotoFile) {
-                $newFilename = $this->subirFotoMascota($fotoFile, $mascota->getNombre(), $this->getUser()->getId(), $slugger);
-                $mascota->setFoto($newFilename);
-            }
+        $entityManager->persist($mascota);
+        $entityManager->flush();
 
-            $entityManager->persist($mascota);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('mascota/new.html.twig', [
-            'mascota' => $mascota,
-            'form' => $form,
-        ]);
+        return $this->json([
+            'status' => 'success',
+            'mensaje' => 'Mascota creada correctamente',
+            'mascota' => $mascota
+        ], 201, [], ['groups' => 'mascota:read']);
+        
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/mi_mascota_editar/{id}', name: 'app_mascota_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Mascota $mascota, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('/api/mi_mascota_editar/{id}', name: 'api_mascota_edit', methods: ['PUT'])]
+    public function edit(Request $request, Mascota $mascota, EntityManagerInterface $entityManager, SluggerInterface $slugger): JsonResponse
     {
-        if ($mascota->getIdUsuario() !== $this->getUser()) 
-        {
-            throw $this->createAccessDeniedException('No puedes editar una mascota que no es tuya.');
+        if ($mascota->getIdUsuario() !== $this->getUser()) {
+            
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'Usuario no autorizado',
+            ], 403);
         }
-
-        $form = $this->createForm(MascotaType::class, $mascota);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
+    
+        $data = json_decode($request->getContent(), true);
+    
+        if (!empty($data['nombre'])) { $mascota->setNombre($data['nombre']); }
+    
+        if (!empty($data['num_chip'])) { $mascota->setNumChip($data['num_chip']);}
+    
+        if (!empty($data['observaciones'])) { $mascota->setObservaciones($data['observaciones']);}
+      
+        $fotoFile = $request->files->get('foto');
+        if ($fotoFile) 
         {
-            $fotoFile = $form->get('foto')->getData();
-            if ($fotoFile) {
-                $newFilename = $this->subirFotoMascota($fotoFile, $mascota->getNombre(), $this->getUser()->getId(), $slugger);
-                $mascota->setFoto($newFilename);
-            }
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
+            $newFilename = $this->subirFotoMascota($fotoFile, $mascota->getNombre(), $this->getUser()->getId(), $slugger);
+            $mascota->setFoto($newFilename);
         }
-
-        return $this->render('mascota/edit.html.twig', [
-            'mascota' => $mascota,
-            'form' => $form,
-        ]);
+        
+    
+        $entityManager->flush();
+    
+        return $this->json([
+            'status' => 'success',
+            'mensaje' => 'Mascota actualizada correctamente',
+            'mascota' => $mascota
+        ], 201, [], ['groups' => 'mascota:read']);
     }
-
-    #[Route('/mi_mascota_eliminar/{id}', name: 'app_mascota_delete', methods: ['POST'])]
-    public function delete(Request $request, Mascota $mascota, EntityManagerInterface $entityManager): Response
+    
+    #[IsGranted('ROLE_USER')]
+    #[Route('/api/mi_mascota_eliminar/{id}', name: 'api_mascota_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Mascota $mascota, EntityManagerInterface $entityManager): JsonResponse
     {
         if ($mascota->getIdUsuario() !== $this->getUser()) 
         {
-            throw $this->createAccessDeniedException('No puedes eliminar una mascota que no es tuya.');
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'Usuario no autorizado',
+            ], 403);
         }
 
-        if ($this->isCsrfTokenValid('delete'.$mascota->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($mascota);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
+        $entityManager->remove($mascota);
+        $entityManager->flush();
+        
+        return $this->json([
+            'status' => 'success',
+            'mensaje' => 'Mascota eliminada correctamente',
+            'mascota' => $mascota
+        ], 200);
+    
     }
 
 

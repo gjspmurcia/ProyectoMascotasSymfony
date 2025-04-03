@@ -5,31 +5,40 @@ namespace App\Entity;
 use App\Repository\MascotaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: MascotaRepository::class)]
 class Mascota
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('mascota:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('mascota:read', 'mascota:write')]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('mascota:read', 'mascota:write')]
     private ?string $num_chip = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('mascota:read', 'mascota:write')]
     private ?string $observaciones = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('mascota:read', 'mascota:write')]
     private ?string $foto = null;
 
     #[ORM\ManyToOne(inversedBy: 'mascotas')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('mascota:read', 'mascota:write')]
     private ?Usuario $id_usuario = null;
 
     #[ORM\OneToOne(mappedBy: 'id_mascota', cascade: ['persist', 'remove'])]
+    #[Groups('mascota:read', 'mascota:write')]
     private ?QR $qr = null;
 
     public function getId(): ?int

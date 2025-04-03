@@ -3,11 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+
+use App\Validator\Email;
+use App\Validator\DniNie;
+use App\Validator\Telefono;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -16,9 +22,12 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('usuario:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Email]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?string $email = null;
 
     /**
@@ -35,30 +44,40 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 255)]
+    #[DniNie]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?string $dni = null;
 
     #[ORM\Column]
+    #[Telefono]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?int $telefono = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?string $calle = null;
 
     #[ORM\Column]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?int $num_calle = null;
 
     #[ORM\Column]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?int $cod_postal = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('usuario:read', 'usuario:write')]
     private ?string $cuidad = null;
 
     /**
      * @var Collection<int, Mascota>
      */
     #[ORM\OneToMany(targetEntity: Mascota::class, mappedBy: 'id_usuario', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[Groups('usuario:read', 'usuario:write')]
     private Collection $mascotas;
 
     public function __construct()

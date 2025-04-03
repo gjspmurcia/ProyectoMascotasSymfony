@@ -42,11 +42,11 @@ class DniNieValidator extends ConstraintValidator
         }
 
         if ($value[0] == 'X') {
-            $value = '0' . substr($value, 1); // Sustituir X por 0
+            $numero = '0' . substr($value, 1, 7); // Sustituir X por 0
         } elseif ($value[0] == 'Y') {
-            $value = '1' . substr($value, 1); // Sustituir Y por 1
+            $numero = '1' . substr($value, 1, 7); // Sustituir Y por 1
         } elseif ($value[0] == 'Z') {
-            $value = '2' . substr($value, 1); // Sustituir Z por 2
+            $numero = '2' . substr($value, 1, 7); // Sustituir Z por 2
         }else {
             $numero = substr($value, 0, 8); // Para DNI, tomar los primeros 8 caracteres
         }

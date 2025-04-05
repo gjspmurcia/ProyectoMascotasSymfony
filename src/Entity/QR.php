@@ -14,7 +14,8 @@ class QR
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $img_qr = null;
+    #[Groups(['mascota:read', 'qr:read'])]
+    private ?string $imgQr = null;
 
     #[ORM\OneToOne(inversedBy: 'qr', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -27,12 +28,12 @@ class QR
 
     public function getImgQr(): ?string
     {
-        return $this->img_qr;
+        return $this->imgQr;
     }
 
-    public function setImgQr(string $img_qr): static
+    public function setImgQr(string $imgQr): static
     {
-        $this->img_qr = $img_qr;
+        $this->imgQr = $imgQr;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Mascota;
+use App\Entity\QR;
 use App\Form\MascotaType;
 use App\Repository\MascotaRepository;
 
@@ -20,7 +21,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class MascotaController extends AbstractController{
     
-    #[Route('/mi_mascota', name: 'app_mascota_index', methods: ['GET'])]
+    #[Route('/listado_mascotas', name: 'app_mascota_index', methods: ['GET'])]
     public function index(MascotaRepository $mascotaRepository): Response
     {
         $usuario = $this->getUser();
@@ -52,6 +53,10 @@ final class MascotaController extends AbstractController{
             }
 
             $entityManager->persist($mascota);
+            $entityManager->flush();
+
+            // generar QR automaticamente
+            $this->generarQrParaMascota($mascota, $entityManager);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
@@ -110,6 +115,18 @@ final class MascotaController extends AbstractController{
         return $this->redirectToRoute('app_mascota_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/generar/qr/{id}', name: 'app_qr_generar', methods: ['GET', 'POST'])]
+    public function generarQr(Mascota $mascota, MascotaRepository $mascotaRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+                
+        $qr = $this->generarQrParaMascota($mascota, $entityManager);
+        $entityManager->flush();
+
+        return $this->render('mascota/index.html.twig', [
+            'mascotas' => $mascotaRepository->findBy(['id_usuario' => $this->getUser()]),
+        ]);
+    }
+
 
     private function subirFotoMascota(UploadedFile $fotoFile, string $nombreMascota, int $idUsuario, SluggerInterface $slugger): string
     {
@@ -124,6 +141,20 @@ final class MascotaController extends AbstractController{
         );
 
         return $newFilename;
+    }
+
+    private function generarQrParaMascota(Mascota $mascota, EntityManagerInterface $entityManager): QR
+    {
+        $contenidoQR = 'http://localhost:8000//mostrar/qr/' . $mascota->getId();
+        $urlQr = 'https://quickchart.io/qr?text=' . urlencode($contenidoQR) . '&size=200';
+
+        $qr = new QR();
+        $qr->setIdMascota($mascota);
+        $qr->setImgQr($urlQr);
+
+        $entityManager->persist($qr);
+
+        return $qr;
     }
 
 

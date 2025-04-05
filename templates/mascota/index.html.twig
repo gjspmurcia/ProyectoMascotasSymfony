@@ -25,8 +25,15 @@
                 <td>{{ mascota.observaciones }}</td>
                 <td>{{ mascota.foto }}</td>
                 <td>
-                    <a href="{{ path('app_mascota_edit', {'id': mascota.id}) }}">edit</a>
-                    <a href="{{ path('app_mascota_delete', {'id': mascota.id}) }}">eliminar</a>
+                {% if mascota.qr is not null %}
+                    <img src="{{ mascota.qr.imgQr }}" alt="Código QR" width="150">
+                {% else %}
+                    <em>No generado</em>
+                {% endif %}</td>
+                <td>
+                    <a href="{{ path('app_mascota_edit', {'id': mascota.id}) }}">Edit</a>
+                    <a href="{{ path('app_mascota_delete', {'id': mascota.id}) }}">Eliminar</a>
+                    <a href="{{ path('app_qr_generar', {'id': mascota.id}) }}">Generar QR</a>
                 </td>
             </tr>
         {% else %}

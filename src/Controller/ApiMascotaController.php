@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Mascota;
-use App\Form\MascotaType;
+use App\Entity\QR;
 use App\Repository\MascotaRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,12 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
 
 
 
@@ -73,6 +71,10 @@ final class ApiMascotaController extends AbstractController{
         }    
 
         $entityManager->persist($mascota);
+        $entityManager->flush();
+
+        // generar QR automaticamente
+        $this->generarQrParaMascota($mascota, $entityManager);
         $entityManager->flush();
 
         return $this->json([
@@ -157,6 +159,20 @@ final class ApiMascotaController extends AbstractController{
         );
 
         return $newFilename;
+    }
+
+    private function generarQrParaMascota(Mascota $mascota, EntityManagerInterface $entityManager): QR
+    {
+        $contenidoQR = 'http://localhost:8000//mostrar/qr/' . $mascota->getId();
+        $urlQr = 'https://quickchart.io/qr?text=' . urlencode($contenidoQR) . '&size=200';
+
+        $qr = new QR();
+        $qr->setIdMascota($mascota);
+        $qr->setImgQr($urlQr);
+
+        $entityManager->persist($qr);
+
+        return $qr;
     }
 
 

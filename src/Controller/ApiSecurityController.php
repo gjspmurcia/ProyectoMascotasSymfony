@@ -11,14 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+
 
 
 class ApiSecurityController extends AbstractController
 {
     
     #[Route(path: '/api/login', name: 'api_login', methods: ['POST'])]
-    public function login(Request $request, UsuarioRepository $usuarioRepo, UserPasswordHasherInterface $hasher, UserAuthenticatorInterface $userAuthenticator, LoginAuthenticator $loginAuthenticator): JsonResponse 
+    public function login(Request $request, UsuarioRepository $usuarioRepo, UserPasswordHasherInterface $hasher): JsonResponse 
     {
         $data = json_decode($request->getContent(), true);
 
@@ -38,7 +40,9 @@ class ApiSecurityController extends AbstractController
             ], 401);
         }
 
-        $userAuthenticator->authenticateUser($usuario,$loginAuthenticator,$request);
+        $token = new UsernamePasswordToken($usuario, 'main', $usuario->getRoles());
+        $this->container->get('security.token_storage')->setToken($token);
+        $request->getSession()->set('_security_main', serialize($token));
 
         return $this->json([
             'status' => 'success',

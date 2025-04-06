@@ -11,6 +11,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -65,9 +66,14 @@ final class ApiUsuarioController extends AbstractController{
         $entityManager->persist($usuario);
         $entityManager->flush();
 
+        $token = new UsernamePasswordToken($usuario, 'main', $usuario->getRoles());
+        $this->container->get('security.token_storage')->setToken($token);
+        $request->getSession()->set('_security_main', serialize($token));
+
+
         return $this->json([
             'status' => 'success',
-            'mensaje' => 'Usuario registrado correctamente',
+            'mensaje' => 'Usuario registrado y logueado correctamente',
             'usuario' => $usuario
         ], 201, [], ['groups' => 'usuario:read']);
     }
@@ -141,7 +147,7 @@ final class ApiUsuarioController extends AbstractController{
 
         return $this->json([
             'status' => 'success',
-            'mensaje' => 'Usuario registrado correctamente',
+            'mensaje' => 'Usuario modificado correctamente',
             'usuario' => $usuario
         ], 200, [], ['groups' => 'usuario:read']);
     }

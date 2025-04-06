@@ -55,7 +55,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Telefono]
     #[Groups('usuario:read', 'usuario:write')]
-    private ?int $telefono = null;
+    private ?string $telefono = null;
 
     #[ORM\Column(length: 255)]
     #[Groups('usuario:read', 'usuario:write')]

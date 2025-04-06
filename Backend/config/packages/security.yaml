@@ -46,7 +46,7 @@ security:
     access_control:
         - { path: ^/mi_perfil, roles: ROLE_USER }
         - { path: ^/mi_mascota, roles: ROLE_USER }
-        - { path: ^/api, roles: ROLE_USER }
+        # - { path: ^/api, roles: ROLE_USER }
 
 
 when@test:

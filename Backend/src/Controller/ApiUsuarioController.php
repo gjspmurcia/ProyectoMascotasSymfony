@@ -79,7 +79,7 @@ final class ApiUsuarioController extends AbstractController{
     }
 
     #[Route('/api/mi_perfil', name: 'api_mi_perfil', methods: ['GET'])]
-    public function miPerfil(Security $security, UsuarioRepository $usuarioRepository): Response
+    public function miPerfil(Security $security, UsuarioRepository $usuarioRepository): JsonResponse
     {
         $usuario = $this->getUser();
         if (!$usuario) {

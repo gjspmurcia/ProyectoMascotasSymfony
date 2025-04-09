@@ -2,12 +2,42 @@
 import '../styles/global.css';
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-// import Perfil from '../components/MiPerfil.jsx';
 
 ---
 
 <Layout>
   <h1 class="text-3xl font-bold text-center mt-10">Mi perfil</h1>
-  <!-- <Perfil /> -->
 
+  <div id="perfil-container" class="p-4 text-center">
+    <p>Cargando perfil...</p>
+  </div>
+
+  <script type="module">
+    document.addEventListener('DOMContentLoaded', async () => {
+      const container = document.getElementById('perfil-container');
+
+      try {
+        const response = await fetch('http://localhost:8000/api/mi_perfil', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === 'success') {
+          const usuario = data.usuario;
+          container.innerHTML = `
+            <h2 class="text-xl font-bold">Bienvenido, ${usuario.nombre}</h2>
+            <p><strong>Email:</strong> ${usuario.email}</p>
+            <p><strong>DNI:</strong> ${usuario.dni}</p>
+            <p><strong>Ciudad:</strong> ${usuario.cuidad}</p>
+          `;
+        } else {
+          container.innerHTML = '<p class="text-red-600">Usuario no autenticado</p>';
+        }
+      } catch (err) {
+        container.innerHTML = '<p class="text-red-600">Error al conectar con el servidor.</p>';
+      }
+    });
+  </script>
 </Layout>

@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-import LoginForm from '../components/LoginForm.jsx'
 
 
 ---
@@ -10,6 +9,54 @@ import LoginForm from '../components/LoginForm.jsx'
 <Layout>
 
     <h1 class="text-3xl font-bold text-center mt-10">Iniciar Sesión</h1>
-  <LoginForm client:load />
+    <form id="login-form" class="flex flex-col gap-2 p-4">
+      <label>Email:</label>
+      <input type="email" name="email" required class="border p-1" />
+    
+      <label>Contraseña:</label>
+      <input type="password" name="password" required class="border p-1" />
+    
+      <button type="submit" class="bg-teal-600 text-white p-2 mt-2">Iniciar sesión</button>
+    
+      <p id="mensaje" class="text-red-600 mt-2"></p>
+    </form>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('login-form');
+        const mensaje = document.getElementById('mensaje');
+    
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+    
+          const email = form.email.value;
+          const password = form.password.value;
+    
+          try {
+            const response = await fetch('http://localhost:8000/api/login', {
+              method: 'POST',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email, password }),
+            });
+    
+            const result = await response.json();
+    
+            if (response.ok) {
+              mensaje.textContent = 'Inicio de sesión exitoso';
+              mensaje.style.color = 'green';
+              window.location.href = '/mi-perfil';
+            } else {
+              mensaje.textContent = result.mensaje || 'Error en el login';
+            }
+          } catch (error) {
+            mensaje.textContent = 'Error al conectar con el servidor';
+          }
+        });
+      });
+    </script>
+    
 
 </Layout>

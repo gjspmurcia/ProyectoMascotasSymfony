@@ -9,7 +9,7 @@ Requisitivos funcionales y no funcionales:
 - Blog - enfocado a las mascotas
 - Reseñas - conexión cuenta google
 
-- Dibujar un diagrama del flujo, o diagrama de caso de uso.
+Dibujar un diagrama del flujo, o diagrama de caso de uso.
   
 Diseño web -> figma, otros
 

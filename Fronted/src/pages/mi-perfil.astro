@@ -6,38 +6,11 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-  <h1 class="text-3xl font-bold text-center mt-10">Mi perfil</h1>
 
   <div id="perfil-container" class="p-4 text-center">
+    <h1 class="text-3xl font-bold text-center mt-10">Mi perfil</h1>
     <p>Cargando perfil...</p>
   </div>
 
-  <script type="module">
-    document.addEventListener('DOMContentLoaded', async () => {
-      const container = document.getElementById('perfil-container');
-
-      try {
-        const response = await fetch('http://localhost:8000/api/mi_perfil', {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.status === 'success') {
-          const usuario = data.usuario;
-          container.innerHTML = `
-            <h2 class="text-xl font-bold">Bienvenido, ${usuario.nombre}</h2>
-            <p><strong>Email:</strong> ${usuario.email}</p>
-            <p><strong>DNI:</strong> ${usuario.dni}</p>
-            <p><strong>Ciudad:</strong> ${usuario.cuidad}</p>
-          `;
-        } else {
-          container.innerHTML = '<p class="text-red-600">Usuario no autenticado</p>';
-        }
-      } catch (err) {
-        container.innerHTML = '<p class="text-red-600">Error al conectar con el servidor.</p>';
-      }
-    });
-  </script>
+  <script defer src="/js/perfil.js" ></script>
 </Layout>

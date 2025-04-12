@@ -6,7 +6,7 @@ VALUES
 ('ana.lopez@gmail.com', '["ROLE_USER"]', '1234', 'Ana López', '45678912C', '699887766', 'Calle Flor', 21, '46002', 'Valencia'),
 ('pedro.sanchez@gmail.com', '["ROLE_USER"]', '1234', 'Pedro Sánchez', '11223344D', '611223344', 'Calle Río', 5, '08001', 'Barcelona'),
 ('marta.perez@gmail.com', '["ROLE_USER"]', '1234', 'Marta Pérez', '99887766E', '688776655', 'Calle Mar', 33, '50001', 'Zaragoza');
-('admin@gmail.com', '["ROLE_ADMIN"]', '1234', 'Admin', ' ', ' ', ' ', ' ', ' ', ' ');
+-- ('admin@gmail.com', '["ROLE_ADMIN"]', '1234', 'Admin', ' ', ' ', ' ', ' ', ' ', ' ');
 
 UPDATE `usuario` SET `password` = '$2y$13$6lQH/3bURs1eTGRnOjxIsOxAV/nXxqGGHTnC.hG4xsltBcBqDgZ8O' 
 		WHERE `roles` = '["ROLE_USER"]' or `roles` = '["ROLE_ADMIN"]';

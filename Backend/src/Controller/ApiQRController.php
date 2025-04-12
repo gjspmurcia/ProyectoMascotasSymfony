@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class QRController extends AbstractController{
+final class ApiQRController extends AbstractController{
     
     
     #[Route('/generar/qr/{id}', name: 'api_qr_generar', methods: ['POST'])]

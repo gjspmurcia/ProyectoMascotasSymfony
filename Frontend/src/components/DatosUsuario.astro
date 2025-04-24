@@ -1,0 +1,73 @@
+---
+
+---
+
+<div>
+    <h2>Perfil de Usuario</h2>
+    <div id="profile-container" class="p-2 text-center bg-teal-100 rounded">
+      Cargando datos...
+    </div>
+  </div>
+  
+  <script>
+    // 1. Obtener el elemento contenedor en el DOM
+    const profileContainer: HTMLElement | null = document.getElementById('profile-container');
+
+
+    // 2. Función asíncrona para obtener los datos
+    async function fetchUserProfile() {
+      try {
+        const response = await fetch("http://localhost:8000/api/mi_perfil", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+              'Accept': 'application/json',
+          }
+        });
+        const data = await response.json();
+  
+        // 4. Verificar el estado de la respuesta y el status de la API
+        if (response.ok && data.status === "success") {
+           const usuario = data.usuario;
+           console.log("Datos de usuario cargados:", usuario);
+  
+           // 5. Si es exitoso, construir e inyectar el HTML con los datos
+           if (profileContainer) {
+           profileContainer.innerHTML = `
+             <div>
+               <h1>Bienvenid@, ${usuario.nombre}</h1>
+               <p><strong>Email:</strong> ${usuario.email || 'No especificado'}</p>
+               <p><strong>DNI:</strong> ${usuario.dni || 'No especificado'}</p>
+               <p><strong>Teléfono:</strong> ${usuario.telefono || 'No especificado'}</p>
+               <p><strong>Dirección:</strong> ${usuario.calle || 'No especificado'}, ${usuario.num_calle || ''}</p>
+               <p><strong>Código postal:</strong> ${usuario.cod_postal || 'No especificado'}</p>
+               <p><strong>Ciudad:</strong> ${usuario.cuidad || 'No especificada'}</p>
+             </div>
+
+             <div>
+                <h2>Mis Mascotas</h2>
+                <ul>
+                  
+                </ul>
+                
+             </div>
+           `;
+           }
+        } else {
+          // 6. Si hay un error de la API 
+          const mensajeError = data.message || `Error desconocido de la API (Status: ${response.status})`;
+          console.error("Datos recibidos:", data); 
+          profileContainer.textContent = `Error: ${mensajeError}`;
+        }
+      } catch (error) {
+        // 7. Si hay un error de red o cualquier otra excepción durante el fetch
+        console.error("Error de red durante el fetch:", error);
+        profileContainer.textContent = "Error de red al conectar con la API.";
+      }
+    }
+  
+    // 8. Llamar a la función para iniciar la carga de datos cuando el script se ejecuta
+    fetchUserProfile();
+  
+  </script>
+

@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
 ---
@@ -15,7 +14,7 @@ import Layout from '../layouts/Layout.astro';
       <label>Contraseña:</label>
       <input type="password" name="password" required class="border p-1" />
     
-      <button type="submit" class="bg-teal-600 text-white p-2 mt-2">Iniciar sesión</button>
+      <button type="submit" class="bg-teal-600 text-white p-2 mt-2 active:bg-teal-950 ">Iniciar sesión</button>
     
       <p id="mensaje" class="text-red-600 mt-2"></p>
     </form>

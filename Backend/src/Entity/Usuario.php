@@ -44,40 +44,40 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 255)]
     #[DniNie]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $dni = null;
 
     #[ORM\Column]
     #[Telefono]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $telefono = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $calle = null;
 
     #[ORM\Column]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?int $num_calle = null;
 
     #[ORM\Column]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?int $cod_postal = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $cuidad = null;
 
     /**
      * @var Collection<int, Mascota>
      */
     #[ORM\OneToMany(targetEntity: Mascota::class, mappedBy: 'id_usuario', orphanRemoval: true, cascade: ['persist', 'remove'])]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private Collection $mascotas;
 
     public function __construct()

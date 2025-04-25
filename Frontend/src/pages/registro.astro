@@ -65,13 +65,17 @@ import Layout from "../layouts/Layout.astro";
     <p id="mensaje"></p>
   </form>
 
+
+
+
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const formulario = document.getElementById("formulario");
       const mensaje = document.getElementById("mensaje");
       const mensajePassword = document.getElementById("mensaje_password");
 
-      formulario.addEventListener("submit", async (event) => {
+      formulario?.addEventListener("submit", async (event) => {
         event.preventDefault(); // Evita la recarga de la página
 
         mensaje.textContent = "";
@@ -108,6 +112,7 @@ import Layout from "../layouts/Layout.astro";
           try {
             const response = await fetch("http://localhost:8000/api/registro", {
               method: "POST",
+              credentials: 'include',
               headers: {
                 "Content-Type": "application/json",
               },
@@ -121,6 +126,9 @@ import Layout from "../layouts/Layout.astro";
               mensaje.classList.remove("text-red-500");
               mensaje.classList.add("text-green-500");
               console.log("Registro exitoso:", responseData);
+              
+              pantallaConfirmacion();
+              autoLogin(formData.get("password"), formData.get("email"));
             } else {
               console.error("Error en el registro:", responseData);
               if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
@@ -144,5 +152,62 @@ import Layout from "../layouts/Layout.astro";
         }
       });
     });
+
+    function pantallaConfirmacion() {
+      formulario.style.display = "none";
+      
+      const divConfirmacion = document.createElement("div");
+      const textoConfirmacion = document.createElement("h2");
+      const botonNuevaMascota = document.createElement("button");
+      const botonPerfil = document.createElement("button");
+      const nuevaMascota = document.createElement("p");
+      const visitaPerfil = document.createElement("p");
+
+      textoConfirmacion.textContent = "Te has registrado correctamente"
+      nuevaMascota.textContent = "A continuación te recomendamos añadir a tu mascota"
+      visitaPerfil.textContent = "Tambien puedes visitar tu perfil para ver tus datos (puedes añadir mascotas desde allí mas tarde)"
+      botonNuevaMascota.textContent= "Añade a tu mascota"
+      botonPerfil.textContent = "Visita tu perfil"
+      botonPerfil.setAttribute("href", "/mi-perfil")
+      botonNuevaMascota.setAttribute("href", "/mascota/registro")
+  
+      divConfirmacion.append(textoConfirmacion, 
+          nuevaMascota,
+          botonNuevaMascota, 
+          visitaPerfil, 
+          botonPerfil
+      );
+
+      formulario.parentNode.replaceChild(divConfirmacion, formulario);
+
+    }
+
+    async function autoLogin(email, password) {
+      try {
+        const response = await fetch('http://localhost:8000/api/login', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          mensaje.textContent = 'Inicio de sesión exitoso';
+          mensaje.style.color = 'green';
+          window.location.href = '/mi-perfil';
+        } else {
+          mensaje.textContent = result.mensaje || 'Error en el login';
+        }
+      } catch (error) {
+        mensaje.textContent = 'Error al conectar con el servidor';
+      }
+    }
+
+
+
   </script>
 </Layout>

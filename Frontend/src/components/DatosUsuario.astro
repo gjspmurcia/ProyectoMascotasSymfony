@@ -4,7 +4,7 @@
 
 <div>
     <h2>Perfil de Usuario</h2>
-    <div id="profile-container" class="p-2 text-center bg-teal-100 rounded">
+    <div id="profile-container" class="p-2 text-center rounded">
       Cargando datos...
     </div>
   </div>
@@ -35,13 +35,17 @@
            if (profileContainer) {
            profileContainer.innerHTML = `
              <div>
-               <h1>Bienvenid@, ${usuario.nombre}</h1>
-               <p><strong>Email:</strong> ${usuario.email || 'No especificado'}</p>
-               <p><strong>DNI:</strong> ${usuario.dni || 'No especificado'}</p>
-               <p><strong>Teléfono:</strong> ${usuario.telefono || 'No especificado'}</p>
-               <p><strong>Dirección:</strong> ${usuario.calle || 'No especificado'}, ${usuario.num_calle || ''}</p>
-               <p><strong>Código postal:</strong> ${usuario.cod_postal || 'No especificado'}</p>
-               <p><strong>Ciudad:</strong> ${usuario.cuidad || 'No especificada'}</p>
+                <h1>Bienvenid@, ${usuario.nombre}</h1>
+                <p><strong>Email:</strong> ${usuario.email || 'No especificado'}</p>
+                <p><strong>DNI:</strong> ${usuario.dni || 'No especificado'}</p>
+                <p><strong>Teléfono:</strong> ${usuario.telefono || 'No especificado'}</p>
+                <p><strong>Dirección:</strong> ${usuario.calle || 'No especificado'}, ${usuario.num_calle || ''}</p>
+                <p><strong>Código postal:</strong> ${usuario.cod_postal || 'No especificado'}</p>
+                <p><strong>Ciudad:</strong> ${usuario.cuidad || 'No especificada'}</p>
+                <br>
+                <button id="botonEliminarUsuario">Eliminar usuario</button>
+                <button id="botonEditarUsuario">Editar usuario</button>
+                <button id="botonLogout">Cerrar sesion</button>
              </div>
 
              <div>
@@ -52,7 +56,13 @@
                 
              </div>
            `;
-           }
+           const botonEliminarUsuario = document.getElementById('botonEliminarUsuario');
+           const botonEditarUsuario = document.getElementById('botonEditarUsuario');
+           const botonLogout = document.getElementById('botonLogout');
+           botonEliminarUsuario?.addEventListener('click', () => eliminarUsuario(usuario.id));
+           botonEditarUsuario?.addEventListener('click', () => editarUsuario(usuario.id));
+           botonLogout?.addEventListener('click', () => logout());
+          }
         } else {
           // 6. Si hay un error de la API 
           const mensajeError = data.message || `Error desconocido de la API (Status: ${response.status})`;
@@ -69,5 +79,83 @@
     // 8. Llamar a la función para iniciar la carga de datos cuando el script se ejecuta
     fetchUserProfile();
   
+
+    async function eliminarUsuario(id) {
+      if (!confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+      return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:8000/api/mi_perfil_eliminar/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === "success") {
+        alert("Usuario eliminado correctamente");
+        // Redirigir al usuario a la página de inicio o login
+        window.location.href = '/';
+        } else {
+          alert(`Error al eliminar el usuario: ${data.mensaje || 'Error desconocido'}`);
+        }
+      } catch (error) {
+        console.error("Error al eliminar el usuario:", error);
+        alert("Error de conexión al intentar eliminar el usuario");
+      }
+    }
+
+    async function editarUsuario(id) {
+
+
+      try {
+        const response = await fetch(`http://localhost:8000/api/mi_perfil_editar/${id}`, {
+          method: 'PUT',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === "success") {
+        alert("Usuario editado correctamente");
+        // Redirigir al usuario a la página de inicio o login
+        window.location.href = '/mi-perfil';
+        } else {
+          alert(`Error al editar el usuario: ${data.mensaje || 'Error desconocido'}`);
+        }
+      } catch (error) {
+        console.error("Error al editar el usuario:", error);
+        alert("Error de conexión al intentar editar el usuario");
+      }
+    }
+
+    function logout() {
+      fetch('http://localhost:8000/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '/login'; 
+        } else {
+          console.error('Error al cerrar sesión');
+        }
+      })
+      .catch(error => {
+        console.error('Error de red:', error);
+      });
+    }
   </script>
 

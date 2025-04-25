@@ -54,11 +54,33 @@ class ApiSecurityController extends AbstractController
     #[Route(path: '/api/logout', name: 'api_logout', methods: ['POST'])]
     public function logout(SessionInterface $session): JsonResponse
     {
-        $session->invalidate();
-
-        return $this->json([
-            'status' => 'success',
-            'mensaje' => 'Sesión cerrada correctamente',
-        ]);
+        try {
+            // Obtener el token de seguridad
+            $tokenStorage = $this->container->get('security.token_storage');
+            
+            // Invalidar la sesión
+            $session->invalidate();
+            
+            // Limpiar el token de autenticación
+            $tokenStorage->setToken(null);
+            
+            // Limpiar cookies específicas si existen
+            $response = new JsonResponse([
+                'status' => 'success',
+                'mensaje' => 'Sesión cerrada correctamente',
+            ]);
+            
+            // Eliminar la cookie de sesión
+            $response->headers->clearCookie('PHPSESSID');
+            
+            return $response;
+    
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'Error al cerrar sesión: ' . $e->getMessage(),
+            ], 500);
+        }
     }
+    
 }

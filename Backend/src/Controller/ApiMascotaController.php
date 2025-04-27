@@ -32,7 +32,7 @@ final class ApiMascotaController extends AbstractController{
             ], 403);
         }
 
-        $mascota = $mascotaRepository->findBy(['id_usuario' => $this->getUser()]);
+        $mascota = $mascotaRepository->findByUsuarioWithQR($usuario);
 
         return $this->json([
             'status' => 'success',
@@ -45,25 +45,28 @@ final class ApiMascotaController extends AbstractController{
     #[Route('/api/mi_mascota_nueva', name: 'api_mascota_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        // al pasar archivos (foto) hay que cambiar a FormData y en el backend a request
+        $nombre = $request->request->get('nombre');
+        $numChip = $request->request->get('num_chip');
+        $observaciones = $request->request->get('observaciones');
+        $fotoFile = $request->files->get('foto');
 
-        if (empty($data)){
+        if (!$nombre){
             return $this->json([
                 'status' => 'error',
-                'mensaje' => 'No se enviado los datos',
-            ], 403);
+                'mensaje' => 'Faltan datos obligatorios',
+            ], 400);
         }
 
         $mascota = new Mascota();
         $mascota->setIdUsuario($this->getUser());
 
-        if (!empty($data['nombre'])) { $mascota->setNombre($data['nombre']);}
+        if (!empty($nombre)) { $mascota->setNombre($nombre);}
 
-        if (!empty($data['num_chip'])) { $mascota->setNumChip($data['num_chip']);}
+        if (!empty($numChip)) { $mascota->setNumChip($numChip);}
     
-        if (!empty($data['observaciones'])) { $mascota->setObservaciones($data['observaciones']);}
+        if (!empty($observaciones)) { $mascota->setObservaciones($observaciones);}
 
-        $fotoFile = $request->files->get('foto');
         if ($fotoFile) 
         {
             $newFilename = $this->subirFotoMascota($fotoFile, $mascota->getNombre(), $this->getUser()->getId(), $slugger);

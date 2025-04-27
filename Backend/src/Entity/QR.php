@@ -21,16 +21,19 @@ class QR
     #[ORM\JoinColumn(nullable: false)]
     private ?Mascota $id_mascota = null;
 
+    #[Groups('mascota:read')]
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    #[Groups('mascota:read', 'mascota:write')]
     public function getImgQr(): ?string
     {
         return $this->imgQr;
     }
 
+    #[Groups('mascota:read', 'mascota:write')]
     public function setImgQr(string $imgQr): static
     {
         $this->imgQr = $imgQr;

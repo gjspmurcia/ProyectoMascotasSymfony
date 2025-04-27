@@ -16,6 +16,17 @@ class MascotaRepository extends ServiceEntityRepository
         parent::__construct($registry, Mascota::class);
     }
 
+    public function findByUsuarioWithQR($usuario): array
+    {
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.qr', 'q')
+            ->addSelect('q')
+            ->where('m.id_usuario = :usuario')
+            ->setParameter('usuario', $usuario)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Mascota[] Returns an array of Mascota objects
 //     */

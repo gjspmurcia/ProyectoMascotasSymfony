@@ -1,0 +1,177 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+
+---
+
+<Layout>
+
+
+<h1 class="text-3xl font-bold text-center mt-10">Edición de usuario</h1>
+<h2>Edita tus datos </h2>
+<form
+  id="formulario"
+  method="PUT"
+  action="http://localhost:8000/api/registro"
+  class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
+>
+  <div class="mb-4">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required />
+  </div>
+  <div class="mb-4">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div class="mb-4">
+    <label for="dni">Dni:</label>
+    <input type="text" id="dni" name="dni" required />
+  </div>
+  <div class="mb-4">
+    <label for="telefono">Teléfono:</label>
+    <input type="text" id="telefono" name="telefono" required />
+  </div>
+  <div class="mb-4">
+    <label for="calle">Calle:</label>
+    <input type="text" id="calle" name="calle" required />
+  </div>
+  <div class="mb-4">
+    <label for="numero">Numero:</label>
+    <input type="text" id="numero" name="num_calle" required />
+  </div>
+  <div class="mb-4">
+    <label for="codigo_postal">Código Postal:</label>
+    <input type="text" id="codigo_postal" name="cod_postal" required />
+  </div>
+  <div class="mb-4">
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudad" name="cuidad" required />
+  </div>
+
+  <div class="mb-4">
+    <label for="password"
+      >Contraseña: <span id="mensaje_password" class="text-gray-400"
+        >Debe contener al menos 8 caracteres, un numero y una mayuscula</span
+      ></label
+    >
+    <input type="password" id="password" name="password" required />
+  </div>
+  <div class="mb-4">
+    <label for="password_confirm">Confirma la contraseña:</label>
+    <input type="password" id="password_confirm" required />
+  </div>
+  <button
+    type="submit"
+    >Editar</button
+  >
+  <p id="mensaje"></p>
+</form>
+
+</Layout>
+
+<script>
+    
+    async function editarUsuario(id, datosUsuario) {
+    console.log(`Intentando editar usuario con ID: ${id}`);
+    console.log("Datos a enviar:", datosUsuario);
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/mi_perfil_editar/${id}`, {
+        method: 'PUT', // Método HTTP PUT
+        credentials: 'include', // Incluye cookies para la sesión/autenticación
+        headers: {
+          'Accept': 'application/json', // Espera respuesta JSON
+          'Content-Type': 'application/json' // Envía cuerpo como JSON
+        },
+        body: JSON.stringify(datosUsuario) // Convierte el objeto de datos a string JSON para el cuerpo
+      });
+
+      const data = await response.json(); // Procesa la respuesta como JSON
+
+      // 2. Manejo de la respuesta de la API
+      if (response.ok && data.status === "success") {
+        console.log("Respuesta de éxito recibida:", data);
+        alert("Usuario editado correctamente");
+        // Redirige al usuario a la página de perfil actualizada
+        window.location.href = '/mi-perfil'; // Cambia a la URL de tu página de perfil
+
+      } else {
+        // Si la respuesta HTTP no fue OK (ej. 400, 403) o el status de la API no es 'success'
+        const mensajeGeneral = data.mensaje || `Error al editar (Status: ${response.status})`;
+        console.error("Error de la API al editar:", mensajeGeneral);
+        console.error("Datos recibidos en caso de error:", data);
+
+        let mensajeCompletoError = `Error: ${mensajeGeneral}`;
+
+        // Mejorar manejo de errores de validación enviados por el backend
+        if (data.errores && Array.isArray(data.errores)) {
+          mensajeCompletoError += "\nDetalles de validación:";
+          data.errores.forEach(error => {
+            // Asumiendo que cada objeto error tiene 'campo' y 'error'
+            mensajeCompletoError += `\n- Campo '${error.campo || 'desconocido'}': ${error.error || 'Error no especificado'}`;
+          });
+          // Opcional: mostrar errores en un div específico en lugar de alert
+          // const errorDiv = document.getElementById('form-error-messages');
+          // if(errorDiv) errorDiv.textContent = mensajeCompletoError;
+        }
+
+        alert(mensajeCompletoError); // Muestra el mensaje de error (general o con detalles)
+      }
+
+    } catch (error) {
+      // 3. Manejo de errores de red o inesperados durante la petición
+      console.error("Error de conexión o inesperado al intentar editar el usuario:", error);
+       // Opcional: mostrar error en un div específico
+       // const errorDiv = document.getElementById('form-error-messages');
+       // if(errorDiv) errorDiv.textContent = "Error de conexión al servidor.";
+      alert("Error de conexión al intentar editar el usuario");
+    }
+  }
+
+  // *** 4. Código para manejar el envío del formulario ***
+
+  // Obtener el formulario por su ID
+  const formularioEdicion = document.getElementById('formulario-edicion-perfil');
+
+  // Asegurarse de que el formulario existe antes de añadir el listener
+  if (formularioEdicion) {
+    // Obtener el ID del usuario. Asegúrate de que este ID se obtiene correctamente.
+    // Ejemplo: desde un atributo data en el formulario
+    const usuarioId = formularioEdicion.dataset.userId; // Asegúrate que el atributo data-user-id existe en tu <form>
+    // O ejemplo: desde la URL si la URL es /editar-perfil/[id]
+    // const pathParts = window.location.pathname.split('/');
+    // const usuarioId = pathParts[pathParts.length - 1]; // Asumiendo que el ID es el último segmento
+
+    if (!usuarioId || usuarioId === 'el_id_del_usuario_aqui') {
+        console.error("ERROR: No se pudo obtener el ID del usuario para la edición.");
+        // Podrías deshabilitar el formulario o mostrar un mensaje de error aquí
+        // formularioEdicion.style.display = 'none';
+        // alert("No se puede cargar la información para editar el perfil.");
+        return; // Salir si no hay ID
+    }
+
+
+    // Añadir un 'listener' para el evento 'submit' del formulario
+    formularioEdicion.addEventListener('submit', async (event) => {
+      event.preventDefault(); // ¡IMPORTANTE! Detiene el envío estándar del formulario por el navegador
+
+      // Recolecta los datos del formulario
+      const formData = new FormData(formularioEdicion);
+
+      // Crea un objeto simple a partir de los datos del formulario
+      // Esto funciona bien si quieres enviar *todos* los campos del formulario
+      // Si solo quieres enviar los campos que han cambiado, necesitarías una lógica más compleja
+      const datosParaEnviar = {};
+      formData.forEach((value, key) => {
+        datosParaEnviar[key] = value;
+      });
+
+      // Llama a la función editarUsuario con el ID y los datos recolectados
+      await editarUsuario(usuarioId, datosParaEnviar);
+    });
+
+  } else {
+    console.error("Elemento con ID 'formulario-edicion-perfil' no encontrado.");
+  }
+
+</script>

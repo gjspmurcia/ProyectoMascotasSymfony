@@ -20,31 +20,34 @@ import Layout from "../layouts/Layout.astro";
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" required />
     </div>
-    <div class="mb-4">
-      <label for="dni">Dni:</label>
-      <input type="text" id="dni" name="dni" required />
-    </div>
-    <div class="mb-4">
-      <label for="telefono">Teléfono:</label>
-      <input type="text" id="telefono" name="telefono" required />
+    <div class="flex flex-row gap-4">
+      <div class="mb-4 w-full">
+        <label for="dni">Dni:</label>
+        <input type="text" id="dni" name="dni" required />
+      </div>
+      <div class="mb-4 w-full">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" required />
+      </div>
     </div>
     <div class="mb-4">
       <label for="calle">Calle:</label>
       <input type="text" id="calle" name="calle" required />
     </div>
     <div class="mb-4">
-      <label for="numero">Numero:</label>
+      <label for="numero">Numero, piso, puerta... :</label>
       <input type="text" id="numero" name="num_calle" required />
     </div>
-    <div class="mb-4">
+    <div class="flex flex-row gap-4">
+    <div class="mb-4 w-full">
       <label for="codigo_postal">Código Postal:</label>
       <input type="text" id="codigo_postal" name="cod_postal" required />
     </div>
-    <div class="mb-4">
+    <div class="mb-4 w-full">
       <label for="ciudad">Ciudad:</label>
       <input type="text" id="ciudad" name="cuidad" required />
     </div>
-
+  </div>
     <div class="mb-4">
       <label for="password"
         >Contraseña: <span id="mensaje_password" class="text-gray-400"
@@ -86,18 +89,19 @@ import Layout from "../layouts/Layout.astro";
         const formData = new FormData(formulario);
 
         // Verifica si la contraseña cumple los requisitos y coincide con la de confirmacion
-        if (formData.get("password").length < 8 || formData.get("password").length > 20) {
+        // COMENTADO Y LONGITUD MIINIMA CAMBIADA A 1 PARA FACILITAR LAS PRUEBAS !!!!!!!!!!!!!!
+        if (formData.get("password").length < 1 || formData.get("password").length > 20) {
           mensajePassword.textContent ="La contraseña debe tener entre 8 y 20 caracteres";
-          mensajePassword.classList.remove("text-green-500");
-          mensajePassword.classList.add("text-red-500");
-        } else if (!/[A-Z]/.test(formData.get("password")) || !/\d/.test(formData.get("password"))) {
-          mensajePassword.textContent = "La contraseña debe contener al menos una mayúscula y un numero";
-          mensajePassword.classList.remove("text-green-500");
-          mensajePassword.classList.add("text-red-500");
-        } else if (!(formData.get("password") == password_confirm.value)) {
-          mensajePassword.textContent = "Las contraseñas no coinciden";
-          mensajePassword.classList.remove("text-green-500");
-          mensajePassword.classList.add("text-red-500");
+        //   mensajePassword.classList.remove("text-green-500");
+        //   mensajePassword.classList.add("text-red-500");
+        // } else if (!/[A-Z]/.test(formData.get("password")) || !/\d/.test(formData.get("password"))) {
+        //   mensajePassword.textContent = "La contraseña debe contener al menos una mayúscula y un numero";
+        //   mensajePassword.classList.remove("text-green-500");
+        //   mensajePassword.classList.add("text-red-500");
+        // } else if (!(formData.get("password") == password_confirm.value)) {
+        //   mensajePassword.textContent = "Las contraseñas no coinciden";
+        //   mensajePassword.classList.remove("text-green-500");
+        //   mensajePassword.classList.add("text-red-500");
         } else {
           mensajePassword.textContent = "Contraseña con formato válido";
           mensajePassword.classList.remove("text-red-500");
@@ -158,8 +162,8 @@ import Layout from "../layouts/Layout.astro";
       
       const divConfirmacion = document.createElement("div");
       const textoConfirmacion = document.createElement("h2");
-      const botonNuevaMascota = document.createElement("button");
-      const botonPerfil = document.createElement("button");
+      const botonNuevaMascota = document.createElement("a");
+      const botonPerfil = document.createElement("a");
       const nuevaMascota = document.createElement("p");
       const visitaPerfil = document.createElement("p");
 
@@ -170,7 +174,10 @@ import Layout from "../layouts/Layout.astro";
       botonPerfil.textContent = "Visita tu perfil"
       botonPerfil.setAttribute("href", "/mi-perfil")
       botonNuevaMascota.setAttribute("href", "/mascota/registro")
-  
+      divConfirmacion.classList.add("w-full", "max-w-xl", "mx-auto", "m-4", "p-4", "rounded", "shadow-lg", "border-2", "border-gray-300");
+      botonPerfil.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
+      botonNuevaMascota.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
+
       divConfirmacion.append(textoConfirmacion, 
           nuevaMascota,
           botonNuevaMascota, 

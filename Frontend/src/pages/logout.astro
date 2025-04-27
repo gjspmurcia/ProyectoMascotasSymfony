@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+
+    <h1 class="text-3xl font-bold text-center mt-10">
+      Logout
+    </h1>
+    <h2>¿Estas seguro de que deseas cerrar la sesion?</h2>
+    <div class="text-center">
+    <button id="botonLogout">Si</button>
+    <button id="botonVolver">Volver</button>
+    </div>
+
+</Layout>
+
+<script>
+
+document.getElementById("botonLogout").addEventListener("click", async () => {
+    fetch('http://localhost:8000/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '/login';
+          alert('Sesión cerrada correctamente');
+        } else {
+          console.error('Error al cerrar sesión');
+        }
+      })
+      .catch(error => {
+        console.error('Error de red:', error);
+      });
+
+})
+
+document.getElementById("botonVolver").addEventListener("click", () => {
+    window.location.href = '/mi-perfil'; 
+});
+
+</script>

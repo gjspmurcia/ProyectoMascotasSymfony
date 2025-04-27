@@ -22,12 +22,12 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('usuario:read')]
+    #[Groups(['usuario:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
     #[Email]
-    #[Groups('usuario:read', 'usuario:write')]
+    #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $email = null;
 
     /**

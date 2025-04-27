@@ -1,7 +1,47 @@
+
+
 <div class="bg-teal-600 p-4 text-white">
     <a class="m-4 hover:text-slate-900" href="/">Inicio</a>
-    <a class="m-4 hover:text-slate-900" href="/faq">Faq</a>
-    <a class="m-4 hover:text-slate-900" href="/registro">Registro</a>
-    <a class="m-4 hover:text-slate-900" href="/login">Login</a>
-    <a class="m-4 hover:text-slate-900" href="/mi-perfil">Mi perfil</a>
+    
+    <a id="botonRegistro" class="m-4 hover:text-slate-900" href="/registro">Registro</a>
+    <a id="botonLog" class="m-4 hover:text-slate-900" href="">Login</a>
+    <a id="botonMiPerfil" class="m-4 hover:text-slate-900 hidden" href="/mi-perfil">Mi perfil</a>
 </div>
+
+<script>
+ const botonLog = document.getElementById("botonLog");
+ const botonMiPerfil = document.getElementById("botonMiPerfil");
+ const botonRegistro = document.getElementById("botonRegistro");
+
+ async function comprobarLogin() {
+    try {
+      const response = await fetch("http://localhost:8000/api/mi_perfil", {
+        method: "GET",
+        credentials: "include",
+      });
+      return response.ok;
+    } catch (error) {
+      console.error("Error al verificar usuario:", error);
+      return false;
+    }
+  }   
+          
+       
+    async function actualizarBotonLogin() {
+        const isLogged = await comprobarLogin();
+        if (isLogged) {
+            botonMiPerfil?.classList.remove("hidden")
+            botonRegistro?.classList.add("hidden")
+            botonLog.textContent = "Logout"
+            botonLog.setAttribute("href", "/logout");
+            botonLog.classList.add("bg-amber-600", "px-2", "py-1", "rounded")
+        } else {
+            botonLog.textContent = "Login"
+            botonLog.setAttribute("href", "/login");
+            botonLog.classList.remove("bg-amber-600", "px-4", "py-1", "rounded")
+        }
+    }
+  
+    document.addEventListener('DOMContentLoaded', actualizarBotonLogin);
+
+</script>

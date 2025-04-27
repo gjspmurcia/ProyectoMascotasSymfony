@@ -106,14 +106,15 @@ class Mascota
         return $this;
     }
 
+    #[Groups('mascota:read', 'mascota:write')]
     public function getQr(): ?QR
     {
         return $this->qr;
     }
 
+    #[Groups('mascota:read', 'mascota:write')]
     public function setQr(QR $qr): static
     {
-        // set the owning side of the relation if necessary
         if ($qr->getIdMascota() !== $this) {
             $qr->setIdMascota($this);
         }

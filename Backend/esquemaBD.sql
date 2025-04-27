@@ -1,5 +1,5 @@
 -- Inserciones para tabla Usuario
-INSERT INTO usuario (email, roles, password, nombre, dni, telefono, calle, num_calle, cod_postal, cuidad) 
+INSERT INTO usuario (email, roles, password, nombre, dni, telefono, calle, num_calle, cod_postal, ciudad) 
 VALUES
 ('laura.gomez@gmail.com', '["ROLE_USER"]', '1234', 'Laura Gómez', '12345678A', '612345678', 'Calle Luna', 12, '28001', 'Madrid'),
 ('carlos.martinez@gmail.com', '["ROLE_USER"]', '1234', 'Carlos Martínez', '87654321B', '678901234', 'Calle Sol', 7, '41001', 'Sevilla'),

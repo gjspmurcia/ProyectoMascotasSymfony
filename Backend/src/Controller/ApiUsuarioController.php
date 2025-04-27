@@ -40,7 +40,7 @@ final class ApiUsuarioController extends AbstractController{
         if (!empty($data['calle'])){ $usuario->setCalle($data['calle']);}
         if (!empty($data['num_calle'])){ $usuario->setNumCalle($data['num_calle']);}
         if (!empty($data['cod_postal'])){ $usuario->setCodPostal($data['cod_postal']);}
-        if (!empty($data['cuidad'])){ $usuario->setCuidad($data['cuidad']);}        
+        if (!empty($data['ciudad'])){ $usuario->setCiudad($data['ciudad']);}        
         if (!empty($data['password'])) {
             $hashedPassword = $passwordHasher->hashPassword($usuario, $data['password']);
             $usuario->setPassword($hashedPassword);
@@ -124,7 +124,7 @@ final class ApiUsuarioController extends AbstractController{
         if (!empty($data['calle'])){ $usuario->setCalle($data['calle']);}
         if (!empty($data['num_calle'])){ $usuario->setNumCalle($data['num_calle']);}
         if (!empty($data['cod_postal'])){ $usuario->setCodPostal($data['cod_postal']);}
-        if (!empty($data['cuidad'])){ $usuario->setCuidad($data['cuidad']);}        
+        if (!empty($data['ciudad'])){ $usuario->setCiudad($data['ciudad']);}        
         if (!empty($data['password'])) {
             $hashedPassword = $passwordHasher->hashPassword($usuario, $data['password']);
             $usuario->setPassword($hashedPassword);

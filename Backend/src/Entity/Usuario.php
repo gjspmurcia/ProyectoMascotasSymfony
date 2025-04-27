@@ -71,7 +71,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Groups(['usuario:read', 'usuario:write'])]
-    private ?string $cuidad = null;
+    private ?string $ciudad = null;
 
     /**
      * @var Collection<int, Mascota>
@@ -231,14 +231,14 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCuidad(): ?string
+    public function getCiudad(): ?string
     {
-        return $this->cuidad;
+        return $this->ciudad;
     }
 
-    public function setCuidad(string $cuidad): static
+    public function setCiudad(string $ciudad): static
     {
-        $this->cuidad = $cuidad;
+        $this->ciudad = $ciudad;
 
         return $this;
     }

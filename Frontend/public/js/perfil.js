@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <p><strong>Telefono:</strong> ${usuario.telefono}</p>
           <p><strong>Dirección:</strong> ${usuario.calle}, ${usuario.num_calle}</p>
           <p><strong>Codigo postal:</strong> ${usuario.cod_postal}</p>
-          <p><strong>Ciudad:</strong> ${usuario.cuidad}</p>
+          <p><strong>Ciudad:</strong> ${usuario.ciudad}</p>
         `;
       } else {
         container.innerHTML = '<p class="text-red-600">Usuario no autenticado</p>';

@@ -1,0 +1,125 @@
+---
+
+---
+
+<div>
+  <h1 class="text-3xl font-bold text-center mt-10">Registro nueva mascota</h1>
+  <h2>Introduce los datos correspondientes</h2>
+  <form
+    id="formRegistroMascota"
+    method="POST"
+    action="http://localhost:8000/api/mi_mascota_nueva"
+    class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
+  >
+    <div class="mb-4">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required />
+    </div>
+    <div class="mb-4">
+      <label for="num_chip">Nº Chip:</label>
+      <input type="text" id="num_chip" name="num_chip" />
+    </div>
+    <div class="mb-4">
+      <label for="observaciones">Observaciones:</label>
+      <input type="text" id="observaciones" name="observaciones" />
+    </div>
+    <div class="mb-4">
+      <label for="foto">Foto</label>
+      <input type="text" id="foto" name="foto" />
+    </div>
+    <button
+      type="submit"
+      class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+      >Registrar mascota</button
+    >
+    <p id="mensaje"></p>
+  </form>
+  <a class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline" href="/mi-perfil">Volver</a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const formMascota = document.getElementById("formRegistroMascota");
+    const mensaje = document.getElementById("mensaje");
+    
+    if (!formMascota) {
+      console.error("No se encontró el formulario");
+      return;
+    }
+
+    formMascota.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Evita la recarga de la página
+      
+      if (!mensaje) {
+        console.error("No se encontró el elemento mensaje");
+        return;
+      }
+      
+      mensaje.textContent = "";
+      mensaje.classList.remove("text-red-500", "text-green-500");
+      console.log("FormMAscota:", formMascota);
+      let formData = new FormData(formMascota as HTMLFormElement);
+      console.log("FormData:", formData);
+      if(formData == null){console.log("formData es null")}
+      
+
+
+      try {
+        const response = await fetch(
+          "http://localhost:8000/api/mi_mascota_nueva",
+          {
+            method: "POST",
+            credentials: "include",
+           
+            body: formData,
+          }
+        );
+
+        const responseData = await response.json();
+
+        if (response.ok) {
+          mensaje.textContent = "Registro exitoso!";
+          mensaje.classList.remove("text-red-500");
+          mensaje.classList.add("text-green-500");
+          console.log("Registro exitoso:", responseData);
+
+          // confirmacion();
+        } else {
+          console.error("Error en el registro:", responseData);
+          if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
+            let errorText = "";
+            responseData.mensaje.forEach((error) => {
+              errorText += `${error.campo}: ${error.error}\n`;
+            });
+            mensaje.textContent = `Error: ${errorText}`;
+          } else {
+            mensaje.textContent = `Error desconocido: ${responseData.mensaje || "Error desconocido"}`;
+          }
+          mensaje.classList.remove("text-green-500");
+          mensaje.classList.add("text-red-500");
+        }
+      } catch (error) {
+        mensaje.textContent = "Error de red. Inténtalo de nuevo más tarde.";
+        mensaje.classList.remove("text-green-500");
+        mensaje.classList.add("text-red-500");
+        console.error("Error de red:", error);
+      }
+    });
+  });
+
+  // function confirmacion() {
+  //   formMascota.style.display = "none";
+
+  //   const divConfirmacion = document.createElement("div");
+  //   const textoConfirmacion = document.createElement("p");
+  //   const botonConfirmacion = document.createElement("a");
+
+  //   textoConfirmacion.textContent = "Mascota registrada correctamente";
+  //   botonConfirmacion.textContent = "OK";
+  //   botonConfirmacion.setAttribute("href", "/mi-perfil");
+
+  //   divConfirmacion.append(textoConfirmacion, botonConfirmacion);
+
+  //   formMascota.parentNode.replaceChild(divConfirmacion, formMascota);
+  // }
+</script>

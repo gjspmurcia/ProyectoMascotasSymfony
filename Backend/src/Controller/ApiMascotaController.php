@@ -142,7 +142,7 @@ final class ApiMascotaController extends AbstractController{
         
         return $this->json([
             'status' => 'success',
-            'mensaje' => 'Mascota eliminada correctamente',
+            'mensaje' => 'Perfil de mascota eliminado correctamente',
             'mascota' => $mascota
         ], 200);
     

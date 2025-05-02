@@ -55,9 +55,6 @@ final class ApiQRController extends AbstractController{
         ]);
     }
 
-    private function generar_qr(){
-
-    }
 
 
 }

@@ -40,7 +40,7 @@ class Mascota
     #[ORM\OneToOne(mappedBy: 'id_mascota', cascade: ['persist', 'remove'])]
     #[Groups('mascota:read', 'mascota:write')]
     private ?QR $qr = null;
-
+ 
     public function getId(): ?int
     {
         return $this->id;

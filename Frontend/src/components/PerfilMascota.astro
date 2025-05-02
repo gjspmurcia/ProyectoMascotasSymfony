@@ -1,0 +1,125 @@
+---
+
+---
+
+<div>
+    <div id="mascota-container" class="p-2 text-center rounded">
+        <h2>Mis mascotas</h2>
+        <div id="divBotonRegistroMascota" class="flex flex-row justify-center items-center gap-4">
+            <p><strong>Añadir nueva mascota</strong></p>
+            <a class="m-4 hover:text-slate-900 bg-teal-600 text-white font-bold px-4 py-2 rounded" href='/registro-mascota' id="botonNuevaMascota">Añadir</a>
+        </div>
+    </div>
+  </div>
+  
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const divRegistroMascota = document.getElementById('divRegistroMascota');
+
+
+
+      // 1. Obtener el elemento contenedor en el DOM
+      const mascotasContainer: HTMLElement | null = document.getElementById('mascota-container');
+
+      if (!mascotasContainer) {
+      console.error("No se encontró el contenedor de mascotas");
+      return;
+    }
+
+      // 2. Función asíncrona para obtener los datos
+      async function fetchMascotaProfile() {
+        try {
+          const response = await fetch("http://localhost:8000/api/mi_mascota", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+            }
+          });
+          const data = await response.json();
+    
+          // 4. Verificar el estado de la respuesta y el status de la API
+          if (response.ok && data.status === "success") {
+            const mascotas = data.mascota;
+            console.log("Datos de mascota cargados:", mascotas);
+    
+            // 5. Si es exitoso, construir e inyectar el HTML con los datos
+            mascotas.forEach(mascota => {
+            if (mascotasContainer) {
+            mascotasContainer.innerHTML += `
+              <div id="mascota-${mascota.id}">
+                  <h1>${mascota.nombre}</h1>
+                  <p><strong>No. Chip:</strong> ${mascota.num_chip || 'No especificado'}</p>
+                  <p><strong>Observaciones:</strong> ${mascota.observaciones || 'No especificado'}</p>
+                  <p><strong>Foto:</strong> ${mascota.foto || 'No especificado'}</p>
+                  <br>
+                  <button id="botonEliminarMascota">Eliminar</button>
+                  <button id="botonEditarMascota">Editar</button>
+              </div>
+            `;
+            const botonEliminarMascota = document.getElementById('botonEliminarMascota');
+            const botonEditarMascota = document.getElementById('botonEditarMascota');
+            botonEliminarMascota?.addEventListener('click', () => eliminarPerfilMascota(`${mascota.id}`));
+            botonEditarMascota?.addEventListener('click', () => {  window.location.href = `/mi-perfil-editar/${mascota.id}`; });
+            }
+            });
+          } else {
+
+            // Si no hay usuario autenticado
+          //   if (response.status === 401) {
+          //     mascotaContainer.innerHTML = `<p>El usuario no esta autenticado (Status: ${response.status})</p>`;
+          //   } else {
+            
+            //  Si hay un error de la API 
+            const mensajeError = data.message || `Error desconocido de la API (Status: ${response.status})`;
+            console.error("Datos recibidos:", data); 
+            mascotasContainer.textContent = `Error: ${mensajeError}`;}
+          // }
+          
+        } catch (error) {
+          // 7. Si hay un error de red o cualquier otra excepción durante el fetch
+          console.error("Error de red durante el fetch:", error);
+          mascotasContainer.textContent = "Error de red al conectar con la API.";
+        }
+      }
+
+    
+      // 8. Llamar a la función para iniciar la carga de datos cuando el script se ejecuta
+      fetchMascotaProfile();
+    
+
+      async function eliminarPerfilMascota(id: number) {
+        if (!confirm("¿Estás seguro de que deseas eliminar este perfil? Esta acción no se puede deshacer.")) {
+        return;
+        }
+
+        try {
+          const response = await fetch(`http://localhost:8000/api/mi_mascota_eliminar/${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          });
+
+          const data = await response.json();
+
+          if ( data.status === "success") {
+          alert("Perfil de mascota eliminado correctamente");
+          // Redirigir al usuario a la página de perfil
+          window.location.href = '/mi-perfil';
+          } else {
+            alert(`Error al eliminar el perfil de mascota: ${data.mensaje || 'Error desconocido'}`);
+          }
+        } catch (error) {
+          console.error("Error al eliminar el perfil de mascota:", error);
+          alert("Error de conexión al intentar eliminar el perfil de mascota");
+        }
+      }
+
+
+  });
+  
+  </script>
+

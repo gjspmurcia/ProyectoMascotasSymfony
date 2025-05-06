@@ -1,11 +1,6 @@
 ---
-import '../styles/global.css';
-import Layout from '../layouts/Layout.astro';
-
+const { usuarioId } = Astro.props;
 ---
-
-<Layout>
-
 
 <h1 class="text-3xl font-bold text-center mt-10">Edición de usuario</h1>
 <h2>Edita tus datos </h2>
@@ -67,9 +62,9 @@ import Layout from '../layouts/Layout.astro';
   <p id="mensaje"></p>
 </form>
 
-</Layout>
 
-<script>
+
+<!-- <script>
     
     async function editarUsuario(id, datosUsuario) {
     console.log(`Intentando editar usuario con ID: ${id}`);
@@ -174,4 +169,4 @@ import Layout from '../layouts/Layout.astro';
     console.error("Elemento con ID 'formulario-edicion-perfil' no encontrado.");
   }
 
-</script>
+</script> -->

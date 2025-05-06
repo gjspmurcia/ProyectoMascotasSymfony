@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Mascota;
 use App\Repository\MascotaRepository;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class ApiQRController extends AbstractController{
     
@@ -33,6 +35,7 @@ final class ApiQRController extends AbstractController{
         ], 201, [], ['groups' => 'qr:read']);
     }
 
+    //MUESTRA EL PERFIL PUBLICO DE LA MASCOTA
     #[Route('/mostrar/qr/{id}', name: 'api_qr_mostrar', methods: ['GET'])]
     public function mostrarQr(int $id, MascotaRepository $mascotaRepo): JsonResponse
     {

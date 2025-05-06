@@ -42,25 +42,75 @@
           if (response.ok && data.status === "success") {
             const mascotas = data.mascota;
             console.log("Datos de mascota cargados:", mascotas);
+            // Preservar el botón de añadir mascota
+      const botonContainer = document.getElementById('divBotonRegistroMascota');
+      const botonHTML = botonContainer?.innerHTML || '';
+           // Limpiar y recrear estructura
+      mascotasContainer.innerHTML = `
+        <h2>Mis mascotas</h2>
+        <div id="divBotonRegistroMascota" class="flex flex-row justify-center items-center gap-4">
+          ${botonHTML}
+        </div>
+      `;
     
             // 5. Si es exitoso, construir e inyectar el HTML con los datos
             mascotas.forEach(mascota => {
             if (mascotasContainer) {
-            mascotasContainer.innerHTML += `
-              <div id="mascota-${mascota.id}">
-                  <h1>${mascota.nombre}</h1>
-                  <p><strong>No. Chip:</strong> ${mascota.num_chip || 'No especificado'}</p>
-                  <p><strong>Observaciones:</strong> ${mascota.observaciones || 'No especificado'}</p>
-                  <p><strong>Foto:</strong> ${mascota.foto || 'No especificado'}</p>
-                  <br>
-                  <button id="botonEliminarMascota">Eliminar</button>
-                  <button id="botonEditarMascota">Editar</button>
-              </div>
-            `;
-            const botonEliminarMascota = document.getElementById('botonEliminarMascota');
-            const botonEditarMascota = document.getElementById('botonEditarMascota');
-            botonEliminarMascota?.addEventListener('click', () => eliminarPerfilMascota(`${mascota.id}`));
-            botonEditarMascota?.addEventListener('click', () => {  window.location.href = `/mi-perfil-editar/${mascota.id}`; });
+              const mascotaDiv = document.createElement('div');
+              mascotaDiv.id = `mascota-${mascota.id}`;
+              mascotaDiv.className = 'p-4 m-4 border rounded shadow';
+              mascotaDiv.innerHTML = `
+                <div>
+                    <h1>${mascota.nombre}</h1>
+                    <p><strong>No. Chip:</strong> ${mascota.num_chip || 'No especificado'}</p>
+                    <p><strong>Observaciones:</strong> ${mascota.observaciones || 'No especificado'}</p>
+                    <p><strong>Foto:</strong> ${mascota.foto || 'No especificado'}</p>
+                    ${mascota.foto ? 
+                      `<div class="my-3">
+                        <img src="http://localhost:8000/uploads/mascotas/${mascota.foto}" 
+                              alt="Foto de ${mascota.nombre}" 
+                              class="w-48 h-48 object-cover rounded mx-auto" />
+                      </div>` 
+                      : 
+                      `<p class="my-2 text-gray-500">No hay foto disponible</p>`
+                    }
+                    <!-- Mostrar el código QR -->
+                        ${mascota.qr ? 
+                          `<div class="my-3">
+                            <h3 class="font-semibold mb-2">Código QR:</h3>
+                            <img src="${mascota.qr.imgQr}" 
+                                  alt="QR de ${mascota.nombre}" 
+                                  class="w-32 h-32 object-cover rounded mx-auto" />
+                            <div class="mt-2 text-center">
+                              <a href="${mascota.qr.imgQr}" 
+                                download="QR_${mascota.nombre}.png"
+                                class="bg-teal-600 hover:bg-teal-800 text-white text-sm px-3 py-1 rounded">
+                                Descargar QR
+                              </a>
+                            </div>
+                          </div>` 
+                          : 
+                          `<div class="my-2 text-gray-500">
+                            <p>No hay código QR disponible</p>
+                            <button id="generarQR${mascota.id}" class="bg-teal-600 hover:bg-teal-800 text-white text-sm px-3 py-1 rounded mt-1">
+                              Generar QR
+                            </button>
+                          </div>`
+                        }
+                    <br>
+                    <button id="botonEliminarMascota${mascota.id}">Eliminar</button>
+                    <button id="botonEditarMascota${mascota.id}">Editar</button>
+                </div>
+              `;
+
+            mascotasContainer.appendChild(mascotaDiv);
+
+            
+            const botonEliminarMascota = document.getElementById(`botonEliminarMascota${mascota.id}`);
+            console.log("botonEliminarMascota:", botonEliminarMascota);
+            const botonEditarMascota = document.getElementById(`botonEditarMascota${mascota.id}`);
+            botonEliminarMascota?.addEventListener('click', () => eliminarPerfilMascota(parseInt(`${mascota.id}`)));
+            botonEditarMascota?.addEventListener('click', () => {  window.location.href = `/editar-mascota/${mascota.id}`; });
             }
             });
           } else {
@@ -104,11 +154,11 @@
           });
 
           const data = await response.json();
-
+          console.log("Respuesta eliminación:", data);
           if ( data.status === "success") {
-          alert("Perfil de mascota eliminado correctamente");
-          // Redirigir al usuario a la página de perfil
-          window.location.href = '/mi-perfil';
+            fetchMascotaProfile();
+
+            alert("Mascota eliminada correctamente");
           } else {
             alert(`Error al eliminar el perfil de mascota: ${data.mensaje || 'Error desconocido'}`);
           }
@@ -120,6 +170,10 @@
 
 
   });
+
+
+
+
   
   </script>
 

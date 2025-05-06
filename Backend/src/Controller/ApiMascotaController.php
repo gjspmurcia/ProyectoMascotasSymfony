@@ -89,7 +89,7 @@ final class ApiMascotaController extends AbstractController{
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/api/mi_mascota_editar/{id}', name: 'api_mascota_edit', methods: ['PUT'])]
+    #[Route('/api/mi_mascota_editar/{id}', name: 'api_mascota_edit', methods: ['POST'])]
     public function edit(Request $request, Mascota $mascota, EntityManagerInterface $entityManager, SluggerInterface $slugger): JsonResponse
     {
         if ($mascota->getIdUsuario() !== $this->getUser()) {
@@ -100,13 +100,19 @@ final class ApiMascotaController extends AbstractController{
             ], 403);
         }
     
-        $data = json_decode($request->getContent(), true);
-    
-        if (!empty($data['nombre'])) { $mascota->setNombre($data['nombre']); }
-    
-        if (!empty($data['num_chip'])) { $mascota->setNumChip($data['num_chip']);}
-    
-        if (!empty($data['observaciones'])) { $mascota->setObservaciones($data['observaciones']);}
+        $nombre = $request->request->get('nombre');
+        $numChip = $request->request->get('num_chip');
+        $observaciones = $request->request->get('observaciones');
+
+        if (!empty($nombre)) { 
+            $mascota->setNombre($nombre); 
+        }
+        if (!empty($numChip)) { 
+            $mascota->setNumChip($numChip);
+        }
+        if (!empty($observaciones)) { 
+            $mascota->setObservaciones($observaciones);
+        }
       
         $fotoFile = $request->files->get('foto');
         if ($fotoFile) 
@@ -143,7 +149,8 @@ final class ApiMascotaController extends AbstractController{
         return $this->json([
             'status' => 'success',
             'mensaje' => 'Perfil de mascota eliminado correctamente',
-            'mascota' => $mascota
+            'id' => $mascota->getId()
+            //'mascota' => $mascota
         ], 200);
     
     }

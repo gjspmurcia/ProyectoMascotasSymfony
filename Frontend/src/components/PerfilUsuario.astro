@@ -52,7 +52,7 @@
            const botonEditarUsuario = document.getElementById('botonEditarUsuario');
            const botonLogout = document.getElementById('botonLogout');
            botonEliminarUsuario?.addEventListener('click', () => eliminarUsuario(usuario.id));
-           botonEditarUsuario?.addEventListener('click', () => {  window.location.href = `/mi-perfil-editar/${usuario.id}`; });
+           botonEditarUsuario?.addEventListener('click', () => {  window.location.href = `/editar-usuario/${usuario.id}`; });
            botonLogout?.addEventListener('click', () => {  window.location.href = `/logout`; });
           }
         } else {

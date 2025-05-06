@@ -1,14 +1,14 @@
 ---
-
+const { mascotaId } = Astro.props;
 ---
 
 <div>
-  <h1 class="text-3xl font-bold text-center mt-10">Registro nueva mascota</h1>
+  <h1 class="text-3xl font-bold text-center mt-10">Editar mascota</h1>
   <h2>Introduce los datos correspondientes</h2>
   <form
-    id="formRegistroMascota"
+    id="formEdicionMascota"
     method="POST"
-    action="http://localhost:8000/api/mi_mascota_nueva"
+    action="http://localhost:8000/api/mi_mascota_editar"
     enctype="multipart/form-data"
     class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
   >
@@ -38,7 +38,7 @@
     <button
       type="submit"
       class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-      >Registrar mascota</button
+      >Finalizar Edición</button
     >
     <a class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline" href="/mi-perfil">Volver</a>
     <p id="mensaje"></p>
@@ -46,16 +46,67 @@
 
 </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const formMascota = document.getElementById("formRegistroMascota");
+<script define:vars={{ mascotaId }}>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const formMascota = document.getElementById("formEdicionMascota");
     const mensaje = document.getElementById("mensaje");
     
-    if (!formMascota) {
-      console.error("No se encontró el formulario");
+  
+    
+    if (!mascotaId) {
+      mensaje.textContent = "Error: ID de mascota no proporcionado";
+      mensaje.classList.add("text-red-500");
       return;
     }
+    
+    // Cargar datos existentes de la mascota
+    try {
+      console.log("Cargando datos de la mascota con ID:", mascotaId);
+      const response = await fetch(`http://localhost:8000/api/mi_mascota`, {
+        credentials: "include"
+      });
+      
+      const data = await response.json();
 
+
+   
+      if (response.ok && data.status === "success") {
+
+        const mascota = Array.isArray(data.mascota) 
+          ? data.mascota.find(m => m.id.toString() === mascotaId.toString())
+          : null;
+        
+        if (!mascota) {
+          mensaje.textContent = `Error: No se encontró la mascota con ID ${mascotaId}`;
+          mensaje.classList.add("text-red-500");
+          return;
+        }
+        // Rellenar el formulario con datos existentes
+        
+        console.log("Datos de la mascota:", mascota);
+        document.getElementById('nombre').value = mascota.nombre || '';
+        document.getElementById('num_chip').value = mascota.num_chip || '';
+        document.getElementById('observaciones').value = mascota.observaciones || '';
+        
+        // Mostrar imagen actual si existe
+        if (mascota.foto) {
+          const previewContainer = document.querySelector('div.mt-2');
+          const img = document.createElement('img');
+          img.src = `http://localhost:8000/uploads/mascotas/${mascota.foto}`;
+          img.className = 'w-32 h-32 object-cover rounded';
+          previewContainer.innerHTML = '';
+          previewContainer.appendChild(img);
+        }
+      } else {
+        mensaje.textContent = `Error: ${data.mensaje || "No se pudo cargar la mascota"}`;
+        mensaje.classList.add("text-red-500");
+      }
+    } catch (error) {
+      mensaje.textContent = "Error de red al cargar los datos";
+      mensaje.classList.add("text-red-500");
+    }
+
+    // Cambiar el evento submit para editar en lugar de crear
     formMascota.addEventListener("submit", async (event) => {
       event.preventDefault(); // Evita la recarga de la página
       
@@ -66,20 +117,25 @@
       
       mensaje.textContent = "";
       mensaje.classList.remove("text-red-500", "text-green-500");
-     
-      let formData = new FormData(formMascota as HTMLFormElement);
-     
+
+      const formMascotaUpdated = document.getElementById("formEdicionMascota");
+      let formData = new FormData(formMascotaUpdated);
+      formData.append('id', mascotaId);
+
+
+      for (let [key, value] of formData.entries()) {
+  console.log(key, value);
+}
+
+
       if(formData == null){console.log("formData es null")}
       
-
- 
       try {
         const response = await fetch(
-          "http://localhost:8000/api/mi_mascota_nueva",
+          `http://localhost:8000/api/mi_mascota_editar/${mascotaId}`,
           {
-            method: "POST",
+            method: "POST", 
             credentials: "include",
-           
             body: formData,
           }
         );
@@ -87,13 +143,13 @@
         const responseData = await response.json();
 
         if (response.ok) {
-          mensaje.textContent = "Registro exitoso!";
+          mensaje.textContent = "Editado con exito";
           mensaje.classList.remove("text-red-500");
           mensaje.classList.add("text-green-500");
-          console.log("Registro exitoso:", responseData);
-          alert(`Mascota registrado correctamente`);
+          console.log("Editado exitoso:", responseData);
+          alert(`Mascota editada correctamente`);
 
-            window.location.href = `/mi-perfil`;
+          window.location.href = `/mi-perfil`;
         } else {
           console.error("Error en el registro:", responseData);
           if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
@@ -117,22 +173,6 @@
     });
   });
 
-  // function confirmacionRegistro() {
-  //   formMascota.style.display = "none";
-
-  //   const divConfirmacion = document.createElement("div");
-  //   const textoConfirmacion = document.createElement("p");
-  //   const botonConfirmacion = document.createElement("a");
-
-  //   textoConfirmacion.textContent = "Mascota registrada correctamente";
-  //   botonConfirmacion.textContent = "OK";
-  //   botonConfirmacion.setAttribute("href", "/mi-perfil");
-
-  //   divConfirmacion.append(textoConfirmacion, botonConfirmacion);
-
-  //   formMascota.parentNode.replaceChild(divConfirmacion, formMascota);
-  // }
-
   // Vista previa de la imagen subida
   const fotoInput = document.getElementById('foto');
   const previewContainer = document.createElement('div');
@@ -141,14 +181,14 @@
   fotoInput?.parentNode?.appendChild(previewContainer);
   
   fotoInput?.addEventListener('change', (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0];
+    const file = (e.target).files?.[0];
     previewContainer.innerHTML = '';
     
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = document.createElement('img');
-        img.src = e.target?.result as string;
+        img.src = e.target?.result;
         img.className = 'w-32 h-32 object-cover rounded';
         previewContainer.appendChild(img);
       };

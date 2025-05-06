@@ -1,0 +1,15 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EdicionMascota from "../../components/EdicionMascota.astro";
+import '../../styles/global.css';
+
+
+
+// Obtener el ID de los parámetros (no de los query params)
+const { id } = Astro.params;
+---
+
+<Layout>
+
+    <EdicionMascota mascotaId={id} />
+</Layout>

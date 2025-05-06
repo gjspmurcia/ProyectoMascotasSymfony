@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\QRRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: QRRepository::class)]
 class QR
 {

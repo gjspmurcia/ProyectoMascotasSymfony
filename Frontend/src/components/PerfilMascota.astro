@@ -52,6 +52,10 @@
                   <p><strong>No. Chip:</strong> ${mascota.num_chip || 'No especificado'}</p>
                   <p><strong>Observaciones:</strong> ${mascota.observaciones || 'No especificado'}</p>
                   <p><strong>Foto:</strong> ${mascota.foto || 'No especificado'}</p>
+                  <p><strong>Código QR:</strong></p>
+                  ${mascota.qr && mascota.qr.imgQr
+                    ? `<img src="${mascota.qr.imgQr}" alt="Código QR de ${mascota.nombre}" width="200" height="200" />`
+                    : '<p>No especificado</p>'}
                   <br>
                   <button id="botonEliminarMascota">Eliminar</button>
                   <button id="botonEditarMascota">Editar</button>

@@ -4,6 +4,11 @@ DIAGRAMA DE FLUJO -> https://lucid.app/lucidspark/c82439cf-4df9-4a33-a5a2-699b92
 
 MODELO ER -> https://lucid.app/lucidchart/4c7deb16-902b-447b-8c84-e8fc8142f6c8/edit?invitationId=inv_0e709810-9890-4066-97a0-7bc6f7863b03
 MODELO RELACIONAL -> https://lucid.app/lucidchart/91bce9dc-2c62-4364-9bf9-3f65f73c6000/edit?invitationId=inv_b44c49a3-4202-4bd3-a15b-4dc0d90d60df
+
+Cosas por añadir - nuevas funcionalidades:
+- Cambio contraseña, olvido de contraseña
+- Avisar si se escanea el QR
+
 # proyectoMascotas
 
 Requisitivos funcionales y no funcionales:

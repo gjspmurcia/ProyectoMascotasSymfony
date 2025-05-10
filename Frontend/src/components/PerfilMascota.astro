@@ -18,7 +18,7 @@
 
 
 
-      // 1. Obtener el elemento contenedor en el DOM
+      //  Obtener el elemento contenedor en el DOM
       const mascotasContainer: HTMLElement | null = document.getElementById('mascota-container');
 
       if (!mascotasContainer) {
@@ -26,7 +26,7 @@
       return;
     }
 
-      // 2. Función asíncrona para obtener los datos
+      //  Función asíncrona para obtener los datos
       async function fetchMascotaProfile() {
         try {
           const response = await fetch("http://localhost:8000/api/mi_mascota", {
@@ -38,7 +38,7 @@
           });
           const data = await response.json();
     
-          // 4. Verificar el estado de la respuesta y el status de la API
+          //  Verificar el estado de la respuesta y el status de la API
           if (response.ok && data.status === "success") {
             const mascotas = data.mascota;
             console.log("Datos de mascota cargados:", mascotas);
@@ -127,14 +127,14 @@
           // }
           
         } catch (error) {
-          // 7. Si hay un error de red o cualquier otra excepción durante el fetch
+          //  Si hay un error de red o cualquier otra excepción durante el fetch
           console.error("Error de red durante el fetch:", error);
           mascotasContainer.textContent = "Error de red al conectar con la API.";
         }
       }
 
     
-      // 8. Llamar a la función para iniciar la carga de datos cuando el script se ejecuta
+      //  Llamar a la función para iniciar la carga de datos cuando el script se ejecuta
       fetchMascotaProfile();
     
 

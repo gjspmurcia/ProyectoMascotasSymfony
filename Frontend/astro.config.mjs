@@ -16,6 +16,8 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-
+  experimental: {
+    session: true,  // sesiones experimentales
+  },
   integrations: [react()]
 });

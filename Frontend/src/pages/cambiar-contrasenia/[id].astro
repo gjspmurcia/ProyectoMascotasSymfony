@@ -1,0 +1,14 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CambiarPassword from "../../components/CambiarPassword.astro";
+import '../../styles/global.css';
+
+
+
+// Obtener el ID de los parámetros (no de los query params)
+const { id } = Astro.params;
+---
+
+<Layout>
+  <CambiarPassword usuarioId={id} />
+</Layout>

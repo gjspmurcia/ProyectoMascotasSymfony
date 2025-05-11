@@ -45,14 +45,17 @@
                 <br>
                 <button id="botonEliminarUsuario">Eliminar usuario</button>
                 <button id="botonEditarUsuario">Editar usuario</button>
+                <button id="botonCambiarPassword">Cambiar contraseña</button>
                 <button id="botonLogout">Cerrar sesion</button>
              </div>
            `;
            const botonEliminarUsuario = document.getElementById('botonEliminarUsuario');
            const botonEditarUsuario = document.getElementById('botonEditarUsuario');
+           const botonCambiarPassword = document.getElementById('botonCambiarPassword');
            const botonLogout = document.getElementById('botonLogout');
            botonEliminarUsuario?.addEventListener('click', () => eliminarUsuario(usuario.id));
            botonEditarUsuario?.addEventListener('click', () => {  window.location.href = `/editar-usuario/${usuario.id}`; });
+           botonCambiarPassword?.addEventListener('click', () => {  window.location.href = `/cambiar-contrasenia/${usuario.id}`; });
            botonLogout?.addEventListener('click', () => {  window.location.href = `/logout`; });
           }
         } else {

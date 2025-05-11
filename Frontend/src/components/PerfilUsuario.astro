@@ -55,7 +55,7 @@
            const botonLogout = document.getElementById('botonLogout');
            botonEliminarUsuario?.addEventListener('click', () => eliminarUsuario(usuario.id));
            botonEditarUsuario?.addEventListener('click', () => {  window.location.href = `/editar-usuario/${usuario.id}`; });
-           botonCambiarPassword?.addEventListener('click', () => {  window.location.href = `/cambiar-contrasenia/${usuario.id}`; });
+           botonCambiarPassword?.addEventListener('click', () => {  window.location.href = `/cambiar-password/${usuario.id}`; });
            botonLogout?.addEventListener('click', () => {  window.location.href = `/logout`; });
           }
         } else {

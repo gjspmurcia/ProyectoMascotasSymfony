@@ -155,7 +155,8 @@ final class ApiUsuarioController extends AbstractController
     #[Route('/api/modificar_password/{id}', name: 'api_modificar_password', methods: ['POST'])]
     public function editPassword(Request $request, Usuario $usuario, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator): JsonResponse
     {
-        if ($authenticatedUser->getId() !== $usuario->getId()) {
+        if ($usuario !== $this->getUser()) 
+        {
             return $this->json([
                 'status' => 'error',
                 'mensaje' => 'Usuario no autorizado',

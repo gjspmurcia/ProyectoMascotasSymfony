@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
-final class ApiUsuarioController extends AbstractController{
-    
+final class ApiUsuarioController extends AbstractController
+{
     
     #[Route('/api/registro', name: 'api_usuario_registro', methods: ['POST'])]
     public function registro(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator): JsonResponse
@@ -113,7 +113,7 @@ final class ApiUsuarioController extends AbstractController{
         if (empty($data)){
             return $this->json([
                 'status' => 'error',
-                'mensaje' => 'No se enviado los datos',
+                'mensaje' => 'No se han enviado los datos',
             ], 400);
         }
 
@@ -151,6 +151,48 @@ final class ApiUsuarioController extends AbstractController{
             'usuario' => $usuario
         ], 200, [], ['groups' => 'usuario:read']);
     }
+
+    #[Route('/api/modificar_password/{id}', name: 'api_modificar_password', methods: ['POST'])]
+    public function editPassword(Request $request, Usuario $usuario, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator): JsonResponse
+    {
+        if ($authenticatedUser->getId() !== $usuario->getId()) {
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'Usuario no autorizado',
+            ], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (empty($data)){
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'No se han enviado los datos',
+            ], 400);
+        }
+      
+        try {
+            // Cifrar y guardar la nueva contraseña
+            $hashedPassword = $passwordHasher->hashPassword($usuario, $data['password']);
+            $usuario->setPassword($hashedPassword);
+
+            // Guardar cambios
+            $entityManager->flush();
+
+            return $this->json([
+                'status' => 'success',
+                'mensaje' => 'Contraseña cambiada correctamente',
+                'usuario' => $usuario,
+            ], 200, [], ['groups' => 'usuario:read']);
+
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'mensaje' => 'Error al actualizar la contraseña: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+        
+
 
     #[Route('/api/mi_perfil_eliminar/{id}', name: 'api_usuario_delete', methods: ['DELETE'])]
     public function delete(Usuario $usuario, EntityManagerInterface $entityManager): JsonResponse

@@ -24,6 +24,7 @@ security:
                 password_path: password
             logout:
                 path: app_logout
+                invalidate_session: true
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -46,6 +47,7 @@ security:
     access_control:
         - { path: ^/mi_perfil, roles: ROLE_USER }
         - { path: ^/mi_mascota, roles: ROLE_USER }
+        - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/api, roles: ROLE_USER }
 
 

@@ -45,3 +45,7 @@ Ejemplo WEB:
 
   Wireframe:
   - https://excalidraw.com/#json=TLUjDnanhMfRSy_kx-RyO,W__p2N6OW-sAFlu9GUsKtA
+
+CORREO
+infoproyectomascotas@gmail.com
+PM987123

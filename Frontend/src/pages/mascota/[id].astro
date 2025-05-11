@@ -1,0 +1,15 @@
+---
+import '../../styles/global.css';
+import PerfilPublico from '../../components/PerfilPublico.astro';
+
+import Layout from '../../layouts/Layout.astro';
+
+const { id } = Astro.params;
+---
+
+<Layout>
+
+  <PerfilPublico  mascotaId={id}/>
+  
+  
+</Layout>

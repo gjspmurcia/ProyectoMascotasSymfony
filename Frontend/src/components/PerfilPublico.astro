@@ -1,0 +1,68 @@
+---
+const { mascotaId } = Astro.props;
+---
+
+<div>
+    <div id="mascota-container" class="p-2 text-center rounded">
+        <h2>Perfil de mascota</h2>
+          <div class="datos-mascota">
+            
+            <h1 id="nombre-mascota"><span></span></h1>
+            <p id="num-chip"><strong>Nº Chip:</strong> <span></span></p>
+            <p id="observaciones"><strong>Observaciones:</strong> <span></span></p>
+            <p id="nombre-usuario"><strong>Dueño:</strong> <span></span></p>
+            <p id="telefono-usuario"><strong>Teléfono de mi dueño:</strong> <span></span></p>
+            <p id="email-usuario"><strong>Email de mi dueño:</strong> <span></span></p>
+            <img id="foto-mascota" src="" alt="Foto de la Mascota" class="w-48 h-48 object-cover rounded mx-auto" />
+          </div>
+    </div>
+  </div>
+  
+  <script define:vars={{ mascotaId }}>
+    console.log("Mascota ID:", mascotaId);
+    document.addEventListener("DOMContentLoaded", async () => {
+      async function cargarPerfilMascota() {
+        try {
+          // Construimos la URL con el id recibido por la URL
+          const response = await fetch(`http://localhost:8000/mostrar/qr/${mascotaId}`);
+          if (!response.ok) {
+            // Si es 404, mostramos mensaje de que la mascota no existe
+            if(response.status === 404){
+              document.getElementById("mascota-container").innerHTML = "<p class='text-red-500 font-bold'>Mascota no existe</p>";
+              return;
+            }
+            throw new Error(`Error en el fetch: ${response.status}`);
+          }
+          const data = await response.json();
+  
+          // Función para actualizar cada campo con su respectivo dato o "No especificado"
+          const actualizarCampo = (id, valor) => {
+            const elemento = document.getElementById(id);
+            if (elemento) {
+              const span = elemento.querySelector("span");
+              if (span) span.textContent = valor || "No especificado";
+            }
+          };
+  
+          actualizarCampo("nombre-mascota", data.nombre_mascota);
+          actualizarCampo("num-chip", data.num_chip);
+          actualizarCampo("observaciones", data.observaciones);
+          actualizarCampo("nombre-usuario", data.nombre_usuario);
+          actualizarCampo("telefono-usuario", data.telefono_usuario);
+          actualizarCampo("email-usuario", data.email_usuario);
+  
+          const fotoElemento = document.getElementById("foto-mascota");
+          if (fotoElemento && fotoElemento instanceof HTMLImageElement) {
+            fotoElemento.src = data.foto
+              ? `http://localhost:8000/uploads/mascotas/${data.foto}`
+              : "ruta_por_defecto.jpg";
+          } else {
+            console.warn("El elemento con id 'foto-mascota' no se encontró en el DOM.");
+          }
+        } catch (error) {
+          console.error("Error en la carga del perfil:", error);
+        }
+      }
+      await cargarPerfilMascota();
+    });
+  </script>

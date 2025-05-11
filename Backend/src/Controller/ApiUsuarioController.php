@@ -97,7 +97,7 @@ final class ApiUsuarioController extends AbstractController{
     }
 
 
-    #[Route('/api/mi_perfil_editar/{id}', name: 'api_usuario_edit', methods: ['PUT'])]
+    #[Route('/api/mi_perfil_editar/{id}', name: 'api_usuario_edit', methods: ['POST'])]
     public function edit(Request $request, Usuario $usuario, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator): JsonResponse
     {
         if ($usuario !== $this->getUser()) 
@@ -125,10 +125,10 @@ final class ApiUsuarioController extends AbstractController{
         if (!empty($data['num_calle'])){ $usuario->setNumCalle($data['num_calle']);}
         if (!empty($data['cod_postal'])){ $usuario->setCodPostal($data['cod_postal']);}
         if (!empty($data['ciudad'])){ $usuario->setCiudad($data['ciudad']);}        
-        if (!empty($data['password'])) {
-            $hashedPassword = $passwordHasher->hashPassword($usuario, $data['password']);
-            $usuario->setPassword($hashedPassword);
-        }
+        // if (!empty($data['password'])) {
+        //     $hashedPassword = $passwordHasher->hashPassword($usuario, $data['password']);
+        //     $usuario->setPassword($hashedPassword);
+        // }
 
         $errores = $validator->validate($usuario);
         if (count($errores) > 0) 

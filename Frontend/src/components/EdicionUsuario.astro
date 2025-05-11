@@ -3,11 +3,10 @@ const { usuarioId } = Astro.props;
 ---
 
 <h1 class="text-3xl font-bold text-center mt-10">Edición de usuario</h1>
-<h2>Edita tus datos </h2>
+<h2>Edita tus datos</h2>
 <form
-  id="formulario"
-  method="PUT"
-  action="http://localhost:8000/api/registro"
+  id="formEdicionUsuario"
+  method="POST"
   class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
 >
   <div class="mb-4">
@@ -18,13 +17,15 @@ const { usuarioId } = Astro.props;
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required />
   </div>
-  <div class="mb-4">
-    <label for="dni">Dni:</label>
-    <input type="text" id="dni" name="dni" required />
-  </div>
-  <div class="mb-4">
-    <label for="telefono">Teléfono:</label>
-    <input type="text" id="telefono" name="telefono" required />
+  <div class="flex flex-row gap-4">
+    <div class="mb-4 w-full">
+      <label for="dni">Dni:</label>
+      <input type="text" id="dni" name="dni" required />
+    </div>
+    <div class="mb-4 w-full">
+      <label for="telefono">Teléfono:</label>
+      <input type="text" id="telefono" name="telefono" required />
+    </div>
   </div>
   <div class="mb-4">
     <label for="calle">Calle:</label>
@@ -34,16 +35,17 @@ const { usuarioId } = Astro.props;
     <label for="numero">Numero:</label>
     <input type="text" id="numero" name="num_calle" required />
   </div>
-  <div class="mb-4">
-    <label for="codigo_postal">Código Postal:</label>
-    <input type="text" id="codigo_postal" name="cod_postal" required />
+  <div class="flex flex-row gap-4">
+    <div class="mb-4 w-full">
+      <label for="codigo_postal">Código Postal:</label>
+      <input type="text" id="codigo_postal" name="cod_postal" required />
+    </div>
+    <div class="mb-4 w-full">
+      <label for="ciudad">Ciudad:</label>
+      <input type="text" id="ciudad" name="ciudad" required />
+    </div>
   </div>
-  <div class="mb-4">
-    <label for="ciudad">Ciudad:</label>
-    <input type="text" id="ciudad" name="ciudad" required />
-  </div>
-
-  <div class="mb-4">
+  <!-- <div class="mb-4">
     <label for="password"
       >Contraseña: <span id="mensaje_password" class="text-gray-400"
         >Debe contener al menos 8 caracteres, un numero y una mayuscula</span
@@ -54,119 +56,122 @@ const { usuarioId } = Astro.props;
   <div class="mb-4">
     <label for="password_confirm">Confirma la contraseña:</label>
     <input type="password" id="password_confirm" required />
-  </div>
-  <button
-    type="submit"
-    >Editar</button
+  </div> -->
+  <button type="submit">Guardar cambios</button>
+  <a
+    class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+    href="/mi-perfil">Volver</a
   >
   <p id="mensaje"></p>
 </form>
 
+<script define:vars={{ usuarioId }}>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const formUsuario = document.getElementById("formEdicionUsuario");
+    const mensaje = document.getElementById("mensaje");
 
+    if (!usuarioId) {
+      mensaje.textContent = "Error: ID de usuario no proporcionado";
+      mensaje.classList.add("text-red-500");
+      return;
+    }
 
-<!-- <script>
-    
-    async function editarUsuario(id, datosUsuario) {
-    console.log(`Intentando editar usuario con ID: ${id}`);
-    console.log("Datos a enviar:", datosUsuario);
-
+    // Cargar datos existentes del usuario
     try {
-      const response = await fetch(`http://localhost:8000/api/mi_perfil_editar/${id}`, {
-        method: 'PUT', // Método HTTP PUT
-        credentials: 'include', // Incluye cookies para la sesión/autenticación
-        headers: {
-          'Accept': 'application/json', // Espera respuesta JSON
-          'Content-Type': 'application/json' // Envía cuerpo como JSON
-        },
-        body: JSON.stringify(datosUsuario) // Convierte el objeto de datos a string JSON para el cuerpo
+      console.log("Cargando datos del usuario con ID:", usuarioId);
+      const response = await fetch(`http://localhost:8000/api/mi_perfil`, {
+        credentials: "include",
       });
 
-      const data = await response.json(); // Procesa la respuesta como JSON
+      const data = await response.json();
 
-      // 2. Manejo de la respuesta de la API
       if (response.ok && data.status === "success") {
-        console.log("Respuesta de éxito recibida:", data);
-        alert("Usuario editado correctamente");
-        // Redirige al usuario a la página de perfil actualizada
-        window.location.href = '/mi-perfil'; // Cambia a la URL de tu página de perfil
+        const usuario = data.usuario;
 
-      } else {
-        // Si la respuesta HTTP no fue OK (ej. 400, 403) o el status de la API no es 'success'
-        const mensajeGeneral = data.mensaje || `Error al editar (Status: ${response.status})`;
-        console.error("Error de la API al editar:", mensajeGeneral);
-        console.error("Datos recibidos en caso de error:", data);
-
-        let mensajeCompletoError = `Error: ${mensajeGeneral}`;
-
-        // Mejorar manejo de errores de validación enviados por el backend
-        if (data.errores && Array.isArray(data.errores)) {
-          mensajeCompletoError += "\nDetalles de validación:";
-          data.errores.forEach(error => {
-            // Asumiendo que cada objeto error tiene 'campo' y 'error'
-            mensajeCompletoError += `\n- Campo '${error.campo || 'desconocido'}': ${error.error || 'Error no especificado'}`;
-          });
-          // Opcional: mostrar errores en un div específico en lugar de alert
-          // const errorDiv = document.getElementById('form-error-messages');
-          // if(errorDiv) errorDiv.textContent = mensajeCompletoError;
+        if (!usuario) {
+          mensaje.textContent = `Error: No se encontró el usuario con ID ${usuarioId}`;
+          mensaje.classList.add("text-red-500");
+          return;
         }
+        // Rellenar el formulario con datos existentes
 
-        alert(mensajeCompletoError); // Muestra el mensaje de error (general o con detalles)
+        console.log("Datos del usuario:", usuario);
+        document.getElementById("nombre").value = usuario.nombre || "";
+        document.getElementById("email").value = usuario.email || "";
+        document.getElementById("dni").value = usuario.dni || "";
+        document.getElementById("telefono").value = usuario.telefono || "";
+        document.getElementById("calle").value = usuario.calle || "";
+        document.getElementById("numero").value = usuario.num_calle || "";
+        document.getElementById("codigo_postal").value =
+          usuario.cod_postal || "";
+        document.getElementById("ciudad").value = usuario.ciudad || "";
+      } else {
+        mensaje.textContent = `Error: ${data.mensaje || "No se pudo cargar el usuario"}`;
+        mensaje.classList.add("text-red-500");
       }
-
     } catch (error) {
-      // 3. Manejo de errores de red o inesperados durante la petición
-      console.error("Error de conexión o inesperado al intentar editar el usuario:", error);
-       // Opcional: mostrar error en un div específico
-       // const errorDiv = document.getElementById('form-error-messages');
-       // if(errorDiv) errorDiv.textContent = "Error de conexión al servidor.";
-      alert("Error de conexión al intentar editar el usuario");
-    }
-  }
-
-  // *** 4. Código para manejar el envío del formulario ***
-
-  // Obtener el formulario por su ID
-  const formularioEdicion = document.getElementById('formulario-edicion-perfil');
-
-  // Asegurarse de que el formulario existe antes de añadir el listener
-  if (formularioEdicion) {
-    // Obtener el ID del usuario. Asegúrate de que este ID se obtiene correctamente.
-    // Ejemplo: desde un atributo data en el formulario
-    const usuarioId = formularioEdicion.dataset.userId; // Asegúrate que el atributo data-user-id existe en tu <form>
-    // O ejemplo: desde la URL si la URL es /editar-perfil/[id]
-    // const pathParts = window.location.pathname.split('/');
-    // const usuarioId = pathParts[pathParts.length - 1]; // Asumiendo que el ID es el último segmento
-
-    if (!usuarioId || usuarioId === 'el_id_del_usuario_aqui') {
-        console.error("ERROR: No se pudo obtener el ID del usuario para la edición.");
-        // Podrías deshabilitar el formulario o mostrar un mensaje de error aquí
-        // formularioEdicion.style.display = 'none';
-        // alert("No se puede cargar la información para editar el perfil.");
-        return; // Salir si no hay ID
+      mensaje.textContent = "Error de red al cargar los datos";
+      mensaje.classList.add("text-red-500");
     }
 
+    // Enviar datos en formato JSON al editar
+    formUsuario.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      mensaje.textContent = "";
+      mensaje.classList.remove("text-red-500", "text-green-500");
 
-    // Añadir un 'listener' para el evento 'submit' del formulario
-    formularioEdicion.addEventListener('submit', async (event) => {
-      event.preventDefault(); // ¡IMPORTANTE! Detiene el envío estándar del formulario por el navegador
+      // Recolectar datos del formulario en un objeto
+      const datosUsuario = {
+        nombre: document.getElementById("nombre").value,
+        email: document.getElementById("email").value,
+        dni: document.getElementById("dni").value,
+        telefono: document.getElementById("telefono").value,
+        calle: document.getElementById("calle").value,
+        num_calle: document.getElementById("numero").value,
+        cod_postal: document.getElementById("codigo_postal").value,
+        ciudad: document.getElementById("ciudad").value,
+        id: usuarioId,
+      };
 
-      // Recolecta los datos del formulario
-      const formData = new FormData(formularioEdicion);
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/mi_perfil_editar/${usuarioId}`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(datosUsuario),
+          }
+        );
 
-      // Crea un objeto simple a partir de los datos del formulario
-      // Esto funciona bien si quieres enviar *todos* los campos del formulario
-      // Si solo quieres enviar los campos que han cambiado, necesitarías una lógica más compleja
-      const datosParaEnviar = {};
-      formData.forEach((value, key) => {
-        datosParaEnviar[key] = value;
-      });
+        const responseData = await response.json();
 
-      // Llama a la función editarUsuario con el ID y los datos recolectados
-      await editarUsuario(usuarioId, datosParaEnviar);
+        if (response.ok) {
+          mensaje.textContent = "Editado con éxito";
+          mensaje.classList.remove("text-red-500");
+          mensaje.classList.add("text-green-500");
+          alert("Usuario actualizado correctamente");
+          window.location.href = `/mi-perfil`;
+        } else {
+          if (responseData.errores && Array.isArray(responseData.errores)) {
+            const erroresTexto = responseData.errores
+              .map((e) => `${e.campo}: ${e.error}`)
+              .join("\n");
+            mensaje.textContent = `Error: ${erroresTexto}`;
+          } else {
+            mensaje.textContent = `Error: ${responseData.mensaje || "Error desconocido"}`;
+          }
+          mensaje.classList.add("text-red-500");
+        }
+      } catch (error) {
+        mensaje.textContent = "Error de red. Inténtalo de nuevo más tarde.";
+        mensaje.classList.remove("text-green-500");
+        mensaje.classList.add("text-red-500");
+        console.error("Error de red:", error);
+      }
     });
-
-  } else {
-    console.error("Elemento con ID 'formulario-edicion-perfil' no encontrado.");
-  }
-
-</script> -->
+  });
+</script>

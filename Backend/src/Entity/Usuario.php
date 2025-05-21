@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
 
-use App\Validator\Email;
+use App\Validator\Email as UsuarioEmail;
 use App\Validator\DniNie;
 use App\Validator\Telefono;
 
@@ -18,15 +18,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
-{
+{   
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['usuario:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
-    #[Email]
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    #[Assert\NotBlank(message: "El email no puede estar vacío.")]
+    #[UsuarioEmail(message: "El email '{{ value }}' no es un correo válido.")]
     #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $email = null;
 
@@ -47,13 +51,19 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $nombre = null;
 
-    #[ORM\Column(length: 255)]
-    #[DniNie]
+     /**
+     * @ORM\Column(type="string", length=10, unique=true)
+     */
+    #[Assert\NotBlank(message: "El DNI/NIE no puede estar vacío.")]
+    #[DniNie(message: "El valor '{{ string }}' no es un DNI o NIE válido.")]
     #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $dni = null;
 
-    #[ORM\Column]
-    #[Telefono]
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    #[Assert\NotBlank(message: "El teléfono no puede estar vacío.")]
+    #[Telefono(message: "El teléfono '{{ string }}' no es válido.")]
     #[Groups(['usuario:read', 'usuario:write'])]
     private ?string $telefono = null;
 

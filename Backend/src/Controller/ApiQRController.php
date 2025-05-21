@@ -6,6 +6,8 @@ use App\Entity\Mascota;
 use App\Repository\MascotaRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -37,7 +39,7 @@ final class ApiQRController extends AbstractController{
 
     //MUESTRA EL PERFIL PUBLICO DE LA MASCOTA
     #[Route('/mostrar/qr/{id}', name: 'api_qr_mostrar', methods: ['GET'])]
-    public function mostrarQr(int $id, MascotaRepository $mascotaRepo): JsonResponse
+    public function mostrarQr(int $id, MascotaRepository $mascotaRepo, MailerInterface $mailer): JsonResponse
     {
         $mascota = $mascotaRepo->find($id);
 
@@ -46,6 +48,20 @@ final class ApiQRController extends AbstractController{
         }
 
         $usuario = $mascota->getIdUsuario();
+
+        // Envía el email
+        $nombreUsuario = $usuario->getNombre();
+        $nombreMascota = $mascota->getNombre();
+        $emailMessage = (new Email())
+            ->from('infoproyectomascotas@gmail.com')
+            ->to($usuario->getEmail())
+            ->subject('Tu mascota ha sido escaneada')
+            ->html(
+                "<p>Hola <strong>{$nombreUsuario}</strong>,</p>".
+                "<p>Acabamos de detectar que alguien ha escaneado el código QR de tu mascota <strong>{$nombreMascota}</strong>.</p>".
+                "<p>Si no fuiste tú, es posible que te contacte alguien.</p>"
+            );
+        $mailer->send($emailMessage);
 
         return $this->json([
             'nombre_mascota' => $mascota->getNombre(),

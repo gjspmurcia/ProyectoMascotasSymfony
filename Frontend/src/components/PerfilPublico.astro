@@ -1,6 +1,11 @@
 ---
+import Modal from './Modal.astro';
+
 const { mascotaId } = Astro.props;
 ---
+<style>
+  .hidden { display: none; }
+</style>
 
 <div>
     <div id="mascota-container" class="p-2 text-center rounded">
@@ -14,9 +19,23 @@ const { mascotaId } = Astro.props;
             <p id="telefono-usuario"><strong>Teléfono de mi dueño:</strong> <span></span></p>
             <p id="email-usuario"><strong>Email de mi dueño:</strong> <span></span></p>
             <img id="foto-mascota" src="" alt="Foto de la Mascota" class="w-48 h-48 object-cover rounded mx-auto" />
+            
+            <button id="btnMostrar" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+              Escribir mensaje a mi dueño
+            </button>
+
+            <!-- Textarea y Botón 2: envío, ocultos inicialmente -->
+            <div id="zonaMensaje" class="hidden mt-2">
+              <textarea id="mensaje"
+                        placeholder="Escribe un mensaje para el dueño"
+                        class="w-full h-32 p-4 mt-2 border border-gray-300 rounded-lg shadow-sm resize-none"></textarea>
+              <button id="btnEnviar" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">Enviar mensaje</button>
+            </div>
           </div>
     </div>
   </div>
+
+  <Modal title='Aviso:' client:load  />
   
   <script define:vars={{ mascotaId }}>
     console.log("Mascota ID:", mascotaId);
@@ -62,7 +81,63 @@ const { mascotaId } = Astro.props;
         } catch (error) {
           console.error("Error en la carga del perfil:", error);
         }
+
       }
       await cargarPerfilMascota();
+
+    const btnMostrar = document.getElementById("btnMostrar");
+    const zonaMensaje = document.getElementById("zonaMensaje");
+    const btnEnviar = document.getElementById("btnEnviar");
+    const textarea = document.getElementById("mensaje");
+
+    // Al pulsar "Escribir mensaje"
+    btnMostrar.addEventListener("click", () => {
+      zonaMensaje.classList.remove("hidden");
+      btnMostrar.classList.add("hidden");
+      textarea.focus();
     });
-  </script>
+
+    // Al pulsar "Enviar mensaje"
+    btnEnviar.addEventListener("click", async () => {
+      const mensaje = textarea.value.trim();
+      if (!mensaje) {
+        window.showModal({
+        message: "Escribe algo antes de enviar.",
+        onConfirm: () => {textarea.focus();}});
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/enviar-aviso/${mascotaId}`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ mensaje })
+          }
+        );
+        if (!response.ok) {
+          window.showModal({message: `Error: ${result.mensaje}`, onConfirm: () => {}});
+          return;
+        }
+
+        if (!response.ok) throw new Error(`Status ${response.status}`);
+        const result = await response.json();
+        window.showModal({message: "¡Mensaje enviado con éxito!",
+        onConfirm: () => {
+          // Limpiar textarea y ocultar zona de mensaje
+          textarea.value = "";
+          zonaMensaje.classList.add("hidden");
+          btnMostrar.classList.remove("hidden");
+        }});
+      } catch (err) {
+        console.error("Error al enviar:", err);
+        window.showModal({message: "Ocurrió un error de red. Intenta de nuevo.",onConfirm: () => {}});
+      }
+    });
+  });
+</script>

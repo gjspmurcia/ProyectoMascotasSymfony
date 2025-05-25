@@ -1,13 +1,15 @@
 ---
+import Modal from './Modal.astro';
 ---
 
 <h1 class="text-3xl font-bold text-center mt-10">Logout</h1>
 <h2>¿Estas seguro de que deseas cerrar la sesion?</h2>
 <div class="text-center">
-<button id="botonLogout">Si</button>
-<button id="botonVolver">Volver</button>
+    <button id="botonLogout">Si</button>
+    <button id="botonVolver">Volver</button>
 </div>
 
+<Modal title='Aviso:' client:load  />
 
 <script>
 
@@ -21,8 +23,12 @@
         })
         .then(response => {
             if (response.ok) {
-            window.location.href = '/login';
-            alert('Sesión cerrada correctamente');
+            window.showModal({
+                message: "Sesión cerrada correctamente",
+                onConfirm: () => {
+                window.location.href = "/login";
+                }
+            });
             } else {
             console.error('Error al cerrar sesión');
             }

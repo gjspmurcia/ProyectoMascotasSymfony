@@ -1,0 +1,62 @@
+---
+// Props que recibe tu modal:
+// - id: identificador único en el DOM
+// - client:load para hidratar sólo en cliente
+const { title = 'Confirmación' } = Astro.props;
+
+---
+<div class="astro-modal fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-20 hidden">
+  <div class="bg-white rounded-2xl shadow-lg border-2 border-gray-300 w-11/12 max-w-md overflow-hidden">
+    
+    <header class="px-4 py-2 bg-teal-600 flex justify-between items-center">
+      <h3 class="m-0 text-2xl font-bold text-white">{title}</h3>
+      <button data-close class="bg-teal-600 text-white p-2 rounded hover:bg-teal-50 hover:text-teal-800 transition-colors duration-150">
+        &times;
+      </button>
+    </header>
+
+    <!-- Cuerpo -->
+    <div class="p-4" data-modal-body>
+      <slot />
+    </div>
+
+    <!-- Pie -->
+    <footer class="px-4 py-3 bg-gray-50 flex justify-end space-x-3 border-t border-gray-200">
+        <button data-confirm class="px-4 py-2 bg-teal-600 text-white font-semibold rounded hover:bg-teal-700 transition-colors duration-150">
+            Aceptar
+        </button>
+        <button data-cancel class="px-4 py-2 bg-gray-300 text-gray-700 font-medium rounded hover:bg-gray-400 transition-colors duration-150">
+            Cancelar
+        </button>
+    </footer>
+  </div>
+</div>
+
+
+<script client:load>
+    const modal = document.querySelector('.astro-modal');
+    if (!modal) {
+        console.error(`No se encontró ningún elemento con la clase .astro-modal`);
+    }
+
+    // Abrir modal y definir callback de confirmación
+    window.showModal = ({ message, onConfirm }) => {
+        // mensaje
+        modal.querySelector('[data-modal-body]').innerHTML = `<p>${message}</p>`;
+        
+        const btnClose   = modal.querySelector('[data-close]');
+        const btnCancel  = modal.querySelector('[data-cancel]');
+        const btnConfirm = modal.querySelector('[data-confirm]');
+
+        const cerrar = () => modal.classList.add('hidden');
+
+        btnClose.addEventListener('click', cerrar, { once: true });
+        btnCancel.addEventListener('click', cerrar, { once: true });
+        btnConfirm.addEventListener('click', () => {
+        onConfirm();
+        cerrar();
+        }, { once: true });
+
+        modal.classList.remove('hidden');
+    };
+</script>

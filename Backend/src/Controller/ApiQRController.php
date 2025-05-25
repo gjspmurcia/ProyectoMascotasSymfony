@@ -6,12 +6,17 @@ use App\Entity\Mascota;
 use App\Repository\MascotaRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 final class ApiQRController extends AbstractController{
     
@@ -39,7 +44,7 @@ final class ApiQRController extends AbstractController{
 
     //MUESTRA EL PERFIL PUBLICO DE LA MASCOTA
     #[Route('/mostrar/qr/{id}', name: 'api_qr_mostrar', methods: ['GET'])]
-    public function mostrarQr(int $id, MascotaRepository $mascotaRepo, MailerInterface $mailer): JsonResponse
+    public function mostrarQr(int $id, MascotaRepository $mascotaRepo, MailerInterface $mailer, LoggerInterface $logger): JsonResponse
     {
         $mascota = $mascotaRepo->find($id);
 
@@ -55,13 +60,23 @@ final class ApiQRController extends AbstractController{
         $emailMessage = (new Email())
             ->from('infoproyectomascotas@gmail.com')
             ->to($usuario->getEmail())
-            ->subject('Tu mascota ha sido escaneada')
+            ->subject('Aviso QR escaneado')
             ->html(
                 "<p>Hola <strong>{$nombreUsuario}</strong>,</p>".
-                "<p>¿Tu mascota se ha perdido? Acabamos de detectar que alguien ha escaneado el código QR de <strong>{$nombreMascota}</strong>.</p>".
-                "<p>Si no fuiste tú, es posible que te contacte alguien.</p>"
-            );
-        $mailer->send($emailMessage);
+                "<p>¿Tu mascota se ha perdido? </p>".
+                "<p>Acabamos de detectar que alguien ha escaneado el código QR de <strong>{$nombreMascota}</strong>.</p>".
+                "<p>Si no fuiste tú, es posible que te contacte alguien. Estaté atendo.</p>".
+                "<p>Si es un error, ignora este mensaje.</p>".
+                "<p>Un saludo de Equipo ProyectoMascotas.</p>"
+                
+        );
+
+        try {
+            $mailer->send($emailMessage);
+        } catch (TransportExceptionInterface $e) {
+            $logger->error('Error enviando email: '.$e->getMessage(), [
+            'exception' => $e,
+            ]);}
 
         return $this->json([
             'nombre_mascota' => $mascota->getNombre(),
@@ -74,6 +89,50 @@ final class ApiQRController extends AbstractController{
         ]);
     }
 
+    // enviar aviso dueño
+    #[Route('/api/enviar-aviso/{id}', name: 'api_enviar_aviso', methods: ['POST'])]
+    public function enviarAviso(int $id, Request $request, MascotaRepository $mascotaRepo, MailerInterface $mailer, LoggerInterface $logger): JsonResponse
+    {
+        $mascota = $mascotaRepo->find($id);
+
+        if (!$mascota) {
+            return $this->json(['mensaje' => 'Mascota no encontrada'], 404);
+        }
+
+        // Extraer JSON con el mensaje
+        $data = json_decode($request->getContent(), true);
+        $mensajeUsuario = $data['mensaje'] ?? '';
+
+        $usuario = $mascota->getIdUsuario();
+
+        // Envía el email
+        $nombreUsuario = $usuario->getNombre();
+        $nombreMascota = $mascota->getNombre();
+        $emailMessage = (new Email())
+            ->from('infoproyectomascotas@gmail.com')
+            ->to($usuario->getEmail())
+            ->subject('Alerta: han escaneado el código QR de tu mascota')
+            ->html(
+                "<p>Hola <strong>{$nombreUsuario}</strong>,</p>".
+                "<p>Alguien ha escaneado el código QR de <strong>{$nombreMascota}</strong>.</p>".
+                "<p>Mensaje de esa persona:</p>".
+                "<blockquote>{$mensajeUsuario}</blockquote>".
+
+                "<p>Un saludo de Equipo ProyectoMascotas.</p>"
+            );
+        
+        try {
+            $mailer->send($emailMessage);
+        } catch (TransportExceptionInterface $e) {
+            $logger->error('Error enviando email: '.$e->getMessage(), [
+            'exception' => $e,
+            ]);}
+
+        return $this->json([
+            'status' => 'success',
+            'mensaje' => 'Email enviado correctamente'
+        ], 201, [], []);
+    }
 
 
 }

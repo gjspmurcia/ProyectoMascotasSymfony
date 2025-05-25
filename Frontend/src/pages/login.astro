@@ -1,29 +1,12 @@
 ---
 import '../styles/global.css';
 import Layout from '../layouts/Layout.astro';
+import LoginUsuario from '../components/LoginUsuario.astro';
 
 ---
 
 <Layout>
 
-    <h1 class="text-3xl font-bold text-center mt-10">Iniciar Sesión</h1>
-    <form id="login-form" class="flex flex-col gap-2  w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300">
-      <label>Email:</label>
-      <input type="email" name="email" required class="border p-1" />
-    
-      <label>Contraseña:</label>
-      <input type="password" name="password" required class="border p-1" />
-      
-      <button type="submit" class="bg-teal-600 text-white p-2 mt-2 active:bg-teal-950 ">Iniciar sesión</button>
-      
-      <p id="mensaje" class="text-red-600 mt-2"></p>
-      <div class="flex justify-between items-center mt-4">
-        <a href="/recuperar-password" class="text-teal-600 hover:text-teal-800">¿Olvidaste tu contraseña?</a>
-        <a href="/registro" class="text-teal-600 hover:text-teal-800">¿No tienes cuenta? Regístrate</a>
-      </div>
-    </form>
-    
-    <script defer src="/js/login.js" ></script>
-    
+    <LoginUsuario/>
 
 </Layout>

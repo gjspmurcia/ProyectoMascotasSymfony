@@ -58,7 +58,7 @@ final class ApiQRController extends AbstractController{
             ->subject('Tu mascota ha sido escaneada')
             ->html(
                 "<p>Hola <strong>{$nombreUsuario}</strong>,</p>".
-                "<p>Acabamos de detectar que alguien ha escaneado el código QR de tu mascota <strong>{$nombreMascota}</strong>.</p>".
+                "<p>¿Tu mascota se ha perdido? Acabamos de detectar que alguien ha escaneado el código QR de <strong>{$nombreMascota}</strong>.</p>".
                 "<p>Si no fuiste tú, es posible que te contacte alguien.</p>"
             );
         $mailer->send($emailMessage);

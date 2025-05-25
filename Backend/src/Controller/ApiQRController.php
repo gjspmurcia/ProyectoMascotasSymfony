@@ -71,12 +71,12 @@ final class ApiQRController extends AbstractController{
                 
         );
 
-        // try {
-        //     $mailer->send($emailMessage);
-        // } catch (TransportExceptionInterface $e) {
-        //     $logger->error('Error enviando email: '.$e->getMessage(), [
-        //     'exception' => $e,
-        //     ]);}
+        try {
+            $mailer->send($emailMessage);
+        } catch (TransportExceptionInterface $e) {
+            $logger->error('Error enviando email: '.$e->getMessage(), [
+            'exception' => $e,
+            ]);}
 
         return $this->json([
             'nombre_mascota' => $mascota->getNombre(),
@@ -121,12 +121,12 @@ final class ApiQRController extends AbstractController{
                 "<p>Un saludo de Equipo ProyectoMascotas.</p>"
             );
         
-        // try {
-        //     $mailer->send($emailMessage);
-        // } catch (TransportExceptionInterface $e) {
-        //     $logger->error('Error enviando email: '.$e->getMessage(), [
-        //     'exception' => $e,
-        //     ]);}
+        try {
+            $mailer->send($emailMessage);
+        } catch (TransportExceptionInterface $e) {
+            $logger->error('Error enviando email: '.$e->getMessage(), [
+            'exception' => $e,
+            ]);}
 
         return $this->json([
             'status' => 'success',

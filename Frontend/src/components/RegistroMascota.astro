@@ -1,5 +1,5 @@
 ---
-
+import Modal from './Modal.astro';
 ---
 
 <div>
@@ -46,6 +46,8 @@
 
 </div>
 
+<Modal title='Aviso:' client:load  />
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const formMascota = document.getElementById("formRegistroMascota");
@@ -91,9 +93,12 @@
           mensaje.classList.remove("text-red-500");
           mensaje.classList.add("text-green-500");
           console.log("Registro exitoso:", responseData);
-          alert(`Mascota registrado correctamente`);
-
-            window.location.href = `/mi-perfil`;
+          window.showModal({
+            message: "Mascota registrado correctamente",
+            onConfirm: () => {
+              window.location.href = "/mi-perfil";
+            }
+          });
         } else {
           console.error("Error en el registro:", responseData);
           if (responseData.mensaje && Array.isArray(responseData.mensaje)) {

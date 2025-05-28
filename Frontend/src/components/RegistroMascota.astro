@@ -2,77 +2,59 @@
 
 ---
 
-<!-- Layout que cambia a horizontal en pantallas md -->
-<div class="md:flex md:flex-row-reverse md:h-auto">
-    <!-- Foto (a la derecha en PC) -->
-    <div class="relative md:w-2/5 lg:w-1/2 h-full">
-        <div class="h-full overflow-hidden">
-            <img
-                id="foto-mascota"  
-                src="" 
-                alt="profile" 
-                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-            />
-        </div>
-        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-teal-900/80 to-transparent p-4">
-            <h1 id="nombre-mascota" >
-                <span class="text-2xl sm:text-3xl text-left text-shadow font-bold text-white drop-shadow-md"></span>
-            </h1>
-        </div>
+<div class="space-y-8 md:overflow-y-auto">
+  <h1 class="text-3xl font-bold text-center mt-10">Registro nueva mascota</h1>
+  <h2>Introduce los datos correspondientes</h2>
+  <form
+    id="formRegistroMascota"
+    method="POST"
+    action="http://localhost:8000/api/mi_mascota_nueva"
+    enctype="multipart/form-data"
+    class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
+  >
+    <div class="mb-4">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required />
     </div>
-
-    <!-- Contenido (a la izquierda en PC) -->
-    <div class="p-6 md:w-3/5 lg:w-1/2 md:flex md:flex-col md:h-full">
-        <div class="space-y-8 md:overflow-y-auto">
-          <h1 class="text-3xl font-bold text-center mt-10">Registro nueva mascota</h1>
-          <h2>Introduce los datos correspondientes</h2>
-          <form
-            id="formRegistroMascota"
-            method="POST"
-            action="http://localhost:8000/api/mi_mascota_nueva"
-            enctype="multipart/form-data"
-            class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
-          >
-            <div class="mb-4">
-              <label for="nombre">Nombre:</label>
-              <input type="text" id="nombre" name="nombre" required />
-            </div>
-            <div class="mb-4">
-              <label for="num_chip">Nº Chip:</label>
-              <input type="text" id="num_chip" name="num_chip" />
-            </div>
-            <div class="mb-4">
-              <label for="observaciones">Observaciones:</label>
-              <input type="text" id="observaciones" name="observaciones" />
-            </div>
-            <div class="mb-4">
-              <label for="foto">Foto:</label>
-              <input 
-                type="file" 
-                id="foto" 
-                name="foto" 
-                accept="image/*"
-                class="w-full border p-2 rounded" 
-              />
-              <p class="text-sm text-gray-500 mt-1">Formatos aceptados: JPG, PNG, GIF (máx. 5MB)</p>
-            </div>
-            <button
-              type="submit"
-              class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-              >Registrar mascota</button
-            >
-            <a class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline" href="/mi-perfil">Volver</a>
-            <p id="mensaje"></p>
-          </form>
-        </div>
+    <div class="mb-4">
+      <label for="num_chip">Nº Chip:</label>
+      <input type="text" id="num_chip" name="num_chip" />
     </div>
+    <div class="mb-4">
+      <label for="observaciones">Observaciones:</label>
+      <input type="text" id="observaciones" name="observaciones" />
+    </div>
+    <div class="mb-4">
+      <label for="foto">Foto:</label>
+      <input
+        type="file"
+        id="foto"
+        name="foto"
+        accept="image/*"
+        class="w-full border p-2 rounded"
+      />
+      <p class="text-sm text-gray-500 mt-1">
+        Formatos aceptados: JPG, PNG, GIF (máx. 5MB)
+      </p>
+    </div>
+    <button
+      type="submit"
+      class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+      >Registrar mascota</button
+    >
+    <a
+      class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+      href="/mi-perfil">Volver</a
+    >
+    <p id="mensaje"></p>
+  </form>
 </div>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const formMascota = document.getElementById("formRegistroMascota");
     const mensaje = document.getElementById("mensaje");
-    
+
     if (!formMascota) {
       console.error("No se encontró el formulario");
       return;
@@ -80,28 +62,28 @@
 
     formMascota.addEventListener("submit", async (event) => {
       event.preventDefault(); // Evita la recarga de la página
-      
+
       if (!mensaje) {
         console.error("No se encontró el elemento mensaje");
         return;
       }
-      
+
       mensaje.textContent = "";
       mensaje.classList.remove("text-red-500", "text-green-500");
-     
-      let formData = new FormData(formMascota as HTMLFormElement);
-     
-      if(formData == null){console.log("formData es null")}
-      
 
- 
+      let formData = new FormData(formMascota as HTMLFormElement);
+
+      if (formData == null) {
+        console.log("formData es null");
+      }
+
       try {
         const response = await fetch(
           "http://localhost:8000/api/mi_mascota_nueva",
           {
             method: "POST",
             credentials: "include",
-           
+
             body: formData,
           }
         );
@@ -115,7 +97,7 @@
           console.log("Registro exitoso:", responseData);
           alert(`Mascota registrado correctamente`);
 
-            window.location.href = `/mi-perfil`;
+          window.location.href = `/mi-perfil`;
         } else {
           console.error("Error en el registro:", responseData);
           if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
@@ -156,22 +138,22 @@
   // }
 
   // Vista previa de la imagen subida
-  const fotoInput = document.getElementById('foto');
-  const previewContainer = document.createElement('div');
-  previewContainer.className = 'mt-2';
-  
+  const fotoInput = document.getElementById("foto");
+  const previewContainer = document.createElement("div");
+  previewContainer.className = "mt-2";
+
   fotoInput?.parentNode?.appendChild(previewContainer);
-  
-  fotoInput?.addEventListener('change', (e) => {
+
+  fotoInput?.addEventListener("change", (e) => {
     const file = (e.target as HTMLInputElement).files?.[0];
-    previewContainer.innerHTML = '';
-    
+    previewContainer.innerHTML = "";
+
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const img = document.createElement('img');
+        const img = document.createElement("img");
         img.src = e.target?.result as string;
-        img.className = 'w-32 h-32 object-cover rounded';
+        img.className = "w-32 h-32 object-cover rounded";
         previewContainer.appendChild(img);
       };
       reader.readAsDataURL(file);

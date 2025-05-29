@@ -8,6 +8,120 @@ const { mascotaId } = Astro.props;
 </style>
 
 <div>
+    <div class="min-h-screen bg-gradient-to-br from-[#732a9b] to-[#edd953] via-[#2a7b9b] via-at-29% via-[#57c785] via-at-68% pb-8 pt-2 px-4">
+    <header class="max-w-4xl mx-auto mb-4">
+        <!-- <p class="text-center text-2xl sm:text-3xl font-bold text-white shadow-2xl">
+            Perfil de la mascota
+        </p> -->
+    </header>
+
+    <div class="max-w-xl mx-auto p-4">
+        <div class="bg-white rounded-xl shadow-[0_0px_30px_rgba(0,0,0,0.6)] overflow-hidden transition-all duration-300 hover:shadow-xl">
+            <!-- Layout que cambia a horizontal en pantallas md -->
+            <div class="md:flex md:flex-row-reverse">
+                <!-- Foto (a la derecha en PC) -->
+                <div class="relative md:w-2/5 lg:w-1/2 md:h-auto">
+                    <div class="h-full md:h-full overflow-hidden">
+                        <img
+                            id="foto-mascota"  
+                            src="" 
+                            alt="profile" 
+                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        />
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-teal-900/80 to-transparent p-4">
+                        <h1 id="nombre-mascota" >
+                            <span class="text-2xl sm:text-3xl text-left text-shadow font-bold text-white drop-shadow-md"></span>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Contenido (a la izquierda en PC) -->
+                <div class="p-6 md:w-3/5 lg:w-1/2">
+                    <div class="space-y-8">
+                        <!-- Pet Details Section -->
+                        <div class="space-y-4">
+                            <h2 class="text-xl font-semibold text-teal-800 flex items-center">
+                                <i class="ph ph-paw-print w-5 h-5 mr-2 text-teal-600"></i>
+                                Información de la mascota
+                            </h2>
+
+                            <div class="space-y-3">
+                                <!-- Mantener el contenido existente -->
+                                <div class="flex items-start space-x-2">
+                                    <div class="mt-1">
+                                        <i class="ph ph-info w-4 h-4 text-teal-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-500">Observaciones</div>
+                                        <div id="observaciones"><span class="text-gray-800"></span></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start space-x-2">
+                                    <div class="mt-1">
+                                        <i class="ph ph-hash w-4 h-4 text-teal-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-500">Nº chip</div>
+                                        <div id="num-chip"><span class="text-gray-800"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Owner Information Section -->
+                        <div class="space-y-4">
+                            <h2 class="text-xl font-semibold text-teal-800 flex items-center">
+                                <i class="ph ph-user w-5 h-5 mr-2 text-teal-600"></i>
+                                Informacion del dueño
+                            </h2>
+
+                            <div class="flex items-start space-x-2">
+                                <div class="mt-1">
+                                    <i class="ph ph-heart w-4 h-4 text-teal-600"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Nombre</div>
+                                    <div id="nombre-usuario" class="text-gray-800"><span></span></div>
+                                </div>
+                            </div>
+
+                            <div class="m-4 space-y-3">
+                                <div class="py-1 flex flex-col space-y-2">
+                                    <div id="telefono-usuario" class="flex items-center text-gray-800">
+                                        <i class="ph ph-phone w-4 h-4 mr-2 text-teal-600"></i>
+                                        <span></span>
+                                    </div>
+                                    <a href="tel:+34612345678" 
+                                       class="inline-flex items-center justify-center rounded-md px-3 py-2 text-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 bg-teal-600 text-white hover:bg-teal-700">
+                                        <i class="ph ph-phone w-4 h-4 mr-3"></i>
+                                        Llamar por teléfono
+                                    </a>
+                                </div>
+
+                                <div class="py-1 flex flex-col space-y-2">
+                                    <div id="email-usuario" class="flex items-center text-gray-800">
+                                        <i class="ph ph-envelope w-4 h-4 mr-4 text-teal-600"></i>
+                                        <span></span>
+                                    </div>
+                                    <a class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 bg-white text-teal-600 border-2 border-teal-600 hover:bg-teal-50">
+                                        <i class="ph ph-envelope w-4 h-4 mr-3"></i>
+                                        Enviar un correo electrónico
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script define:vars={{ mascotaId }}>
+
     <div id="mascota-container" class="p-2 text-center rounded">
         <h2>Perfil de mascota</h2>
           <div class="datos-mascota">
@@ -35,7 +149,7 @@ const { mascotaId } = Astro.props;
     </div>
   </div>
 
-  <Modal title='Aviso:' client:load  />
+  <Modal title='Aviso:' />
   
   <script define:vars={{ mascotaId }}>
     console.log("Mascota ID:", mascotaId);

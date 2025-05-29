@@ -1,5 +1,7 @@
 ---
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
 ---
 
 <!doctype html>
@@ -10,10 +12,26 @@ import Header from "../components/Header.astro";
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Aplicación mascotas</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
+		<link
+		rel="stylesheet"
+		type="text/css"
+		href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+	  />
+	  <link
+		rel="stylesheet"
+		type="text/css"
+		href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css"
+	  />
 	</head>
 	<body>
 		<Header />
 		<slot />
+		<Footer /> 
 	</body>
 </html>
 
@@ -25,3 +43,4 @@ import Header from "../components/Header.astro";
 		height: 100%;
 	}
 </style>
+

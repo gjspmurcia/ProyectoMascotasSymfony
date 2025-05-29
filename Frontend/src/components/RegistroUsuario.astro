@@ -1,0 +1,213 @@
+<h1 class="text-3xl font-bold text-center mt-10">Registro</h1>
+  <h2>Introduce tus datos personales</h2>
+  <form
+    id="formulario"
+    method="POST"
+    action="http://localhost:8000/api/registro"
+    class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
+  >
+    <div class="mb-4">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required />
+    </div>
+    <div class="mb-4">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+    </div>
+    <div class="flex flex-row gap-4">
+      <div class="mb-4 w-full">
+        <label for="dni">Dni:</label>
+        <input type="text" id="dni" name="dni" required />
+      </div>
+      <div class="mb-4 w-full">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" required />
+      </div>
+    </div>
+    <div class="mb-4">
+      <label for="calle">Calle:</label>
+      <input type="text" id="calle" name="calle" required />
+    </div>
+    <div class="mb-4">
+      <label for="numero">Numero, piso, puerta... :</label>
+      <input type="text" id="numero" name="num_calle" required />
+    </div>
+    <div class="flex flex-row gap-4">
+    <div class="mb-4 w-full">
+      <label for="codigo_postal">Código Postal:</label>
+      <input type="text" id="codigo_postal" name="cod_postal" required />
+    </div>
+    <div class="mb-4 w-full">
+      <label for="ciudad">Ciudad:</label>
+      <input type="text" id="ciudad" name="ciudad" required />
+    </div>
+  </div>
+    <div class="mb-4">
+      <label for="password"
+        >Contraseña: <span id="mensaje_password" class="text-gray-400"
+          >Debe contener al menos 8 caracteres, un numero y una mayuscula</span
+        ></label
+      >
+      <input type="password" id="password" name="password" required />
+    </div>
+    <div class="mb-4">
+      <label for="password_confirm">Confirma la contraseña:</label>
+      <input type="password" id="password_confirm" required />
+    </div>
+    <button
+      type="submit"
+      class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+      >Registrar</button
+    >
+    <p id="mensaje"></p>
+  </form>
+
+
+
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const formulario = document.getElementById("formulario");
+      const mensaje = document.getElementById("mensaje");
+      const mensajePassword = document.getElementById("mensaje_password");
+
+      formulario?.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evita la recarga de la página
+
+        mensaje.textContent = "";
+        mensaje.classList.remove("text-red-500", "text-green-500");
+
+        let password_confirm = document.querySelector("#password_confirm");
+
+        const formData = new FormData(formulario);
+
+        // Verifica si la contraseña cumple los requisitos y coincide con la de confirmacion
+        // COMENTADO Y LONGITUD MIINIMA CAMBIADA A 1 PARA FACILITAR LAS PRUEBAS !!!!!!!!!!!!!!
+        if (formData.get("password").length < 1 || formData.get("password").length > 20) {
+          mensajePassword.textContent ="La contraseña debe tener entre 8 y 20 caracteres";
+        //   mensajePassword.classList.remove("text-green-500");
+        //   mensajePassword.classList.add("text-red-500");
+        // } else if (!/[A-Z]/.test(formData.get("password")) || !/\d/.test(formData.get("password"))) {
+        //   mensajePassword.textContent = "La contraseña debe contener al menos una mayúscula y un numero";
+        //   mensajePassword.classList.remove("text-green-500");
+        //   mensajePassword.classList.add("text-red-500");
+        // } else if (!(formData.get("password") == password_confirm.value)) {
+        //   mensajePassword.textContent = "Las contraseñas no coinciden";
+        //   mensajePassword.classList.remove("text-green-500");
+        //   mensajePassword.classList.add("text-red-500");
+        } else {
+          mensajePassword.textContent = "Contraseña con formato válido";
+          mensajePassword.classList.remove("text-red-500");
+          mensajePassword.classList.add("text-green-500");
+
+          const data = Object.fromEntries(formData.entries());
+
+          // Convierte los datos a JSON
+          const jsonData = JSON.stringify(data);
+
+          // Envía el JSON al backend
+          try {
+            const response = await fetch("http://localhost:8000/api/registro", {
+              method: "POST",
+              credentials: 'include',
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: jsonData,
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+              mensaje.textContent = "Registro exitoso!";
+              mensaje.classList.remove("text-red-500");
+              mensaje.classList.add("text-green-500");
+              console.log("Registro exitoso:", responseData);
+              
+              pantallaConfirmacion();
+              autoLogin(formData.get("password"), formData.get("email"));
+            } else {
+              console.error("Error en el registro:", responseData);
+              if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
+                let errorText = "";
+                responseData.mensaje.forEach((error) => {
+                  errorText += `${error.campo}: ${error.error}\n`;
+                });
+                mensaje.textContent = `Error: ${errorText}`;
+              } else {
+                mensaje.textContent = `Error desconocido: ${responseData.mensaje || "Error desconocido"}`;
+              }
+              mensaje.classList.remove("text-green-500");
+              mensaje.classList.add("text-red-500");
+            }
+          } catch (error) {
+            mensaje.textContent = "Error de red. Inténtalo de nuevo más tarde.";
+            mensaje.classList.remove("text-green-500");
+            mensaje.classList.add("text-red-500");
+            console.error("Error de red:", error);
+          }
+        }
+      });
+    });
+
+    function pantallaConfirmacion() {
+      formulario.style.display = "none";
+      
+      const divConfirmacion = document.createElement("div");
+      const textoConfirmacion = document.createElement("h2");
+      const botonNuevaMascota = document.createElement("a");
+      const botonPerfil = document.createElement("a");
+      const nuevaMascota = document.createElement("p");
+      const visitaPerfil = document.createElement("p");
+
+      textoConfirmacion.textContent = "Te has registrado correctamente"
+      nuevaMascota.textContent = "A continuación te recomendamos añadir a tu mascota"
+      visitaPerfil.textContent = "Tambien puedes visitar tu perfil para ver tus datos (puedes añadir mascotas desde allí mas tarde)"
+      botonNuevaMascota.textContent= "Añade a tu mascota"
+      botonPerfil.textContent = "Visita tu perfil"
+      botonPerfil.setAttribute("href", "/mi-perfil")
+      botonNuevaMascota.setAttribute("href", "/mascota/registro")
+      divConfirmacion.classList.add("w-full", "max-w-xl", "mx-auto", "m-4", "p-4", "rounded", "shadow-lg", "border-2", "border-gray-300");
+      botonPerfil.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
+      botonNuevaMascota.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
+
+      divConfirmacion.append(textoConfirmacion, 
+          nuevaMascota,
+          botonNuevaMascota, 
+          visitaPerfil, 
+          botonPerfil
+      );
+
+      formulario.parentNode.replaceChild(divConfirmacion, formulario);
+
+    }
+
+    async function autoLogin(email, password) {
+      try {
+        const response = await fetch('http://localhost:8000/api/login', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          mensaje.textContent = 'Inicio de sesión exitoso';
+          mensaje.style.color = 'green';
+          window.location.href = '/mi-perfil';
+        } else {
+          mensaje.textContent = result.mensaje || 'Error en el login';
+        }
+      } catch (error) {
+        mensaje.textContent = 'Error al conectar con el servidor';
+      }
+    }
+
+
+
+  </script>

@@ -1,5 +1,5 @@
 ---
-
+import Modal from './Modal.astro';
 ---
 
 <div class="space-y-8 md:overflow-y-auto">
@@ -50,6 +50,8 @@
   </form>
 </div>
 
+<Modal title='Aviso:' />
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const formMascota = document.getElementById("formRegistroMascota");
@@ -95,9 +97,13 @@
           mensaje.classList.remove("text-red-500");
           mensaje.classList.add("text-green-500");
           console.log("Registro exitoso:", responseData);
-          alert(`Mascota registrado correctamente`);
+          window.showModal({
+            message: "Mascota registrado correctamente",
+            onConfirm: () => {
+              window.location.href = "/mi-perfil";
+            }
+          });
 
-          window.location.href = `/mi-perfil`;
         } else {
           console.error("Error en el registro:", responseData);
           if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
@@ -121,21 +127,6 @@
     });
   });
 
-  // function confirmacionRegistro() {
-  //   formMascota.style.display = "none";
-
-  //   const divConfirmacion = document.createElement("div");
-  //   const textoConfirmacion = document.createElement("p");
-  //   const botonConfirmacion = document.createElement("a");
-
-  //   textoConfirmacion.textContent = "Mascota registrada correctamente";
-  //   botonConfirmacion.textContent = "OK";
-  //   botonConfirmacion.setAttribute("href", "/mi-perfil");
-
-  //   divConfirmacion.append(textoConfirmacion, botonConfirmacion);
-
-  //   formMascota.parentNode.replaceChild(divConfirmacion, formMascota);
-  // }
 
   // Vista previa de la imagen subida
   const fotoInput = document.getElementById("foto");

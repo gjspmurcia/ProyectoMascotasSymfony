@@ -1,5 +1,5 @@
 ---
-
+import Modal from './Modal.astro';
 ---
 
 <div>
@@ -12,11 +12,11 @@
     </div>
   </div>
   
-  <script>
+  <Modal title='Aviso:' client:load  />
+
+<script>
   document.addEventListener("DOMContentLoaded", () => {
     const divRegistroMascota = document.getElementById('divRegistroMascota');
-
-
 
       //  Obtener el elemento contenedor en el DOM
       const mascotasContainer: HTMLElement | null = document.getElementById('mascota-container');
@@ -139,41 +139,53 @@
     
 
       async function eliminarPerfilMascota(id: number) {
-        if (!confirm("¿Estás seguro de que deseas eliminar este perfil? Esta acción no se puede deshacer.")) {
-        return;
-        }
 
-        try {
-          const response = await fetch(`http://localhost:8000/api/mi_mascota_eliminar/${id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+        window.showModal({
+          message: "¿Estás seguro de que deseas eliminar este perfil? Esta acción no se puede deshacer.",
+          onConfirm: async () => {
+
+            try {
+              const response = await fetch(`http://localhost:8000/api/mi_mascota_eliminar/${id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                }
+              });
+
+              const data = await response.json();
+              console.log("Respuesta eliminación:", data);
+              if ( data.status === "success") {
+                fetchMascotaProfile();
+
+                window.showModal({
+                message: "Mascota eliminada correctamente",
+                onConfirm: () => {
+                  window.location.href = "/mi-perfil";
+                }
+                });
+              } else {
+                window.showModal({
+                message: `Error al eliminar el perfil de mascota: ${data.mensaje || 'Error desconocido'}`,
+                onConfirm: () => {
+                  window.location.href = "/mi-perfil";
+                }
+                });
+              }
+            } catch (error) {
+              console.error("Error al eliminar el perfil de mascota:", error);
+              window.showModal({
+                message: "Error de conexión al intentar eliminar el perfil de mascota",
+                onConfirm: () => {
+                  window.location.href = "/mi-perfil";
+                }
+              });
             }
-          });
-
-          const data = await response.json();
-          console.log("Respuesta eliminación:", data);
-          if ( data.status === "success") {
-            fetchMascotaProfile();
-
-            alert("Mascota eliminada correctamente");
-          } else {
-            alert(`Error al eliminar el perfil de mascota: ${data.mensaje || 'Error desconocido'}`);
           }
-        } catch (error) {
-          console.error("Error al eliminar el perfil de mascota:", error);
-          alert("Error de conexión al intentar eliminar el perfil de mascota");
-        }
+        });
       }
+});
 
-
-  });
-
-
-
-
-  
-  </script>
+</script>
 

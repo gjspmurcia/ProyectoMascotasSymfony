@@ -1,4 +1,5 @@
 ---
+import Modal from './Modal.astro';
 const { usuarioId } = Astro.props;
 ---
 
@@ -45,18 +46,6 @@ const { usuarioId } = Astro.props;
       <input type="text" id="ciudad" name="ciudad" required />
     </div>
   </div>
-  <!-- <div class="mb-4">
-    <label for="password"
-      >Contraseña: <span id="mensaje_password" class="text-gray-400"
-        >Debe contener al menos 8 caracteres, un numero y una mayuscula</span
-      ></label
-    >
-    <input type="password" id="password" name="password" required />
-  </div>
-  <div class="mb-4">
-    <label for="password_confirm">Confirma la contraseña:</label>
-    <input type="password" id="password_confirm" required />
-  </div> -->
   <button type="submit">Guardar cambios</button>
   <a
     class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
@@ -64,6 +53,8 @@ const { usuarioId } = Astro.props;
   >
   <p id="mensaje"></p>
 </form>
+
+<Modal title='Aviso:' client:load  />
 
 <script define:vars={{ usuarioId }}>
   document.addEventListener("DOMContentLoaded", async () => {
@@ -153,8 +144,12 @@ const { usuarioId } = Astro.props;
           mensaje.textContent = "Editado con éxito";
           mensaje.classList.remove("text-red-500");
           mensaje.classList.add("text-green-500");
-          alert("Usuario actualizado correctamente");
-          window.location.href = `/mi-perfil`;
+          window.showModal({
+            message: "Usuario actualizado correctamente",
+            onConfirm: () => {
+              window.location.href = "/mi-perfil";
+            }
+          });
         } else {
           if (responseData.errores && Array.isArray(responseData.errores)) {
             const erroresTexto = responseData.errores

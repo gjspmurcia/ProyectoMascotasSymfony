@@ -1,5 +1,5 @@
 ---
-
+import Modal from './Modal.astro';
 ---
 
 <div>
@@ -9,6 +9,7 @@
     </div>
   </div>
   
+  <Modal title='Aviso:' client:load  />
   <script>
     // 1. Obtener el elemento contenedor en el DOM
     const profileContainer: HTMLElement | null = document.getElementById('profile-container');
@@ -45,14 +46,17 @@
                 <br>
                 <button id="botonEliminarUsuario">Eliminar usuario</button>
                 <button id="botonEditarUsuario">Editar usuario</button>
+                <button id="botonCambiarPassword">Cambiar contraseña</button>
                 <button id="botonLogout">Cerrar sesion</button>
              </div>
            `;
            const botonEliminarUsuario = document.getElementById('botonEliminarUsuario');
            const botonEditarUsuario = document.getElementById('botonEditarUsuario');
+           const botonCambiarPassword = document.getElementById('botonCambiarPassword');
            const botonLogout = document.getElementById('botonLogout');
            botonEliminarUsuario?.addEventListener('click', () => eliminarUsuario(usuario.id));
            botonEditarUsuario?.addEventListener('click', () => {  window.location.href = `/editar-usuario/${usuario.id}`; });
+           botonCambiarPassword?.addEventListener('click', () => {  window.location.href = `/cambiar-password/${usuario.id}`; });
            botonLogout?.addEventListener('click', () => {  window.location.href = `/logout`; });
           }
         } else {
@@ -61,7 +65,6 @@
           if (response.status === 401) {
             profileContainer.innerHTML = `<p>El usuario no esta autenticado (Status: ${response.status})</p>`;
           } else {
-          
           //  Si hay un error de la API 
           const mensajeError = data.message || `Error desconocido de la API (Status: ${response.status})`;
           console.error("Datos recibidos:", data); 
@@ -77,35 +80,49 @@
     // 8. Llamar a la función para iniciar la carga de datos cuando el script se ejecuta
     fetchUserProfile();
   
-
     async function eliminarUsuario(id) {
-      if (!confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-      return;
-      }
+      
+      window.showModal({
+          message: "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.",
+          onConfirm: async () => {
+              try {
+                const response = await fetch(`http://localhost:8000/api/mi_perfil_eliminar/${id}`, {
+                  method: 'DELETE',
+                  credentials: 'include',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  }
+              });
+            
+            const data = await response.json();
 
-      try {
-        const response = await fetch(`http://localhost:8000/api/mi_perfil_eliminar/${id}`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            if (response.ok && data.status === "success") {
+              window.showModal({
+                message: "Usuario eliminado correctamente",
+                onConfirm: () => {
+                  window.location.href = "/";
+                }
+              });
+            } else {
+              window.showModal({
+                message: `Error al eliminar el usuario: ${data.mensaje || 'Error desconocido'}`,
+                onConfirm: () => {
+                  window.location.href = "/mi-perfil";
+                }
+              });
+            }
+          } catch (error) {
+            console.error("Error al eliminar el usuario:", error);
+            window.showModal({
+                message: "Error de conexión al intentar eliminar el usuario",
+                onConfirm: () => {
+                  window.location.href = "/mi-perfil";
+                }
+            });
           }
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.status === "success") {
-        alert("Usuario eliminado correctamente");
-        // Redirigir al usuario a la página de inicio o login
-        window.location.href = '/';
-        } else {
-          alert(`Error al eliminar el usuario: ${data.mensaje || 'Error desconocido'}`);
         }
-      } catch (error) {
-        console.error("Error al eliminar el usuario:", error);
-        alert("Error de conexión al intentar eliminar el usuario");
-      }
+      });
     }
 
     function logout() {

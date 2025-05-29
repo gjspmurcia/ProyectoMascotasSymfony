@@ -1,4 +1,5 @@
 ---
+import Modal from './Modal.astro';
 const { mascotaId } = Astro.props;
 ---
 
@@ -46,6 +47,7 @@ const { mascotaId } = Astro.props;
 
 </div>
 
+<Modal title='Aviso:' client:load  />
 <script define:vars={{ mascotaId }}>
   document.addEventListener("DOMContentLoaded", async () => {
     const formMascota = document.getElementById("formEdicionMascota");
@@ -147,9 +149,13 @@ const { mascotaId } = Astro.props;
           mensaje.classList.remove("text-red-500");
           mensaje.classList.add("text-green-500");
           console.log("Editado exitoso:", responseData);
-          alert(`Mascota editada correctamente`);
-
-          window.location.href = `/mi-perfil`;
+          window.showModal({
+            message: "Mascota editada correctamente",
+            onConfirm: () => {
+              window.location.href = "/mi-perfil";
+            }
+          });
+          
         } else {
           console.error("Error en el registro:", responseData);
           if (responseData.mensaje && Array.isArray(responseData.mensaje)) {

@@ -1,7 +1,7 @@
 ---
 import Modal from './Modal.astro';
-
 const { mascotaId } = Astro.props;
+const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 ---
 <style>
   .hidden { display: none; }
@@ -130,13 +130,13 @@ const { mascotaId } = Astro.props;
 
   <Modal title='Aviso:' />
   
-  <script define:vars={{ mascotaId }}>
+  <script define:vars={{ mascotaId, PUBLIC_API_URL }}>
     console.log("Mascota ID:", mascotaId);
     document.addEventListener("DOMContentLoaded", async () => {
       async function cargarPerfilMascota() {
         try {
           // Construimos la URL con el id recibido por la URL
-          const response = await fetch(`http://localhost:8000/mostrar/qr/${mascotaId}`);
+          const response = await fetch(`${PUBLIC_API_URL}/mostrar/qr/${mascotaId}`);
           if (!response.ok) {
             // Si es 404, mostramos mensaje de que la mascota no existe
             if(response.status === 404){
@@ -166,7 +166,7 @@ const { mascotaId } = Astro.props;
           const fotoElemento = document.getElementById("foto-mascota");
           if (fotoElemento && fotoElemento instanceof HTMLImageElement) {
             fotoElemento.src = data.foto
-              ? `http://localhost:8000/uploads/mascotas/${data.foto}`
+              ? `${PUBLIC_API_URL}/uploads/mascotas/${data.foto}`
               : "ruta_por_defecto.jpg";
           } else {
             console.warn("El elemento con id 'foto-mascota' no se encontró en el DOM.");
@@ -202,7 +202,7 @@ const { mascotaId } = Astro.props;
 
       try {
         const response = await fetch(
-          `http://localhost:8000/api/enviar-aviso/${mascotaId}`,
+          `${PUBLIC_API_URL}/api/enviar-aviso/${mascotaId}`,
           {
             method: "POST",
             credentials: "include",

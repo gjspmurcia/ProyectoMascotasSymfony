@@ -33,7 +33,7 @@ const { title = 'Confirmación' } = Astro.props;
 </div>
 
 
-<script client:load>
+<script>
     const modal = document.querySelector('.astro-modal');
     if (!modal) {
         console.error(`No se encontró ningún elemento con la clase .astro-modal`);

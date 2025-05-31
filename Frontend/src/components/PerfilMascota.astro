@@ -10,9 +10,9 @@ import Modal from './Modal.astro';
             <a class="m-4 hover:text-slate-900 bg-teal-600 text-white font-bold px-4 py-2 rounded" href='/registro-mascota' id="botonNuevaMascota">Añadir</a>
         </div>
     </div>
-  </div>
+</div>
   
-  <Modal title='Aviso:' client:load  />
+<Modal title='Aviso:' />
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -29,7 +29,7 @@ import Modal from './Modal.astro';
       //  Función asíncrona para obtener los datos
       async function fetchMascotaProfile() {
         try {
-          const response = await fetch("http://localhost:8000/api/mi_mascota", {
+          const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -67,7 +67,7 @@ import Modal from './Modal.astro';
                     <p><strong>Foto:</strong> ${mascota.foto || 'No especificado'}</p>
                     ${mascota.foto ? 
                       `<div class="my-3">
-                        <img src="http://localhost:8000/uploads/mascotas/${mascota.foto}" 
+                        <img src="${import.meta.env.PUBLIC_API_URL}/uploads/mascotas/${mascota.foto}" 
                               alt="Foto de ${mascota.nombre}" 
                               class="w-48 h-48 object-cover rounded mx-auto" />
                       </div>` 
@@ -145,7 +145,7 @@ import Modal from './Modal.astro';
           onConfirm: async () => {
 
             try {
-              const response = await fetch(`http://localhost:8000/api/mi_mascota_eliminar/${id}`, {
+              const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_eliminar/${id}`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {

@@ -71,7 +71,7 @@
 
   async function comprobarLogin() {
     try {
-      const response = await fetch("http://localhost:8000/api/mi_perfil", {
+      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_perfil`, {
         method: "GET",
         credentials: "include",
       });

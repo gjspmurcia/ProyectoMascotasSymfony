@@ -1,6 +1,7 @@
 ---
 import Modal from './Modal.astro';
 const { mascotaId } = Astro.props;
+const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 ---
 
 <div>
@@ -9,7 +10,7 @@ const { mascotaId } = Astro.props;
   <form
     id="formEdicionMascota"
     method="POST"
-    action="http://localhost:8000/api/mi_mascota_editar"
+    action=`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_editar`
     enctype="multipart/form-data"
     class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
   >
@@ -47,8 +48,8 @@ const { mascotaId } = Astro.props;
 
 </div>
 
-<Modal title='Aviso:' client:load  />
-<script define:vars={{ mascotaId }}>
+<Modal title='Aviso:' />
+<script define:vars={{ mascotaId, PUBLIC_API_URL }}>
   document.addEventListener("DOMContentLoaded", async () => {
     const formMascota = document.getElementById("formEdicionMascota");
     const mensaje = document.getElementById("mensaje");
@@ -64,7 +65,7 @@ const { mascotaId } = Astro.props;
     // Cargar datos existentes de la mascota
     try {
       console.log("Cargando datos de la mascota con ID:", mascotaId);
-      const response = await fetch(`http://localhost:8000/api/mi_mascota`, {
+      const response = await fetch(`${PUBLIC_API_URL}/api/mi_mascota`, {
         credentials: "include"
       });
       
@@ -94,7 +95,7 @@ const { mascotaId } = Astro.props;
         if (mascota.foto) {
           const previewContainer = document.querySelector('div.mt-2');
           const img = document.createElement('img');
-          img.src = `http://localhost:8000/uploads/mascotas/${mascota.foto}`;
+          img.src = `${PUBLIC_API_URL}/uploads/mascotas/${mascota.foto}`;
           img.className = 'w-32 h-32 object-cover rounded';
           previewContainer.innerHTML = '';
           previewContainer.appendChild(img);
@@ -134,7 +135,7 @@ const { mascotaId } = Astro.props;
       
       try {
         const response = await fetch(
-          `http://localhost:8000/api/mi_mascota_editar/${mascotaId}`,
+          `${PUBLIC_API_URL}/api/mi_mascota_editar/${mascotaId}`,
           {
             method: "POST", 
             credentials: "include",

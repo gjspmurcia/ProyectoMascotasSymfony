@@ -33,7 +33,6 @@ jobs:
           # Copiamos la carpeta dist y server, package.json, node_modules etc que se necesitan para SSR
           mkdir -p deploy-package
           cp -r Frontend/dist deploy-package/
-          cp -r Frontend/server deploy-package/
           cp Frontend/package.json deploy-package/
           cp -r Frontend/node_modules deploy-package/
 

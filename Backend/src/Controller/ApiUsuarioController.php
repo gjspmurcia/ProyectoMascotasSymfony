@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class ApiUsuarioController extends AbstractController
 {
     
-    #[Route('/api/registro', name: 'api_usuario_registro', methods: ['POST'])]
+    #[Route('/registro', name: 'api_usuario_registro', methods: ['POST'])]
     public function registro(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

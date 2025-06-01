@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="bg-white min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+      <!-- Título principal -->
+      <h1 class="text-3xl font-bold text-center text-teal-700 mb-8">
+        Política de Privacidad
+      </h1>
+
+      <!-- Contenido de la política -->
+      <div class="space-y-6 text-gray-700 leading-relaxed text-justify">
+        
+        <p>
+          En <strong>Mi Huella App</strong> nos tomamos muy en serio la privacidad de tus datos personales. Esta Política de Privacidad explica cómo recopilamos, utilizamos, almacenamos y protegemos la información que obtienes al usar nuestra plataforma. Al registrarte y utilizar nuestro servicio, aceptas las prácticas descritas en este documento.
+        </p>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">1. Información que recopilamos</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>Datos de registro:</strong> nombre, dirección de correo electrónico y contraseña.</li>
+          <li><strong>Datos de perfil de mascota:</strong> nombre de la mascota, número de chip, observaciones, fotografía y cualquier otra información que proporciones al registrar o editar una mascota.</li>
+          <li><strong>Información de escaneo de QR:</strong> fecha, hora e IP aproximada desde la que se escanea el código QR de la mascota.</li>
+          <li><strong>Mensajes al dueño:</strong> texto que un usuario anónimo envía desde el formulario “Escribir mensaje” en la vista pública de la mascota.</li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">2. Cómo usamos tu información</h2>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>Autenticación y gestión de cuenta:</strong> para permitir el registro, inicio de sesión y edición de tu perfil personal.</li>
+          <li><strong>Gestión de mascotas:</strong> para almacenar y mostrar los datos de tus mascotas, así como generar y mantener actualizado el código QR correspondiente.</li>
+          <li><strong>Notificaciones:</strong> enviamos correos electrónicos al dueño de la mascota cuando se escanea su código QR o cuando alguien envía un mensaje desde el formulario público.</li>
+          <li><strong>Mejora del servicio:</strong> analizamos patrones de uso y escaneo (de forma agregada) para mejorar la experiencia y detectar posibles comportamientos anómalos.</li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">3. Compartir datos con terceros</h2>
+        <p>
+          No vendemos, alquilamos ni cedemos tu información personal a terceros ajenos a <strong>Mi Huella App</strong>. Solamente compartimos datos en los siguientes casos:
+        </p>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>Proveedores de servicios:</strong> como el envío de correos electrónicos (SMTP) y generación de QR (QuickChart.io). Estos proveedores solo tienen acceso a la información necesaria para cumplir con su función.</li>
+          <li><strong>Requerimientos legales:</strong> si una autoridad judicial o administrativa lo solicita válidamente, proporcionaremos los datos requeridos de acuerdo con la legislación vigente.</li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">4. Seguridad de la información</h2>
+        <p>
+          Implementamos medidas técnicas y organizativas razonables para proteger tus datos contra accesos no autorizados, pérdida o alteración. Entre ellas:
+        </p>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>Cifrado de contraseñas:</strong> utilizamos algoritmos seguros (bcrypt/argon2) para almacenar contraseñas.</li>
+          <li><strong>HTTPS:</strong> toda la comunicación entre el navegador y nuestros servidores está cifrada con TLS.</li>
+          <li><strong>Control de acceso:</strong> solo personal autorizado puede acceder a la base de datos y a la infraestructura de servidores.</li>
+          <li><strong>Copia de seguridad:</strong> realizamos backups periódicos de la base de datos para prevenir pérdida de información.</li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">5. Conservación de datos</h2>
+        <p>
+          Conservamos tus datos personales mientras mantengas una cuenta activa en <strong>Mi Huella App</strong>. Si decides eliminar tu cuenta, procederemos a borrar toda la información personal y de mascotas asociada en un plazo máximo de 30 días. Sin embargo, podremos mantener datos agregados o anónimos para fines estadísticos y de mejora del servicio.
+        </p>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">6. Tus derechos</h2>
+        <p>
+          De acuerdo con la legislación aplicable, puedes ejercer los siguientes derechos:
+        </p>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>Acceso:</strong> solicitar una copia de los datos que almacenamos sobre ti.</li>
+          <li><strong>Rectificación:</strong> corregir o actualizar información inexacta.</li>
+          <li><strong>Supresión:</strong> borrar tus datos personales (derecho al olvido).</li>
+          <li><strong>Limitación:</strong> restringir el uso de tus datos en determinadas circunstancias.</li>
+          <li><strong>Portabilidad:</strong> recibir tus datos en un formato estructurado y legible.</li>
+          <li><strong>Oposición:</strong> oponerte al tratamiento de tus datos para ciertas finalidades (por ejemplo, marketing).</li>
+        </ul>
+        <p>
+          Para ejercer cualquiera de estos derechos, contáctanos a través de <a href="mailto:privacidad@mihuellaapp.com" class="text-teal-600 hover:underline">privacidad@mihuellaapp.com</a>. Responderemos a tu solicitud en un plazo máximo de un mes.
+        </p>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">7. Cambios en esta política</h2>
+        <p>
+          Nos reservamos el derecho de modificar esta Política de Privacidad en cualquier momento. La versión actual estará disponible siempre en esta página, con su fecha de última actualización indicada. Te recomendamos revisar esta sección periódicamente para estar al tanto de posibles cambios.
+        </p>
+
+        <h2 class="text-2xl font-semibold text-teal-600 mt-8">8. Contacto</h2>
+        <p>
+          Si tienes dudas, inquietudes o reclamaciones sobre el tratamiento de tus datos personales, puedes escribirnos a: <strong>privacidad@mihuellaapp.com</strong> o usar el formulario de contacto en <a href="/contacto" class="text-teal-600 hover:underline">nuestra página de contacto</a>.
+        </p>
+
+        <p class="mt-8 text-sm text-gray-500 text-center">
+          Fecha de última actualización: 1 de junio de 2025
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

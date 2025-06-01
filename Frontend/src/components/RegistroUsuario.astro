@@ -7,7 +7,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
   <form
     id="formulario"
     method="POST"
-    action=`${import.meta.env.PUBLIC_API_URL}/api/registro`
+    action=`${import.meta.env.PUBLIC_API_URL}/registro`
     class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
   >
     <div class="mb-4">
@@ -112,7 +112,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 
           // Envía el JSON al backend
           try {
-            const response = await fetch(`${PUBLIC_API_URL}/api/registro`, {
+            const response = await fetch(`${PUBLIC_API_URL}/registro`, {
               method: "POST",
               credentials: 'include',
               headers: {
@@ -166,15 +166,18 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
       const visitaPerfil = document.createElement("p");
 
       textoConfirmacion.textContent = "Te has registrado correctamente"
+      textoConfirmacion.classList.add("text-2xl", "font-bold", "text-teal-700","mb-6","text-center")
       nuevaMascota.textContent = "A continuación te recomendamos añadir a tu mascota"
+      nuevaMascota.classList.add("text-gray-700","mb-8");
       visitaPerfil.textContent = "Tambien puedes visitar tu perfil para ver tus datos (puedes añadir mascotas desde allí mas tarde)"
+      visitaPerfil.classList.add("text-gray-700","mb-8", "mt-8");
       botonNuevaMascota.textContent= "Añade a tu mascota"
       botonPerfil.textContent = "Visita tu perfil"
       botonPerfil.setAttribute("href", "/mi-perfil")
-      botonNuevaMascota.setAttribute("href", "/mascota/registro")
-      divConfirmacion.classList.add("w-full", "max-w-xl", "mx-auto", "m-4", "p-4", "rounded", "shadow-lg", "border-2", "border-gray-300");
-      botonPerfil.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
-      botonNuevaMascota.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
+      botonNuevaMascota.setAttribute("href", "/registro-mascota")
+      divConfirmacion.classList.add("w-full", "max-w-xl", "mx-auto", "mt-6", "mb-6", "p-8", "rounded", "shadow-lg", "border-2", "border-gray-300");
+      botonPerfil.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "mb-8", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
+      botonNuevaMascota.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "mb-8", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
 
       divConfirmacion.append(textoConfirmacion, 
           nuevaMascota,

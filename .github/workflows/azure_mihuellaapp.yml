@@ -25,6 +25,9 @@ jobs:
 
       - name: npm install, build, and test
         working-directory: Frontend
+        env:
+          PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
+          PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
         run: |
           npm install
           npm run build

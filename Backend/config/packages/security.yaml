@@ -48,6 +48,7 @@ security:
         - { path: ^/api/recuperar-password, roles: PUBLIC_ACCESS }
         - { path: ^/api/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/api/enviar-aviso, roles: PUBLIC_ACCESS }
+        - { path: ^/registro, roles: PUBLIC_ACCESS }
         - { path: ^/mi_perfil, roles: ROLE_USER }
         - { path: ^/mi_mascota, roles: ROLE_USER }
         - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }

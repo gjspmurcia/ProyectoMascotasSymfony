@@ -63,8 +63,12 @@ class ApiResetPasswordController extends AbstractController
             $resetToken = $this->resetPasswordHelper->generateResetToken($usuario);
 
             // Construye el enlace que recibirá el usuario en el correo
-            $frontendUrl = $this->getParameter('url') . '/nuevo-password?token=' . $resetToken->getToken();
-            
+            $url = $this->getParameter('url');
+            $frontendUrl = sprintf(
+                '%s/nuevo-password?token=%s',
+                $url,
+                $resetToken->getToken()
+            );
             $this->logger->debug('URL de frontend construida', ['url'=>$frontendUrl]);
 
             // Envía el email

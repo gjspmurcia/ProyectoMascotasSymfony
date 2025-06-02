@@ -173,7 +173,7 @@ final class ApiMascotaController extends AbstractController{
 
     private function generarQrParaMascota(Mascota $mascota, EntityManagerInterface $entityManager): QR
     {
-        $contenidoQR = 'http://localhost:4321/mascota/' . $mascota->getId();
+        $contenidoQR = $this->getParameter('url') . '/mascota/' . $mascota->getId();
         $urlQr = 'https://quickchart.io/qr?text=' . urlencode($contenidoQR) . '&size=200';
 
         $qr = new QR();

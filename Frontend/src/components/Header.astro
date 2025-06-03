@@ -28,7 +28,7 @@
         <a class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/faq">Preguntas frecuentes</a>
         
         <a id="botonRegistro" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/registro">Registro</a>
-        <a id="botonLog" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/login">Login</a>
+        <a id="botonLog" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/login">Iniciar sesión</a>
         <a id="botonMiPerfil" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0 hidden" href="/mi-perfil">Mi perfil</a>
     </div>
  
@@ -92,11 +92,11 @@
     if (isLogged) {
       botonMiPerfil?.classList.remove("hidden");
       botonRegistro?.classList.add("hidden");
-      botonLog.textContent = "Logout";
+      botonLog.textContent = "Cerrar sesión";
       botonLog.setAttribute("href", "/logout");
       botonLog.classList.add("bg-amber-600", "px-2", "py-1", "rounded");
     } else {
-      botonLog.textContent = "Login";
+      botonLog.textContent = "Iniciar sesión";
       botonLog.setAttribute("href", "/login");
       botonLog.classList.remove("bg-amber-600", "px-4", "py-1", "rounded");
     }

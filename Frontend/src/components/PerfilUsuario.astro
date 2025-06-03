@@ -3,7 +3,6 @@ import Modal from './Modal.astro';
 ---
 
 <div>
-    <h2>Perfil de Usuario</h2>
     <div id="profile-container" class="p-2 text-center rounded">
       Cargando datos...
     </div>
@@ -36,24 +35,19 @@ import Modal from './Modal.astro';
            if (profileContainer) {
            profileContainer.innerHTML = `
              <div>
-                <h1>Bienvenid@, ${usuario.nombre}</h1>
-                <p><strong>Email:</strong> ${usuario.email || 'No especificado'}</p>
-                <p><strong>DNI:</strong> ${usuario.dni || 'No especificado'}</p>
-                <p><strong>Teléfono:</strong> ${usuario.telefono || 'No especificado'}</p>
-                <p><strong>Dirección:</strong> ${usuario.calle || 'No especificado'}, ${usuario.num_calle || ''}</p>
-                <p><strong>Código postal:</strong> ${usuario.cod_postal || 'No especificado'}</p>
-                <p><strong>Ciudad:</strong> ${usuario.ciudad || 'No especificada'}</p>
-                <br>
-                <button id="botonEliminarUsuario">Eliminar usuario</button>
+                </br>
                 <button id="botonEditarUsuario">Editar usuario</button>
                 <button id="botonCambiarPassword">Cambiar contraseña</button>
                 <button id="botonLogout">Cerrar sesion</button>
+                <button id="botonEliminarUsuario">Eliminar usuario</button>
+                </br>
              </div>
            `;
            const botonEliminarUsuario = document.getElementById('botonEliminarUsuario');
            const botonEditarUsuario = document.getElementById('botonEditarUsuario');
            const botonCambiarPassword = document.getElementById('botonCambiarPassword');
            const botonLogout = document.getElementById('botonLogout');
+
            botonEliminarUsuario?.addEventListener('click', () => eliminarUsuario(usuario.id));
            botonEditarUsuario?.addEventListener('click', () => {  window.location.href = `/editar-usuario/${usuario.id}`; });
            botonCambiarPassword?.addEventListener('click', () => {  window.location.href = `/cambiar-password/${usuario.id}`; });

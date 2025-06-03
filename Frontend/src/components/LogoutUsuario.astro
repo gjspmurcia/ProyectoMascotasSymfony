@@ -27,7 +27,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
             window.showModal({
                 message: "Sesión cerrada correctamente",
                 onConfirm: () => {
-                window.location.href = "/login";
+                window.location.href = "/";
                 }
             });
             } else {
@@ -41,7 +41,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
     })
 
     document.getElementById("botonVolver").addEventListener("click", () => {
-        window.location.href = '/mi-perfil'; 
+        window.location.href = '/area-privada'; 
     });
 
 </script>

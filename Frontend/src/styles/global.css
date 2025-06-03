@@ -1,5 +1,76 @@
 @import "tailwindcss";
 
+@layer base {
+  :root {
+    --primary: #0f766e;
+    --primary-light: #14b8a6;
+  }
+}
+
+
+@layer components {
+  .text-primary {
+    @apply text-[#0f766e];
+  }
+  
+  .text-primary-light {
+    @apply text-[#14b8a6];
+  }
+
+  .bg-primary {
+    @apply bg-[#0f766e];
+  }
+
+  .bg-primary-light {
+    @apply bg-[#14b8a6];
+  }
+
+  .bg-primary-dark {
+    @apply bg-[#0f5855];
+  }
+
+  .hover\:bg-primary-dark:hover {
+    @apply bg-[#0f5855];
+  }
+
+  .hover\:text-primary-light:hover {
+    @apply text-[#14b8a6];
+  }
+
+  .border-primary {
+    @apply border-[#0f766e];
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
 html,
 body {
     margin: 0;

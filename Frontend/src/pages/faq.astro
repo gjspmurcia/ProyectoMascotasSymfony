@@ -1,72 +1,11 @@
 ---
 import '../styles/global.css';
 import Layout from '../layouts/Layout.astro';
+import Faq from '../components/Faq.astro';
 
 
 ---
 
 <Layout>
-    <div class="bg-white min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-2xl mx-auto">
-      <!-- Título principal -->
-      <h1 class="text-3xl font-bold text-center text-teal-700 mb-8">
-        Preguntas frecuentes
-      </h1>
-
-      <!-- Contenedor de preguntas -->
-      <div class="space-y-6">
-
-        <!-- Pregunta 1 -->
-        <div class="border border-gray-200 rounded-lg shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2">
-            ¿Cómo registro una nueva mascota?
-          </h2>
-          <p class="text-gray-600 leading-relaxed text-justify">
-            Para registrar una mascota, inicia sesión con tu cuenta y ve a “Área Privada”. Allí encontrarás el botón “Nueva Mascota”. Haz clic, completa el formulario con nombre, foto, número de chip (si lo tienes) y observaciones, y pulsa “Crear”. La app generará automáticamente un código QR asociado a esa mascota.
-          </p>
-        </div>
-
-        <!-- Pregunta 2 -->
-        <div class="border border-gray-200 rounded-lg shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2">
-            ¿Cómo funciona el código QR?
-          </h2>
-          <p class="text-gray-600 leading-relaxed text-justify">
-            Una vez registrada la mascota, el sistema genera un código QR único que contiene la URL pública de su perfil. Imprime ese QR en una chapa o pegatina en el collar. Si alguien encuentra a tu mascota, solo debe escanear el QR con la cámara de su móvil y accederá a la página con tus datos de contacto.
-          </p>
-        </div>
-
-        <!-- Pregunta 3 -->
-        <div class="border border-gray-200 rounded-lg shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2">
-            ¿Qué sucede cuando alguien escanea mi QR?
-          </h2>
-          <p class="text-gray-600 leading-relaxed text-justify">
-            Al escanear el QR, el visitante llegará a la vista pública de tu mascota, donde verá tu nombre, teléfono y correo electrónico. Además, si el visitante pulsa “Escribir mensaje a mi dueño” y envía un texto, tú recibirás ese mensaje por correo electrónico. También se te notificará automáticamente por email cuando el código QR sea escaneado, para que sepas que tu mascota ha sido localizada.
-          </p>
-        </div>
-
-        <!-- Pregunta 4 -->
-        <div class="border border-gray-200 rounded-lg shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2">
-            ¿Puedo editar los datos de mi mascota después de crearla?
-          </h2>
-          <p class="text-gray-600 leading-relaxed text-justify">
-            Sí. En “Área Privada” encontrarás la sección de “Mascotas” donde podrás ver todas tus mascotas registradas. Para cada una, hay opciones para ver el perfil, editar la foto, nombre, observaciones o número de chip, y también para regenerar el QR si lo necesitas.
-          </p>
-        </div>
-
-        <!-- Pregunta 5 -->
-        <div class="border border-gray-200 rounded-lg shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2">
-            ¿Cómo contactar al dueño si no veo su información?
-          </h2>
-          <p class="text-gray-600 leading-relaxed text-justify">
-            Todos los perfiles públicos muestran el número de teléfono y el correo electrónico del dueño. Si por alguna razón esos campos están vacíos (“No especificado”), intenta contactar a través de la dirección de email principal de la aplicación o busca información en tu área local (veterinarias, protectoras) indicando el número de chip visible en la placa de la mascota.
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </div>
+    <Faq />
 </Layout>

@@ -76,6 +76,7 @@ body {
     margin: 0;
     width: 100%;
     min-height: 100dvh;
+    scroll-behavior: smooth;
 }
 
 *{
@@ -84,15 +85,7 @@ body {
     
 }
 
-h1 {
-    @apply text-3xl font-bold text-center text-black mt-10; 
-}
-h2 {
-    @apply text-2xl font-semibold text-center text-gray-900 mt-8;
-}
-h3 {
-    @apply text-xl font-medium text-center text-gray-800 mt-6;
-}
+
 label {
     @apply block text-gray-800 text-sm font-bold mb-2
 }

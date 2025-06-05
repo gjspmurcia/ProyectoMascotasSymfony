@@ -8,7 +8,7 @@ import Modal from './Modal.astro';
     </div>
   </div>
   
-  <Modal title='Aviso:' client:load  />
+  <Modal title='Aviso:' />
   <script>
     // 1. Obtener el elemento contenedor en el DOM
     const profileContainer: HTMLElement | null = document.getElementById('profile-container');
@@ -16,7 +16,7 @@ import Modal from './Modal.astro';
     // 2. Función asíncrona para obtener los datos
     async function fetchUserProfile() {
       try {
-        const response = await fetch("http://localhost:8000/api/mi_perfil", {
+        const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_perfil`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -111,7 +111,7 @@ import Modal from './Modal.astro';
     fetchUserProfile();
 
     function logout() {
-      fetch('http://localhost:8000/api/logout', {
+      fetch(`${import.meta.env.PUBLIC_API_URL}/api/logout`, {
         method: 'POST',
         credentials: 'include',
         headers: {

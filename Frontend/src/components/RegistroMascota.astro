@@ -8,7 +8,7 @@ import Modal from './Modal.astro';
   <form
     id="formRegistroMascota"
     method="POST"
-    action="http://localhost:8000/api/mi_mascota_nueva"
+    action=`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_nueva`
     enctype="multipart/form-data"
     class="w-full max-w-xl mx-auto m-8 mb-12 p-8 rounded-xl shadow-xl/20 hover:shadow-xl-40 border-1 border-gray-300 bg-white"
   >
@@ -81,7 +81,7 @@ import Modal from './Modal.astro';
 
       try {
         const response = await fetch(
-          "http://localhost:8000/api/mi_mascota_nueva",
+          `${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_nueva`,
           {
             method: "POST",
             credentials: "include",

@@ -42,7 +42,7 @@ import Modal from './Modal.astro';
   </div>
 </section>
 
-<Modal title='Aviso:' client:load />
+<Modal title='Aviso:' />
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -55,7 +55,7 @@ import Modal from './Modal.astro';
 
     async function fetchMascotaProfile() {
       try {
-        const response = await fetch("http://localhost:8000/api/mi_mascota", {
+        const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -82,7 +82,7 @@ import Modal from './Modal.astro';
                 <!-- Imagen de la mascota -->
                 <div class="relative aspect-5/4">
                   ${mascota.foto ? 
-                    `<img src="http://localhost:8000/uploads/mascotas/${mascota.foto}" 
+                    `<img src="${import.meta.env.PUBLIC_API_URL}/uploads/mascotas/${mascota.foto}" 
                           alt="Foto de ${mascota.nombre}" 
                           class="w-full h-full object-cover" />` 
                     : 
@@ -219,7 +219,7 @@ import Modal from './Modal.astro';
         message: "¿Estás seguro de que deseas eliminar este perfil? Esta acción no se puede deshacer.",
         onConfirm: async () => {
           try {
-            const response = await fetch(`http://localhost:8000/api/mi_mascota_eliminar/${id}`, {
+            const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_eliminar/${id}`, {
               method: 'DELETE',
               credentials: 'include',
               headers: {

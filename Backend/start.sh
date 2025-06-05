@@ -1,0 +1,1 @@
+cp /home/site/wwwroot/nginx /etc/nginx/sites-available/default && service nginx restart

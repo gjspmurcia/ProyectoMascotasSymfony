@@ -1,5 +1,5 @@
 ---
-
+const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 ---
 
 <div
@@ -33,7 +33,7 @@
     </div>
   </form>
 </div>
-<script>
+<script define:vars={{ PUBLIC_API_URL }}>
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("loginUsuarioForm");
     const mensaje = document.getElementById("mensaje");
@@ -45,9 +45,9 @@
       const password = form.password.value;
 
       try {
-        const response = await fetch("http://localhost:8000/api/login", {
-          method: "POST",
-          credentials: "include",
+        const response = await fetch(`${PUBLIC_API_URL}/api/login`, {
+          method: 'POST',
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
@@ -57,9 +57,9 @@
         const result = await response.json();
 
         if (response.ok) {
-          mensaje.textContent = "Inicio de sesión exitoso";
-          mensaje.style.color = "green";
-          window.location.href = "/mi-perfil";
+          mensaje.textContent = 'Inicio de sesión exitoso';
+          mensaje.style.color = 'green';
+          window.location.href = '/area-privada';
         } else {
           mensaje.textContent = result.mensaje || "Error en el login";
         }

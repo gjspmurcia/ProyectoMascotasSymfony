@@ -3,10 +3,12 @@
 ---
 
 <div class="bg-gradient-to-br from-teal-600 to-[#146d6f] p-4 md:px-10 text-white flex items-center justify-between shadow-lg/20">
-    <div class="flex items-center mx-2 md:mx-8">
-        <img class="max-h-9 md:max-h-10 mx-2" src="/logoMiHuella.png" alt="Logo" />
-        <img class="max-h-9.5 md:max-h-10 mx-2" src="/miHuella.png" alt="MiHuellaQR" />
-    </div>
+    <a href="/">
+      <div class="flex items-center mx-2 md:mx-8">
+          <img class="max-h-9 md:max-h-10 mx-2" src="/logoMiHuella.png" alt="Logo" />
+          <img class="max-h-9.5 md:max-h-10 mx-2" src="/miHuella.png" alt="MiHuellaQR" />
+      </div>
+    </a>
     
 
     <!-- Botón hamburguesa (visible solo en móvil) -->
@@ -26,15 +28,15 @@
         <a class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/faq">Preguntas frecuentes</a>
         
         <a id="botonRegistro" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/registro">Registro</a>
-        <a id="botonLog" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/login">Iniciar sesión</a>
-        <a id="botonMiPerfil" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0 hidden" href="/area-privada">Área privada</a>
+        <a id="botonLogin" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0" href="/login">Iniciar sesión</a>
+        <a id="botonAreaPrivada" class="m-3 py-1 md:py-0 md:px-1 hover:text-teal-200 hover:border-b-[2px] border-teal-200 md:border-0 hidden" href="/area-privada">Área privada</a>
     </div>
  
 </div>
 
 <script>
-  const botonLog = document.getElementById("botonLog");
-  const botonMiPerfil = document.getElementById("botonMiPerfil");
+  const botonLogin = document.getElementById("botonLogin");
+  const botonAreaPrivada = document.getElementById("botonAreaPrivada");
   const botonRegistro = document.getElementById("botonRegistro");
   const menuToggle = document.getElementById("menu-toggle");
   const menuItems = document.getElementById("menu-items");
@@ -74,7 +76,7 @@
 
   async function comprobarLogin() {
     try {
-      const response = await fetch("http://localhost:8000/api/mi_perfil", {
+      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_perfil`, {
         method: "GET",
         credentials: "include",
       });
@@ -88,15 +90,15 @@
   async function actualizarBotonLogin() {
     const isLogged = await comprobarLogin();
     if (isLogged) {
-      botonMiPerfil?.classList.remove("hidden");
+      botonAreaPrivada?.classList.remove("hidden");
       botonRegistro?.classList.add("hidden");
-      botonLog.textContent = "Cerrar sesión";
-      botonLog.setAttribute("href", "/logout");
-      botonLog.classList.add("bg-amber-600", "px-2", "py-1", "rounded");
+      botonLogin.textContent = "Cerrar sesión";
+      botonLogin.setAttribute("href", "/logout");
+      botonLogin.classList.add("bg-amber-600", "px-2", "py-1", "rounded");
     } else {
-      botonLog.textContent = "Iniciar sesión";
-      botonLog.setAttribute("href", "/login");
-      botonLog.classList.remove("bg-amber-600", "px-4", "py-1", "rounded");
+      botonLogin.textContent = "Iniciar sesión";
+      botonLogin.setAttribute("href", "/login");
+      botonLogin.classList.remove("bg-amber-600", "px-4", "py-1", "rounded");
     }
   }
   

@@ -2,7 +2,7 @@
 import Modal from './Modal.astro';
 ---
 
-<section class="pt-8 md:pt-12 pb-16">
+<section class="pt-8 md:pt-12 pb-16 min-h-3/5  bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header Section -->
     <div class="text-center mb-12">
@@ -15,8 +15,8 @@ import Modal from './Modal.astro';
     </div>
 
     <!-- Add New Pet Section -->
-    <div id="divBotonRegistroMascota" class="mb-12 flex flex-col items-center">
-      <div class="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl p-8 text-center border border-primary/20">
+    <div id="divBotonRegistroMascota" class="mb-12 flex flex-col items-center ">
+      <div class="bg-white rounded-xl p-8 text-center  shadow-xl/20 hover:shadow-lg/35 hover:scale-101 transition-all duration-200">
         <div class="flex items-center justify-center w-16 h-16 bg-primary rounded-full mx-auto mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -76,11 +76,11 @@ import Modal from './Modal.astro';
             mascotas.forEach(mascota => {
               const mascotaDiv = document.createElement('div');
               mascotaDiv.id = `mascota-${mascota.id}`;
-              mascotaDiv.className = 'bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 overflow-hidden';
+              mascotaDiv.className = 'bg-white rounded-xl  shadow-xl/20 border border-gray-100 hover:shadow-lg/30 hover:scale-101 transition-all duration-200 overflow-hidden  shadow-xl/20';
               
               mascotaDiv.innerHTML = `
                 <!-- Imagen de la mascota -->
-                <div class="relative aspect-5/4 bg-gradient-to-br from-primary-light/30 to-secondary-light/20">
+                <div class="relative aspect-5/4">
                   ${mascota.foto ? 
                     `<img src="http://localhost:8000/uploads/mascotas/${mascota.foto}" 
                           alt="Foto de ${mascota.nombre}" 

@@ -2,7 +2,7 @@
 import Modal from './Modal.astro';
 ---
 
-<div class="space-y-8 md:overflow-y-auto">
+<div class="space-y-8 md:overflow-y-auto min-h-3/5  bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
   <h1 class="text-3xl font-bold text-center mt-10">Registro nueva mascota</h1>
   <h2 class="text-xl text-center">Introduce los datos correspondientes</h2>
   <form
@@ -10,7 +10,7 @@ import Modal from './Modal.astro';
     method="POST"
     action="http://localhost:8000/api/mi_mascota_nueva"
     enctype="multipart/form-data"
-    class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
+    class="w-full max-w-xl mx-auto m-8 mb-12 p-8 rounded-xl shadow-xl/20 hover:shadow-xl-40 border-1 border-gray-300 bg-white"
   >
     <div class="mb-4">
       <label for="nombre">Nombre:</label>

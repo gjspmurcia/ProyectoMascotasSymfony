@@ -25,6 +25,17 @@ import Modal from './Modal.astro';
           }
         });
         const data = await response.json();
+
+         if (response.status === 401 || data.status === "unauthorized" || data.code === 401) {
+          // Usuario no autenticado volver a inicio
+          window.showModal({
+            message: "Error, por favor, inicia sesión primero.",
+            onConfirm: () => {
+              window.location.href = "/login";
+            }
+          });
+          
+        }
   
         // 4. Verificar el estado de la respuesta y el status de la API
         if (response.ok && data.status === "success") {

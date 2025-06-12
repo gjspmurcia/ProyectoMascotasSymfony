@@ -64,6 +64,16 @@ import Modal from './Modal.astro';
         });
         const data = await response.json();
 
+        if (response.status === 401 || data.status === "unauthorized" || data.code === 401) {
+          // Usuario no autenticado volver a inicio
+          window.showModal({
+            message: "Error, por favor, inicia sesión primero.",
+            onConfirm: () => {
+              window.location.href = "/login";
+            }
+          });
+        }
+
         if (response.ok && data.status === "success") {
           const mascotas = data.mascota;
           console.log("Datos de mascota cargados:", mascotas);

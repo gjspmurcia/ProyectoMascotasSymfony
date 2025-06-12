@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+
+
+---
+
+<Layout>
+
+<section class="min-h-3/5 py-12 px-4 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68% flex flex-col items-center justify-center">
+  <div class="max-w-2xl w-full mx-auto bg-white rounded-xl shadow-xl hover:shadow-lg/40 border border-gray-200 p-8">
+    <h2 class="text-3xl font-extrabold text-primary text-center mb-2">¿Tienes dudas o sugerencias?</h2>
+    <p class="text-base text-gray-600 text-center mb-6">
+      Rellena el siguiente formulario y nos pondremos en contacto contigo lo antes posible.
+    </p>
+    <form id="contactoForm" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="nombre" class="text-teal-800 font-semibold flex items-center">Nombre</label>
+        <input id="nombre" name="nombre" type="text" required placeholder="Tu nombre" class="border rounded-md p-2 focus:ring-2 focus:ring-teal-300 transition" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="email" class="text-teal-800 font-semibold flex items-center">Email</label>
+        <input id="email" name="email" type="email" required placeholder="Tu correo electrónico" class="border rounded-md p-2 focus:ring-2 focus:ring-teal-300 transition" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="mensaje" class="text-teal-800 font-semibold flex items-center">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" rows="5" required placeholder="¿En qué podemos ayudarte?" class="border rounded-md p-2 focus:ring-2 focus:ring-teal-300 transition"></textarea>
+      </div>
+      <button type="submit" class="bg-teal-600 text-white font-semibold py-2 mt-2 rounded-lg shadow hover:bg-teal-700 transition transform hover:scale-105 text-lg flex items-center justify-center">
+        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Enviar mensaje
+      </button>
+      <p id="mensajeContacto" class="text-center text-green-700 mt-2 hidden">¡Mensaje enviado correctamente!</p>
+    </form>
+    <div class="mt-6 text-center text-gray-500">
+      <p class="mt-2 text-xs">* Responderemos en menos de 24 horas hábiles.</p>
+    </div>
+  </div>
+</section>
+
+
+</Layout>

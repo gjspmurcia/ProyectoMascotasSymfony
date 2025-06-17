@@ -14,7 +14,7 @@ import Modal from './Modal.astro';
       </p>
     </div>
 
-    <!-- Add New Pet Section -->
+    <!-- Añadir mascota -->
     <div id="divBotonRegistroMascota" class="mb-12 flex flex-col items-center ">
       <div class="bg-white rounded-xl p-8 text-center  shadow-xl/20 hover:shadow-lg/35 hover:scale-101 transition-all duration-200">
         <div class="flex items-center justify-center w-16 h-16 bg-primary rounded-full mx-auto mb-4">
@@ -35,7 +35,7 @@ import Modal from './Modal.astro';
       </div>
     </div>
 
-    <!-- Pets Container -->
+    <!-- Listado mascotas -->
     <div id="mascota-container" class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <!-- Las mascotas se cargarán aquí dinámicamente -->
     </div>
@@ -118,7 +118,7 @@ import Modal from './Modal.astro';
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      <strong>Chip: </strong> ${mascota.num_chip || 'No especificado'}
+                      <strong>Chip:&nbsp;</strong> ${mascota.num_chip || 'No especificado'}
                     </div>
                     <div class="flex items-start text-sm text-gray-600">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 mt-0.5 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,10 +136,10 @@ import Modal from './Modal.astro';
                     `<div class="bg-slate-100 rounded-lg p-4 text-center mb-6">
                       <img src="${mascota.qr.imgQr}" 
                             alt="QR de ${mascota.nombre}" 
-                            class="w-24 h-24 mx-auto mb-3 border rounded" />
+                            class="w-28 h-28 mx-auto mb-3 border rounded" />
                       <a href="${mascota.qr.imgQr}" 
                         download="QR_${mascota.nombre}.png"
-                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary hover:text-white transition-all duration-300">
+                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary hover:text-primary-light transition-all duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
@@ -166,7 +166,7 @@ import Modal from './Modal.astro';
                       Editar
                     </button>
                     <button id="botonEliminarMascota${mascota.id}"
-                            class="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 transition-all duration-300">
+                            class="warning flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md transition-all duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
@@ -246,14 +246,14 @@ import Modal from './Modal.astro';
               window.showModal({
                 message: "Mascota eliminada correctamente",
                 onConfirm: () => {
-                  window.location.href = "/mi-perfil";
+                  window.location.href = "/mis-mascotas";
                 }
               });
             } else {
               window.showModal({
                 message: `Error al eliminar el perfil de mascota: ${data.mensaje || 'Error desconocido'}`,
                 onConfirm: () => {
-                  window.location.href = "/mi-perfil";
+                  window.location.href = "/mis-mascotas";
                 }
               });
             }
@@ -262,7 +262,7 @@ import Modal from './Modal.astro';
             window.showModal({
               message: "Error de conexión al intentar eliminar el perfil de mascota",
               onConfirm: () => {
-                window.location.href = "/mi-perfil";
+                window.location.href = "/mis-mascotas";
               }
             });
           }

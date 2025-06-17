@@ -2,7 +2,7 @@
 import Modal from './Modal.astro';
 ---
 
-<div>
+<div class="min-h-3/5 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
     <div id="profile-container" class="p-2 text-center rounded">
       Cargando datos...
     </div>
@@ -33,7 +33,7 @@ import Modal from './Modal.astro';
            // 5. Si es exitoso, construir e inyectar el HTML con los datos
            if (profileContainer) {
            profileContainer.innerHTML = `
-            <section id="area-privada" class="pt-12 md:pt-16 bg-gray-50">
+            <section id="area-privada" class="pt-12 md:pt-16 ">
               <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- TITULO Y DESCRIPCIÓN -->
                 <div class="text-center">
@@ -51,7 +51,7 @@ import Modal from './Modal.astro';
                   <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     
                     <!-- TARJETA 1: MI PERFIL -->
-                    <a href="/mi-perfil" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <a href="/mi-perfil" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:scale-102 transition-all duration-300">
                       <div class="p-6 flex flex-col items-center">
                         <img src="/user_icon.svg" alt="Perfil Icon" class="h-16 w-16 text-primary mb-4"></img>
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Mi Perfil</h3>
@@ -62,7 +62,7 @@ import Modal from './Modal.astro';
                     </a>
 
                     <!-- TARJETA 2: MIS MASCOTAS -->
-                    <a href="/mis-mascotas" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <a href="/mis-mascotas" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:scale-102 transition-all duration-300">
                       <div class="p-6 flex flex-col items-center">
                         <img src="/pet_icon.svg" alt="Mis Mascotas" class="h-16 w-16 mb-4"></img>
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Mis Mascotas</h3>
@@ -73,7 +73,7 @@ import Modal from './Modal.astro';
                     </a>
 
                     <!-- TARJETA 3: CREAR NUEVA MASCOTA -->
-                    <a href="/registro-mascota" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <a href="/registro-mascota" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:scale-102 transition-all duration-300">
                       <div class="p-6 flex flex-col items-center">
                         <img src="/new_pet_icon.svg" alt="Crear Nueva Mascota" class="h-16 w-16 mb-4"></img>
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Crear Nueva Mascota</h3>

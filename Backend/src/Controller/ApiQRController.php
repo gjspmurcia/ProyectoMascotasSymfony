@@ -65,9 +65,9 @@ final class ApiQRController extends AbstractController{
                 "<p>Hola <strong>{$nombreUsuario}</strong>,</p>".
                 "<p>¿Tu mascota se ha perdido? </p>".
                 "<p>Acabamos de detectar que alguien ha escaneado el código QR de <strong>{$nombreMascota}</strong>.</p>".
-                "<p>Si no fuiste tú, es posible que te contacte alguien. Estaté atendo.</p>".
+                "<p>Si no fuiste tú, es posible que te contacte alguien. Estate atento.</p>".
                 "<p>Si es un error, ignora este mensaje.</p>".
-                "<p>Un saludo de Equipo ProyectoMascotas.</p>"
+                "<p>Un saludo de Equipo MiHuellaAPP.</p>"
                 
         );
 
@@ -118,7 +118,7 @@ final class ApiQRController extends AbstractController{
                 "<p>Mensaje de esa persona:</p>".
                 "<blockquote>{$mensajeUsuario}</blockquote>".
 
-                "<p>Un saludo de Equipo ProyectoMascotas.</p>"
+                "<p>Un saludo de Equipo MiHuellaAPP.</p>"
             );
         
         try {

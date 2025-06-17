@@ -1,3 +1,7 @@
+---
+const { expandAll = true } = Astro.props;
+---
+
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
   <div class="text-center">
     <p class="mt-1 text-3xl font-extrabold text-gray-900 sm:text-4xl sm:tracking-tight">
@@ -5,65 +9,113 @@
     </p>
   </div>
 
-  <div class="mt-12 grid gap-8 grid-cols-1 lg:grid-cols-2">
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-3">
-        <span><img src="/icon.svg" alt="Icono" class="w-8 h-8" /></span>
-        ¿Cómo registro una nueva mascota?
-      </h3>
-      <p class="mt-4 text-gray-500">
-        Para registrar una mascota, inicia sesión con tu cuenta y ve a “Área Privada”. Allí encontrarás el botón “Nueva Mascota”. Haz clic, completa el formulario con nombre, foto, número de chip (si lo tienes) y observaciones, y pulsa “Crear”. La app generará automáticamente un código QR asociado a esa mascota.
-      </p>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-3">
-        <span><img src="/icon.svg" alt="Icono" class="w-8 h-8" /></span>
-        ¿Cómo funciona el código QR?
-      </h3>
-      <p class="mt-4 text-gray-500">
-        Una vez registrada la mascota, el sistema genera un código QR único que contiene la URL pública de su perfil. Imprime ese QR en una chapa o pegatina en el collar. Si alguien encuentra a tu mascota, solo debe escanear el QR con la cámara de su móvil y accederá a la página con tus datos de contacto.
-      </p>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-3">
-        <span><img src="/icon.svg" alt="Icono" class="w-8 h-8" /></span>
-        ¿Qué sucede cuando alguien escanea mi QR?
-      </h3>
-      <p class="mt-4 text-gray-500">
-        Al escanear el QR, el visitante llegará a la vista pública de tu mascota, donde verá tu nombre, teléfono y correo electrónico. Además, si el visitante pulsa “Escribir mensaje a mi dueño” y envía un texto, tú recibirás ese mensaje por correo electrónico. También se te notificará automáticamente por email cuando el código QR sea escaneado, para que sepas que tu mascota ha sido localizada.
-      </p>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-3">
-        <span><img src="/icon.svg" alt="Icono" class="w-8 h-8" /></span>
-         ¿Puedo editar los datos de mi mascota después de crearla?
-      </h3>
-      <p class="mt-4 text-gray-500">
-        Sí. En “Área Privada” encontrarás la sección de “Mascotas” donde podrás ver todas tus mascotas registradas. Para cada una, hay opciones para ver el perfil, editar la foto, nombre, observaciones o número de chip, y también para regenerar el QR si lo necesitas.
-      </p>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-3">
-        <span><img src="/icon.svg" alt="Icono" class="w-8 h-8" /></span>
-        ¿Cómo contactar al dueño si no veo su información?
-      </h3>
-      <p class="mt-4 text-gray-500">
-        Todos los perfiles públicos muestran el número de teléfono y el correo electrónico del dueño. Si por alguna razón esos campos están vacíos (“No especificado”), intenta contactar a través de la dirección de email principal de la aplicación o busca información en tu área local (veterinarias, protectoras) indicando el número de chip visible en la placa de la mascota.
-      </p>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-      <h3 class="text-lg font-semibold text-teal-900 flex items-center gap-3">
-        <span><img src="/icon.svg" alt="Icono" class="w-8 h-8" /></span>
-        ¿Puedo usarlo si mi animal no es un perro?
-      </h3>
-      <p class="mt-4 text-gray-500">
-        Por supuesto, lo mas habitual son los perros, pero cualquier tipo de animal puede tener un perfil, lo unico que necesitas tener en cuenta es que pueda llevar de forma habitual, el código el QR en un tamaño suficiente para poder escanearlo con facilidad.
-      </p>
-    </div>
+  <div id="faq" class="mt-12 grid gap-8 grid-cols-1 lg:grid-cols-2 items-start">
+    {[
+      {
+        question: "¿Cómo registro una nueva mascota?",
+        answer:
+          "Para registrar una mascota, inicia sesión con tu cuenta y ve a “Área Privada”. Allí encontrarás el botón “Nueva Mascota”. Haz clic, completa el formulario con nombre, foto, número de chip (si lo tienes) y observaciones, y pulsa “Crear”. La app generará automáticamente un código QR asociado a esa mascota.",
+      },
+      {
+        question: "¿Cómo funciona el código QR?",
+        answer:
+          "Una vez registrada la mascota, el sistema genera un código QR único que contiene la URL pública de su perfil. Imprime ese QR en una chapa o pegatina en el collar. Si alguien encuentra a tu mascota, solo debe escanear el QR con la cámara de su móvil y accederá a la página con tus datos de contacto.",
+      },
+      {
+        question: "¿Qué sucede cuando alguien escanea mi QR?",
+        answer:
+          "Al escanear el QR, el visitante llegará a la vista pública de tu mascota, donde verá tu nombre, teléfono y correo electrónico. Además, si el visitante pulsa “Escribir mensaje a mi dueño” y envía un texto, tú recibirás ese mensaje por correo electrónico. También se te notificará automáticamente por email cuando el código QR sea escaneado, para que sepas que tu mascota ha sido localizada.",
+      },
+      {
+        question: "¿Puedo editar los datos de mi mascota después de crearla?",
+        answer:
+          "Sí. En “Área Privada” encontrarás la sección de “Mascotas” donde podrás ver todas tus mascotas registradas. Para cada una, hay opciones para ver el perfil, editar la foto, nombre, observaciones o número de chip, y también para regenerar el QR si lo necesitas.",
+      },
+      {
+        question: "¿Cómo contactar al dueño si no veo su información?",
+        answer:
+          "Todos los perfiles públicos muestran el número de teléfono y el correo electrónico del dueño. Si por alguna razón esos campos están vacíos (“No especificado”), intenta contactar a través de la dirección de email principal de la aplicación o busca información en tu área local (veterinarias, protectoras) indicando el número de chip visible en la placa de la mascota.",
+      },
+      {
+        question: "¿Puedo usarlo si mi animal no es un perro?",
+        answer:
+          "Por supuesto, lo más habitual son los perros, pero cualquier tipo de animal puede tener un perfil. Lo único que necesitas tener en cuenta es que pueda llevar de forma habitual el código QR en un tamaño suficiente para poder escanearlo con facilidad.",
+      },
+    ].map((faq, index) => (
+      <div class="faq-item bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden">
+        <button
+          class={`faq-question faq-toggle cursor-pointer w-full text-left p-6 flex items-center justify-between gap-3 ${expandAll ? 'faq-open' : ''}`}
+          aria-expanded={expandAll ? 'true' : 'false'}
+          aria-controls={`faq-answer-${index}`}
+        >
+          <span class="text-lg font-semibold text-gray-900 flex items-center gap-3">
+            <img src="/icon.svg" alt="Icono" class="w-8 h-8" />
+            {faq.question}
+          </span>
+          <svg
+            class="faq-arrow w-5 h-5 text-primary transform transition-transform duration-300 rotate-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div
+          id={`faq-answer-${index}`}
+          class="faq-answer px-6 pb-6 text-gray-500 max-h-0 overflow-hidden transition-max-height duration-500 ease-in-out"
+          style={`max-height: ${expandAll ? '1000px' : '0'};`}
+          {...(expandAll ? {} : { hidden: true })}
+        >
+          {faq.answer}
+        </div>
+      </div>
+    ))}
   </div>
 </section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".faq-question");
+
+    buttons.forEach((button) => {
+      const answer = button.nextElementSibling;
+      const arrow = button.querySelector(".faq-arrow");
+
+      button.addEventListener("click", () => {
+        const isExpanded = button.getAttribute("aria-expanded") === "true";
+
+        button.setAttribute("aria-expanded", String(!isExpanded));
+        button.classList.toggle("faq-open", !isExpanded);
+
+        if (!isExpanded) {
+          answer.hidden = false;
+          answer.style.maxHeight = answer.scrollHeight + "px";
+        } else {
+          answer.style.maxHeight = null;
+          setTimeout(() => (answer.hidden = true), 500);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .faq-question.faq-open .faq-arrow {
+    @apply rotate-180;
+  }
+
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+
+  .faq-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-answer[hidden] {
+    display: none;
+  }
+</style>

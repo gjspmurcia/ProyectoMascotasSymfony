@@ -44,7 +44,7 @@ import Modal from './Modal.astro';
     >
     <a
       class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-      href="/mi-perfil">Volver</a
+      href="javascript:history.back()">Volver</a
     >
     <p id="mensaje"></p>
   </form>
@@ -98,7 +98,7 @@ import Modal from './Modal.astro';
           mensaje.classList.add("text-green-500");
           console.log("Registro exitoso:", responseData);
           window.showModal({
-            message: "Mascota registrado correctamente",
+            message: "Mascota registrada correctamente",
             onConfirm: () => {
               window.location.href = "/mis-mascotas";
             }

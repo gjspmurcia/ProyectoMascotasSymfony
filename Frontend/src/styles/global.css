@@ -92,7 +92,9 @@ label {
 input {
     @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow mb-2;
 }
-button:not(.faq-toggle,.warning) {
+button:not(.faq-toggle,.warning,.btnLogout) {
     @apply bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none m-2 cursor-pointer}
 .warning {
-    @apply bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-6 rounded focus:outline-none m-2 cursor-pointer}
+    @apply bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none m-2 cursor-pointer}
+.btnLogout {
+    @apply bg-white border-amber-600 text-amber-600 hover:bg-gray-800 hover:border-gray-800 hover:text-white font-bold py-2 px-6 rounded focus:outline-none m-2 cursor-pointer}

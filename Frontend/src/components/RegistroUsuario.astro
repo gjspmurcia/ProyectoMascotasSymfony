@@ -2,13 +2,14 @@
 const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 ---
 
-<h1 class="text-3xl font-bold text-center mt-10">Registro</h1>
+<div class="space-y-3 md:overflow-y-auto min-h-3/5 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
+  <h1 class="text-3xl font-bold text-center mt-10">Registro</h1>
   <h2 class="text-xl text-center">Introduce tus datos personales</h2>
   <form
     id="formulario"
     method="POST"
     action=`${import.meta.env.PUBLIC_API_URL}/registro`
-    class="w-full max-w-xl mx-auto m-4 p-4 rounded shadow-lg border-2 border-gray-300"
+    class="w-full max-w-xl mx-auto m-8 mb-12 p-8 rounded-xl shadow-xl/20 hover:shadow-xl-40 border-1 border-gray-300 bg-white"
   >
     <div class="mb-4">
       <label for="nombre">Nombre:</label>
@@ -20,7 +21,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
     </div>
     <div class="flex flex-row gap-4">
       <div class="mb-4 w-full">
-        <label for="dni">Dni:</label>
+        <label for="dni">DNI:</label>
         <input type="text" id="dni" name="dni" required />
       </div>
       <div class="mb-4 w-full">
@@ -33,7 +34,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
       <input type="text" id="calle" name="calle" required />
     </div>
     <div class="mb-4">
-      <label for="numero">Numero, piso, puerta... :</label>
+      <label for="numero">Número, piso, puerta... :</label>
       <input type="text" id="numero" name="num_calle" required />
     </div>
     <div class="flex flex-row gap-4">
@@ -65,7 +66,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
     >
     <p id="mensaje"></p>
   </form>
-
+</div>
 
 
 

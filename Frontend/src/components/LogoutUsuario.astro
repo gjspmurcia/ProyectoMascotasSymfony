@@ -3,11 +3,20 @@ import Modal from './Modal.astro';
 const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 ---
 
-<h1 class="text-3xl font-bold text-center mt-10">Cerrar sesión</h1>
-<h2 class="text-xl text-center mt-4">¿Estás seguro de que deseas cerrar la sesión?</h2>
-<div class="text-center">
-    <button id="botonLogout">Sí</button>
-    <button id="botonVolver">Volver</button>
+<div class="min-h-3/5 flex items-center">
+    <div class="space-y-6 p-2 text-center rounded mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-10">Cerrar Sesión</h1>
+        <h2 class="text-xl text-center mt-4">¿Estás seguro de que deseas cerrar la sesión?</h2>
+        <div class="text-center">
+            <button id="botonLogout">Sí</button>
+            <!-- <button id="botonVolver">Volver</button> -->
+            <a
+                id="botonVolver"
+                class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+                href="javascript:history.back()">Volver</a
+            >
+        </div>
+    </div>
 </div>
 
 <Modal title='Aviso:' />

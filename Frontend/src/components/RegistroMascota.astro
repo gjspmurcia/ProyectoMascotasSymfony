@@ -2,53 +2,50 @@
 import Modal from './Modal.astro';
 ---
 
-<div class="space-y-8 md:overflow-y-auto min-h-3/5  bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
-  <h1 class="mt-8 mb-3 text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">Registra una nueva mascota</h1>
-  <h2 class="text-xl text-center text-gray-700">Completa su perfil y genera el código QR</h2>
- 
-  <form
-    id="formRegistroMascota"
-    method="POST"
-    action=`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_nueva`
-    enctype="multipart/form-data"
-    class="w-full max-w-xl mx-auto m-8 mb-12 p-8 rounded-xl shadow-xl/20 hover:shadow-xl-40 border-1 border-gray-300 bg-white"
-  >
-    <div class="mb-4">
-      <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" name="nombre" required />
-    </div>
-    <div class="mb-4">
-      <label for="num_chip">Nº Chip:</label>
-      <input type="text" id="num_chip" name="num_chip" />
-    </div>
-    <div class="mb-4">
-      <label for="observaciones">Observaciones:</label>
-      <input type="text" id="observaciones" name="observaciones" />
-    </div>
-    <div class="mb-4">
-      <label for="foto">Foto:</label>
-      <input
-        type="file"
-        id="foto"
-        name="foto"
-        accept="image/*"
-        class="w-full border p-2 rounded"
-      />
-      <p class="text-sm text-gray-500 mt-1">
-        Formatos aceptados: JPG, PNG, GIF (máx. 5MB)
-      </p>
-    </div>
-    <button
-      type="submit"
-      class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-      >Registrar mascota</button
-    >
-    <a
-      class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-      href="javascript:history.back()">Volver</a
-    >
-    <p id="mensaje"></p>
-  </form>
+<div class="min-h-3/5 flex items-center p-12 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
+  <div class="w-full max-w-3xl mx-auto">
+    <h1 class="text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight mb-2">Registra una nueva mascota</h1>
+    <h2 class="text-center text-gray-700 text-md md:text-xl mb-6">Completa su perfil y genera el código QR</h2>
+
+  <form id="formRegistroMascota" method="POST" action=`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_nueva`
+    enctype="multipart/form-data" class="bg-white text-gray-700 flex flex-col gap-4 w-full mx-auto p-8 rounded-xl shadow-xl hover:shadow-lg/40 border border-gray-300">
+    <div>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required class="w-full mt-1 p-2 border rounded-md" />
+      </div>
+
+      <div>
+        <label for="num_chip">Nº Chip:</label>
+        <input type="text" id="num_chip" name="num_chip" class="w-full mt-1 p-2 border rounded-md" />
+      </div>
+
+      <div>
+        <label for="observaciones">Observaciones:</label>
+        <input type="text" id="observaciones" name="observaciones" class="w-full mt-1 p-2 border rounded-md" />
+      </div>
+
+      <div>
+        <label for="foto">Foto:</label>
+        <input type="file" id="foto" name="foto" accept="image/*" class="w-full mt-1 border p-2 rounded-md"/>
+        <p class="text-xs text-gray-500 mt-1">Formatos aceptados: JPG, PNG, GIF (máx. 5MB)</p>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-4 mt-4">
+        <button type="submit"
+          class="w-full md:w-auto bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition duration-300">
+          Registrar mascota
+        </button>
+
+        <a
+          class="w-full md:w-auto bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded text-center focus:outline-none focus:shadow-outline transition duration-300"
+          href="javascript:history.back()">
+          Volver
+        </a>
+      </div>
+
+      <p id="mensaje" class="text-red-600 mt-2"></p>
+    </form>
+  </div>
 </div>
 
 <Modal title='Aviso:' />

@@ -6,8 +6,13 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
   <div class="w-full max-w-3xl mx-auto">
     <h1 class="mt-8 text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">¡Únete a nuestra comunidad!</h1>
     <h2 class="text-center text-gray-700 text-md md:text-xl mb-6">Completa tu perfil en segundos</h2>
-    <form id="formulario" method="POST" action=`${import.meta.env.PUBLIC_API_URL}/registro`
+
+    <form 
+      id="formulario" 
+      method="POST" 
+      action=`${import.meta.env.PUBLIC_API_URL}/registro`
       class="bg-white flex flex-col gap-4 w-full mx-auto p-8 rounded-xl shadow-xl hover:shadow-lg/40 border border-gray-300">
+      
       <div>
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required class="w-full mt-1 p-2 border rounded-md" autofocus />
@@ -29,20 +34,21 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
         </div>
       </div>
 
-      <div>
-        <label for="calle">Calle:</label>
-        <input type="text" id="calle" name="calle" required class="w-full mt-1 p-2 border rounded-md" />
-      </div>
-
-      <div>
-        <label for="numero">Número, piso, puerta:</label>
-        <input type="text" id="numero" name="num_calle" required class="w-full mt-1 p-2 border rounded-md" />
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="w-full">
+          <label for="calle">Calle:</label>
+          <input type="text" id="calle" name="calle" required class="w-full mt-1 p-2 border rounded-md" />
+        </div>
+        <div class="w-full">
+          <label for="numero">Número:</label>
+          <input type="number" min="0" id="numero" name="num_calle" required class="w-full mt-1 p-2 border rounded-md" />
+        </div>
       </div>
 
       <div class="flex flex-col md:flex-row gap-4">
         <div class="w-full">
           <label for="codigo_postal">Código Postal:</label>
-          <input type="text" id="codigo_postal" name="cod_postal" required class="w-full mt-1 p-2 border rounded-md" />
+          <input type="number" min="0" id="codigo_postal" name="cod_postal" required class="w-full mt-1 p-2 border rounded-md" />
         </div>
         <div class="w-full">
           <label for="ciudad">Ciudad:</label>
@@ -65,15 +71,13 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
         <input type="password" id="password_confirm" required class="w-full mt-1 p-2 border rounded-md" />
       </div>
 
-      <button
-        type="submit"
-        class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition duration-300">
-        Registrar
-      </button>
+      <div class="flex flex-col md:flex-row gap-4 mt-4">
+        <button type="submit" class="transition duration-300">Registrar</button>
+      </div>
 
       <p id="mensaje" class="text-red-600 mt-2"></p>
 
-      <div class="flex justify-between items-center mt-4 text-sm md:text-base">
+      <div class="flex justify-between items-center text-sm md:text-base">
         <a href="/login" class="text-teal-600 hover:text-teal-800 text-center">¿Ya tienes cuenta? Inicia sesión</a>
       </div>
     </form>
@@ -179,15 +183,11 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
     nuevaMascota.textContent = "A continuación te recomendamos añadir tu primera mascota:"
     nuevaMascota.classList.add("text-gray-700","mb-8");
     botonNuevaMascota.textContent= "Registrar mascota"
-    botonNuevaMascota.addEventListener("click", () => {
-      window.location.href = '/registro-mascota'; 
-    });
+    botonNuevaMascota.addEventListener("click", () => { window.location.href = '/registro-mascota'; });
     visitaPerfil.textContent = "Tambien puedes visitar tu perfil para ver tus datos:"
     visitaPerfil.classList.add("text-gray-700","mb-8", "mt-8");
     botonPerfil.textContent = "Visitar perfil"
-    botonPerfil.addEventListener("click", () => {
-      window.location.href = '/mi-perfil'; 
-    });
+    botonPerfil.addEventListener("click", () => { window.location.href = '/mi-perfil'; });
     divConfirmacion.classList.add("bg-white", "w-full", "max-w-xl", "mx-auto", "mt-6", "mb-6", "p-8", "rounded-xl", "shadow-xl", "border", "border-gray-300");
 
     divConfirmacion.append(

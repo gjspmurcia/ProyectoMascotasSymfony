@@ -3,47 +3,54 @@ import Modal from './Modal.astro';
 const { mascotaId } = Astro.props;
 const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 ---
+
 <div class="min-h-3/5 flex items-center p-12 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
   <div class="w-full max-w-3xl mx-auto">
     <h1 class="text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight mb-2">Editar mascota</h1>
     <h2 class="text-center text-gray-700 text-md md:text-xl mb-6">Edita la información de tu mascota y mantén todos sus datos actualizados</h2>
   
-  <form
-    id="formEdicionMascota"
-    method="POST"
-    action=`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_editar`
-    enctype="multipart/form-data"
-    class="bg-white text-gray-700 flex flex-col gap-4 w-full mx-auto p-8 rounded-xl shadow-xl hover:shadow-lg/40 border border-gray-300">
-    <div>
-      <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" name="nombre" required />
-    </div>
-    <div>
-      <label for="num_chip">Nº Chip:</label>
-      <input type="text" id="num_chip" name="num_chip" />
-    </div>
-    <div>
-      <label for="observaciones">Observaciones:</label>
-      <input type="text" id="observaciones" name="observaciones" />
-    </div>
-    <div>
-      <label for="foto">Foto:</label>
-      <input 
-        type="file" 
-        id="foto" 
-        name="foto" 
-        accept="image/*"
-        class="w-full border p-2 rounded" 
-      />
-      <p class="text-sm text-gray-500 mt-1">Formatos aceptados: JPG, PNG, GIF (máx. 5MB)</p>
-    </div>
-    <button
-      type="submit"
-      class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline">Guardar cambios</button>
-    <a class="bg-amber-600 hover:bg-amber-800 text-white text-center font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline" href="javascript:history.back()">Volver</a>
-    <p id="mensaje"></p>
-  </form>
+    <form
+      id="formEdicionMascota"
+      method="POST"
+      action=`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_editar`
+      enctype="multipart/form-data"
+      class="bg-white text-gray-700 flex flex-col gap-4 w-full mx-auto p-8 rounded-xl shadow-xl hover:shadow-lg/40 border border-gray-300">
+      
+      <div>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required />
+      </div>
 
+      <div>
+        <label for="num_chip">Nº Chip:</label>
+        <input type="text" id="num_chip" name="num_chip" />
+      </div>
+
+      <div>
+        <label for="observaciones">Observaciones:</label>
+        <input type="text" id="observaciones" name="observaciones" />
+      </div>
+
+      <div>
+        <label for="foto">Foto:</label>
+        <input 
+          type="file" 
+          id="foto" 
+          name="foto" 
+          accept="image/*"
+          class="w-full border p-2 rounded" 
+        />
+        <p class="text-sm text-gray-500 mt-1">Formatos aceptados: JPG, PNG, GIF (máx. 5MB)</p>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-4 mt-4">
+        <button type="submit" class="transition duration-300">Guardar cambios</button>
+        <button id="botonVolver" class="warning transition duration-300">Volver</button>
+      </div>
+
+      <p id="mensaje"></p>
+    </form>
+  </div>
 </div>
 
 <Modal title='Aviso:' />
@@ -51,8 +58,6 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
   document.addEventListener("DOMContentLoaded", async () => {
     const formMascota = document.getElementById("formEdicionMascota");
     const mensaje = document.getElementById("mensaje");
-    
-  
     
     if (!mascotaId) {
       mensaje.textContent = "Error: ID de mascota no proporcionado";
@@ -69,10 +74,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
       
       const data = await response.json();
 
-
-   
       if (response.ok && data.status === "success") {
-
         const mascota = Array.isArray(data.mascota) 
           ? data.mascota.find(m => m.id.toString() === mascotaId.toString())
           : null;
@@ -123,23 +125,20 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
       let formData = new FormData(formMascotaUpdated);
       formData.append('id', mascotaId);
 
-
       for (let [key, value] of formData.entries()) {
-  console.log(key, value);
-}
+        console.log(key, value);
+      }
 
-
-      if(formData == null){console.log("formData es null")}
+      if (formData == null) {
+        console.log("formData es null")
+      }
       
       try {
-        const response = await fetch(
-          `${PUBLIC_API_URL}/api/mi_mascota_editar/${mascotaId}`,
-          {
-            method: "POST", 
-            credentials: "include",
-            body: formData,
-          }
-        );
+        const response = await fetch(`${PUBLIC_API_URL}/api/mi_mascota_editar/${mascotaId}`, {
+          method: "POST", 
+          credentials: "include",
+          body: formData,
+        });
 
         const responseData = await response.json();
 
@@ -154,7 +153,6 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
               window.location.href = "/mis-mascotas";
             }
           });
-          
         } else {
           console.error("Error en el registro:", responseData);
           if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
@@ -199,5 +197,9 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
       };
       reader.readAsDataURL(file);
     }
+  });
+
+  document.getElementById("botonVolver").addEventListener("click", () => {
+    window.location.href = 'javascript:history.back()'; 
   });
 </script>

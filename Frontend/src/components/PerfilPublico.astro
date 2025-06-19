@@ -149,8 +149,8 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
         // Construimos la URL con el id recibido por la URL
         const response = await fetch(`${PUBLIC_API_URL}/mostrar/qr/${mascotaId}`);
         if (!response.ok) {
-          // Si es 404, mostramos mensaje de que la mascota no existe
-          if (response.status === 404) {
+          // Si es 404 o 500, mostramos mensaje de que la mascota no existe
+          if (response.status === 404 || response.status === 500) {
             mascotaContainer.classList.add("flex");
             mascotaContainer.classList.add("items-center");
             mascotaContainer.innerHTML = `

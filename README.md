@@ -48,5 +48,3 @@ Ejemplo WEB:
 
 CORREO
 infoproyectomascotas@gmail.com
-PM987123
-contraseña de aplicación (Symfony) -> jieu sqra aexn nycc

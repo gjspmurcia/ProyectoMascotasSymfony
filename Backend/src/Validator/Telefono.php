@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class Telefono extends Constraint
 {
-    public $message = 'El valor "{{ string }}" no es un telefono valido';
+    public $message = 'El valor "{{ string }}" no es un teléfono válido.';
     public string $mode = 'strict';
 
     // all configurable options must be passed to the constructor

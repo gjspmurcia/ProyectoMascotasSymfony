@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class DniNie extends Constraint
 {
-    public $message = 'El valor "{{ string }}" no es un DNI o NIE valido';
+    public $message = 'El valor "{{ string }}" no es un DNI o NIE válido.';
     public string $mode = 'strict';
 
     // all configurable options must be passed to the constructor

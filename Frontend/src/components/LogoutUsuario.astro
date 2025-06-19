@@ -4,52 +4,44 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 ---
 
 <div class="min-h-3/5 flex items-center">
-    <div class="space-y-6 p-2 text-center rounded mx-auto">
-        <h1 class="text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">¿Estás seguro de que deseas cerrar la sesión?</h1>
-        <div class="text-center">
-            <button id="botonLogout">Sí</button>
-            <!-- <button id="botonVolver">Volver</button> -->
-            <a
-                id="botonVolver"
-                class="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-                href="javascript:history.back()">Volver</a
-            >
-        </div>
+  <div class="space-y-6 p-2 text-center rounded mx-auto">
+    <h1 class="text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">¿Estás seguro de que deseas cerrar la sesión?</h1>
+    <div class="text-center">
+      <button id="botonLogout">Sí</button>
+      <button id="botonVolver" class="warning">Volver</button>
     </div>
+  </div>
 </div>
 
 <Modal title='Aviso:' />
 
 <script define:vars={{ PUBLIC_API_URL }}>
-
-    document.getElementById("botonLogout").addEventListener("click", async () => {
-        fetch(`${PUBLIC_API_URL}/api/logout`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-            window.showModal({
-                message: "Sesión cerrada correctamente",
-                onConfirm: () => {
-                window.location.href = "/";
-                }
-            });
-            } else {
-            console.error('Error al cerrar sesión');
-            }
-        })
-        .catch(error => {
-            console.error('Error de red:', error);
-        });
-
+  document.getElementById("botonLogout").addEventListener("click", async () => {
+    fetch(`${PUBLIC_API_URL}/api/logout`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+      'Content-Type': 'application/json',
+      },
     })
-
-    document.getElementById("botonVolver").addEventListener("click", () => {
-        window.location.href = 'javascript:history.back()'; 
+    .then(response => {
+      if (response.ok) {
+        window.showModal({
+          message: "Sesión cerrada correctamente",
+          onConfirm: () => {
+          window.location.href = "/";
+          }
+        });
+      } else {
+        console.error('Error al cerrar sesión');
+      }
+    })
+    .catch(error => {
+      console.error('Error de red:', error);
     });
+  })
 
+  document.getElementById("botonVolver").addEventListener("click", () => {
+    window.location.href = 'javascript:history.back()'; 
+  });
 </script>

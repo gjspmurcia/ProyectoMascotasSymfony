@@ -4,8 +4,8 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 
 <div class="min-h-3/5 flex items-center p-12 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68%">
   <div class="w-full max-w-3xl mx-auto">
-  <h1 class="mt-8 text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">¡Únete a nuestra comunidad!</h1>
-  <h2 class="text-center text-gray-700 text-md md:text-xl mb-6">Completa tu perfil en segundos</h2>
+    <h1 class="mt-8 text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">¡Únete a nuestra comunidad!</h1>
+    <h2 class="text-center text-gray-700 text-md md:text-xl mb-6">Completa tu perfil en segundos</h2>
     <form id="formulario" method="POST" action=`${import.meta.env.PUBLIC_API_URL}/registro`
       class="bg-white flex flex-col gap-4 w-full mx-auto p-8 rounded-xl shadow-xl hover:shadow-lg/40 border border-gray-300">
       <div>
@@ -67,8 +67,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 
       <button
         type="submit"
-        class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition duration-300"
-      >
+        class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition duration-300">
         Registrar
       </button>
 
@@ -76,160 +75,153 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 
       <div class="flex justify-between items-center mt-4 text-sm md:text-base">
         <a href="/login" class="text-teal-600 hover:text-teal-800 text-center">¿Ya tienes cuenta? Inicia sesión</a>
-        
       </div>
     </form>
   </div>
 </div>
 
+<script define:vars={{ PUBLIC_API_URL }}>
+  document.addEventListener("DOMContentLoaded", () => {
+    const formulario = document.getElementById("formulario");
+    const mensaje = document.getElementById("mensaje");
+    const mensajePassword = document.getElementById("mensaje_password");
 
+    formulario?.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Evita la recarga de la página
 
+      mensaje.textContent = "";
+      mensaje.classList.remove("text-red-500", "text-green-500");
 
-  <script define:vars={{ PUBLIC_API_URL }}>
-    document.addEventListener("DOMContentLoaded", () => {
-      const formulario = document.getElementById("formulario");
-      const mensaje = document.getElementById("mensaje");
-      const mensajePassword = document.getElementById("mensaje_password");
+      let password_confirm = document.querySelector("#password_confirm");
 
-      formulario?.addEventListener("submit", async (event) => {
-        event.preventDefault(); // Evita la recarga de la página
+      const formData = new FormData(formulario);
 
-        mensaje.textContent = "";
-        mensaje.classList.remove("text-red-500", "text-green-500");
+      // Verifica si la contraseña cumple los requisitos y coincide con la de confirmacion
+      if (formData.get("password").length < 8 || formData.get("password").length > 20) {
+        mensajePassword.textContent ="Debe tener entre 8 y 20 caracteres";
+        mensajePassword.classList.remove("text-green-500");
+        mensajePassword.classList.add("text-red-500");
+      } else if (!/[A-Z]/.test(formData.get("password")) || !/\d/.test(formData.get("password"))) {
+        mensajePassword.textContent = "Debe contener al menos una mayúscula y un número";
+        mensajePassword.classList.remove("text-green-500");
+        mensajePassword.classList.add("text-red-500");
+      } else if (!(formData.get("password") == password_confirm.value)) {
+        mensajePassword.textContent = "Las contraseñas no coinciden";
+        mensajePassword.classList.remove("text-green-500");
+        mensajePassword.classList.add("text-red-500");
+      } else {
+        mensajePassword.textContent = "Contraseña con formato válido";
+        mensajePassword.classList.remove("text-red-500");
+        mensajePassword.classList.add("text-green-500");
 
-        let password_confirm = document.querySelector("#password_confirm");
+        const data = Object.fromEntries(formData.entries());
 
-        const formData = new FormData(formulario);
+        // Convierte los datos a JSON
+        const jsonData = JSON.stringify(data);
 
-        // Verifica si la contraseña cumple los requisitos y coincide con la de confirmacion
-        // COMENTADO Y LONGITUD MIINIMA CAMBIADA A 1 PARA FACILITAR LAS PRUEBAS !!!!!!!!!!!!!!
-        if (formData.get("password").length < 1 || formData.get("password").length > 20) {
-          mensajePassword.textContent ="La contraseña debe tener entre 8 y 20 caracteres";
-        //   mensajePassword.classList.remove("text-green-500");
-        //   mensajePassword.classList.add("text-red-500");
-        // } else if (!/[A-Z]/.test(formData.get("password")) || !/\d/.test(formData.get("password"))) {
-        //   mensajePassword.textContent = "La contraseña debe contener al menos una mayúscula y un numero";
-        //   mensajePassword.classList.remove("text-green-500");
-        //   mensajePassword.classList.add("text-red-500");
-        // } else if (!(formData.get("password") == password_confirm.value)) {
-        //   mensajePassword.textContent = "Las contraseñas no coinciden";
-        //   mensajePassword.classList.remove("text-green-500");
-        //   mensajePassword.classList.add("text-red-500");
-        } else {
-          mensajePassword.textContent = "Contraseña con formato válido";
-          mensajePassword.classList.remove("text-red-500");
-          mensajePassword.classList.add("text-green-500");
+        // Envía el JSON al backend
+        try {
+          const response = await fetch(`${PUBLIC_API_URL}/registro`, {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: jsonData,
+          });
 
-          const data = Object.fromEntries(formData.entries());
+          const responseData = await response.json();
 
-          // Convierte los datos a JSON
-          const jsonData = JSON.stringify(data);
-
-          // Envía el JSON al backend
-          try {
-            const response = await fetch(`${PUBLIC_API_URL}/registro`, {
-              method: "POST",
-              credentials: 'include',
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: jsonData,
-            });
-
-            const responseData = await response.json();
-
-            if (response.ok) {
-              mensaje.textContent = "Registro exitoso!";
-              mensaje.classList.remove("text-red-500");
-              mensaje.classList.add("text-green-500");
-              console.log("Registro exitoso:", responseData);
-              
-              pantallaConfirmacion();
-              autoLogin(formData.get("password"), formData.get("email"));
+          if (response.ok) {
+            mensaje.textContent = "Registro exitoso!";
+            mensaje.classList.remove("text-red-500");
+            mensaje.classList.add("text-green-500");
+            console.log("Registro exitoso:", responseData);
+            
+            pantallaConfirmacion();
+            autoLogin(formData.get("password"), formData.get("email"));
+          } else {
+            console.error("Error en el registro:", responseData);
+            if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
+              let errorText = "";
+              responseData.mensaje.forEach((error) => {
+                errorText += `${error.campo}: ${error.error}\n`;
+              });
+              mensaje.textContent = `Error: ${errorText}`;
             } else {
-              console.error("Error en el registro:", responseData);
-              if (responseData.mensaje && Array.isArray(responseData.mensaje)) {
-                let errorText = "";
-                responseData.mensaje.forEach((error) => {
-                  errorText += `${error.campo}: ${error.error}\n`;
-                });
-                mensaje.textContent = `Error: ${errorText}`;
-              } else {
-                mensaje.textContent = `Error desconocido: ${responseData.mensaje || "Error desconocido"}`;
-              }
-              mensaje.classList.remove("text-green-500");
-              mensaje.classList.add("text-red-500");
+              mensaje.textContent = `Error desconocido: ${responseData.mensaje || "Error desconocido"}`;
             }
-          } catch (error) {
-            mensaje.textContent = "Error de red. Inténtalo de nuevo más tarde.";
             mensaje.classList.remove("text-green-500");
             mensaje.classList.add("text-red-500");
-            console.error("Error de red:", error);
           }
+        } catch (error) {
+          mensaje.textContent = "Error de red. Inténtalo de nuevo más tarde.";
+          mensaje.classList.remove("text-green-500");
+          mensaje.classList.add("text-red-500");
+          console.error("Error de red:", error);
         }
-      });
-    });
-
-    function pantallaConfirmacion() {
-      formulario.style.display = "none";
-      
-      const divConfirmacion = document.createElement("div");
-      const textoConfirmacion = document.createElement("h2");
-      const botonNuevaMascota = document.createElement("a");
-      const botonPerfil = document.createElement("a");
-      const nuevaMascota = document.createElement("p");
-      const visitaPerfil = document.createElement("p");
-
-      textoConfirmacion.textContent = "Te has registrado correctamente"
-      textoConfirmacion.classList.add("text-2xl", "font-bold", "text-teal-700","mb-6","text-center")
-      nuevaMascota.textContent = "A continuación te recomendamos añadir a tu mascota"
-      nuevaMascota.classList.add("text-gray-700","mb-8");
-      visitaPerfil.textContent = "Tambien puedes visitar tu perfil para ver tus datos (puedes añadir mascotas desde allí mas tarde)"
-      visitaPerfil.classList.add("text-gray-700","mb-8", "mt-8");
-      botonNuevaMascota.textContent= "Añade a tu mascota"
-      botonPerfil.textContent = "Visita tu perfil"
-      botonPerfil.setAttribute("href", "/mi-perfil")
-      botonNuevaMascota.setAttribute("href", "/registro-mascota")
-      divConfirmacion.classList.add("w-full", "max-w-xl", "mx-auto", "mt-6", "mb-6", "p-8", "rounded", "shadow-lg", "border-2", "border-gray-300");
-      botonPerfil.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "mb-8", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
-      botonNuevaMascota.classList.add("bg-teal-600", "hover:bg-teal-800", "text-white", "font-bold", "mb-8", "py-2", "px-6", "rounded", "focus:outline-none", "focus:shadow-outline", "m-2");
-
-      divConfirmacion.append(textoConfirmacion, 
-          nuevaMascota,
-          botonNuevaMascota, 
-          visitaPerfil, 
-          botonPerfil
-      );
-
-      formulario.parentNode.replaceChild(divConfirmacion, formulario);
-
-    }
-
-    async function autoLogin(email, password) {
-      try {
-        const response = await fetch(`${PUBLIC_API_URL}/api/login`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          mensaje.textContent = 'Inicio de sesión exitoso';
-          mensaje.style.color = 'green';
-          window.location.href = '/mi-perfil';
-        } else {
-          mensaje.textContent = result.mensaje || 'Error en el login';
-        }
-      } catch (error) {
-        mensaje.textContent = 'Error al conectar con el servidor';
       }
+    });
+  });
+
+  function pantallaConfirmacion() {
+    formulario.style.display = "none";
+    
+    const divConfirmacion = document.createElement("div");
+    const textoConfirmacion = document.createElement("h2");
+    const botonNuevaMascota = document.createElement("button");
+    const botonPerfil = document.createElement("button");
+    const nuevaMascota = document.createElement("p");
+    const visitaPerfil = document.createElement("p");
+
+    textoConfirmacion.textContent = "Te has registrado correctamente"
+    textoConfirmacion.classList.add("text-2xl", "font-bold", "text-teal-700","mb-6","text-center")
+    nuevaMascota.textContent = "A continuación te recomendamos añadir tu primera mascota:"
+    nuevaMascota.classList.add("text-gray-700","mb-8");
+    botonNuevaMascota.textContent= "Registrar mascota"
+    botonNuevaMascota.addEventListener("click", () => {
+      window.location.href = '/registro-mascota'; 
+    });
+    visitaPerfil.textContent = "Tambien puedes visitar tu perfil para ver tus datos:"
+    visitaPerfil.classList.add("text-gray-700","mb-8", "mt-8");
+    botonPerfil.textContent = "Visitar perfil"
+    botonPerfil.addEventListener("click", () => {
+      window.location.href = '/mi-perfil'; 
+    });
+    divConfirmacion.classList.add("bg-white", "w-full", "max-w-xl", "mx-auto", "mt-6", "mb-6", "p-8", "rounded-xl", "shadow-xl", "border", "border-gray-300");
+
+    divConfirmacion.append(
+      textoConfirmacion, 
+      nuevaMascota,
+      botonNuevaMascota, 
+      visitaPerfil, 
+      botonPerfil
+    );
+    formulario.parentNode.replaceChild(divConfirmacion, formulario);
+  }
+
+  async function autoLogin(email, password) {
+    try {
+      const response = await fetch(`${PUBLIC_API_URL}/api/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        mensaje.textContent = 'Inicio de sesión exitoso';
+        mensaje.style.color = 'green';
+        window.location.href = '/mi-perfil';
+      } else {
+        mensaje.textContent = result.mensaje || 'Error en el login';
+      }
+    } catch (error) {
+      mensaje.textContent = 'Error al conectar con el servidor';
     }
-
-
-
-  </script>
+  }
+</script>

@@ -151,10 +151,9 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
         if (!response.ok) {
           // Si es 404 o 500, mostramos mensaje de que la mascota no existe
           if (response.status === 404 || response.status === 500) {
-            mascotaContainer.classList.add("flex");
-            mascotaContainer.classList.add("items-center");
+            mascotaContainer.classList.add("flex","items-center");
             mascotaContainer.innerHTML = `
-              <div class="mx-auto p-2 text-center rounded">
+              <div class="mx-auto p-2">
                 Mascota no encontrada.
               </div>
             `;
@@ -190,6 +189,12 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
         }
       } catch (error) {
         console.error("Error en la carga del perfil:", error);
+        mascotaContainer.classList.add("flex","items-center");
+        mascotaContainer.innerHTML = `
+          <div class="mx-auto p-2">
+            Error al conectar con el servidor.
+          </div>
+        `;
       }
     }
     await cargarPerfilMascota();

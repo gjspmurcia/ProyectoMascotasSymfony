@@ -170,7 +170,7 @@ import Modal from './Modal.astro';
 
   async function eliminarUsuario(id) {
     window.showModal({
-      message: "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.",
+      message: "<strong>¿Estás seguro de que deseas eliminar tu cuenta?</strong> <br><br> Si continúas, también se eliminarán los perfiles de tus mascotas: sus códigos QR ya no servirán para reencontraros. <br><br> <span class='text-red-600'>Esta acción no se puede deshacer.</span>",
       onConfirm: async () => {
         try {
           const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_perfil_eliminar/${id}`, {

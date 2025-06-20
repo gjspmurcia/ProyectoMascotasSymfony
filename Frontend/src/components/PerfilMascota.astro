@@ -36,8 +36,10 @@ import Modal from './Modal.astro';
     </div>
 
     <!-- Listado mascotas -->
-    <div id="mascota-container" class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      <!-- Las mascotas se cargarán aquí dinámicamente -->
+    <div class="flex flex-col items-center">
+      <div id="mascota-container" class="grid gap-8 grid-cols-1 min-w-64">
+        <!-- Las mascotas se cargarán aquí dinámicamente -->
+      </div>
     </div>
   </div>
 </section>
@@ -77,6 +79,14 @@ import Modal from './Modal.astro';
         if (response.ok && data.status === "success") {
           const mascotas = data.mascota;
           console.log("Datos de mascota cargados:", mascotas);
+
+          if (mascotas.length == 1) {
+            mascotasContainer.classList.add("max-w-120");
+          } else if (mascotas.length == 2) {
+            mascotasContainer.classList.add("md:grid-cols-2","max-w-240");
+          } else {
+            mascotasContainer.classList.add("md:grid-cols-2","lg:grid-cols-3");
+          }
           
           // Limpiar contenedor
           mascotasContainer.innerHTML = '';
@@ -162,7 +172,7 @@ import Modal from './Modal.astro';
                   }
 
                   <!-- Botones de acción -->
-                  <div class="flex gap-3">
+                  <div class="flex flex-col sm:flex-row gap-3">
                     <button id="botonEditarMascota${mascota.id}"
                         class="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-all duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -231,7 +241,7 @@ import Modal from './Modal.astro';
 
     async function eliminarPerfilMascota(id: number) {
       window.showModal({
-        message: "¿Estás seguro de que deseas eliminar este perfil? Esta acción no se puede deshacer.",
+        message: "<strong>¿Estás seguro de que deseas eliminar este perfil?</strong> <br><br> Si continúas, su código QR único ya no servirá para reencontraros. <br><br> <span class='text-red-600'>Esta acción no se puede deshacer.</span>",
         onConfirm: async () => {
           try {
             const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/api/mi_mascota_eliminar/${id}`, {
@@ -276,4 +286,3 @@ import Modal from './Modal.astro';
     }
   });
 </script>
-

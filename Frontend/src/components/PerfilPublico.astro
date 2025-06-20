@@ -67,53 +67,58 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 
                   <div class="flex items-start space-x-2">
                     <div class="mt-1">
-                        <i class="ph ph-hash w-4 h-4 text-teal-600"></i>
+                      <i class="ph ph-hash w-4 h-4 text-teal-600"></i>
                     </div>
                     <div>
-                        <div class="text-sm font-medium text-gray-500">Nº chip</div>
-                        <div id="num-chip"><span class="text-gray-800"></span></div>
+                      <div class="text-sm font-medium text-gray-500">Nº chip</div>
+                      <div id="num-chip"><span class="text-gray-800"></span></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Sección de informacion del dueño -->
+              <!-- Sección de información del dueño -->
               <div class="space-y-4">
                 <h2 class="text-xl font-semibold text-teal-800 flex items-center">
                   <i class="ph ph-user w-5 h-5 mr-2 text-teal-600"></i>
-                  Informacion del dueño
+                  Información del dueño
                 </h2>
 
                 <div class="flex items-start space-x-2">
-                    <div class="mt-1">
-                      <i class="ph ph-heart w-4 h-4 text-teal-600"></i>
-                    </div>
-                    <div>
-                      <div class="text-sm font-medium text-gray-500">Nombre</div>
-                      <div id="nombre-usuario" class="text-gray-800"><span></span></div>
-                    </div>
+                  <div class="mt-1">
+                    <i class="ph ph-heart w-4 h-4 text-teal-600"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-500">Nombre</div>
+                    <div id="nombre-usuario" class="text-gray-800"><span></span></div>
+                  </div>
                 </div>
 
-                <div class="m-4 space-y-3">
+                <div class="space-y-3"> <!-- m-4 -->
                   <div class="py-1 flex flex-col space-y-2">
                     <div id="telefono-usuario" class="flex items-center text-gray-800">
                       <i class="ph ph-phone w-4 h-4 mr-2 text-teal-600"></i>
                       <span></span>
                     </div>
-                    <a href="tel:+34612345678" 
+                    <!--<a href="tel:+34612345678" 
                       class="inline-flex items-center justify-center rounded-md px-3 py-2 text-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 bg-teal-600 text-white hover:bg-teal-700">
                       <i class="ph ph-phone w-4 h-4 mr-3"></i>
                       Llamar por teléfono
-                    </a>
+                    </a>-->
+                    <button id="btnLlamar" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-md font-medium transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 bg-white text-teal-600 border-2 border-teal-600 hover:bg-teal-50">
+                      <i class="ph ph-phone w-4 h-4 mr-2"></i>
+                      Llamar por teléfono
+                    </button>
                   </div>
 
                   <div class="py-1 flex flex-col space-y-2">
                     <div id="email-usuario" class="flex items-center text-gray-800">
-                      <i class="ph ph-envelope w-4 h-4 mr-4 text-teal-600"></i>
+                      <i class="ph ph-envelope w-4 h-4 mr-2 text-teal-600"></i>
                       <span></span>
                     </div>
 
-                    <button id="btnMostrar" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 bg-white text-teal-600 border-2 border-teal-600 hover:bg-teal-50">
+                    <button id="btnMostrar" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-md font-medium transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 bg-white text-teal-600 border-2 border-teal-600 hover:bg-teal-50">
+                      <i class="ph ph-envelope w-4 h-4 mr-2"></i>
                       Escribir mensaje a mi dueño
                     </button>
 
@@ -122,7 +127,13 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
                       <textarea id="mensaje"
                         placeholder="Escribe un mensaje para el dueño"
                         class="w-full h-32 p-4 mt-2 border border-gray-300 rounded-lg shadow-sm resize-none"></textarea>
-                      <button id="btnEnviar" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">Enviar mensaje</button>
+                      <div class="flex flex-col md:flex-row gap-4 mt-4">
+                        <button id="btnEnviar" class="inline-flex items-center justify-center transition duration-300">
+                          <i class="ph ph-envelope w-4 h-4 mr-2"></i>
+                          Enviar mensaje
+                        </button>
+                        <button id="btnCancelar" class="inline-flex items-center justify-center warning transition duration-300">Cancelar</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -179,6 +190,8 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
         actualizarCampo("telefono-usuario", data.telefono_usuario);
         actualizarCampo("email-usuario", data.email_usuario);
 
+        document.getElementById("btnLlamar").addEventListener("click", () => { window.location.href = 'tel:+34' + data.telefono_usuario; });
+
         const fotoElemento = document.getElementById("foto-mascota");
         if (fotoElemento && fotoElemento instanceof HTMLImageElement) {
           fotoElemento.src = data.foto
@@ -205,6 +218,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
     const btnMostrar = document.getElementById("btnMostrar");
     const zonaMensaje = document.getElementById("zonaMensaje");
     const btnEnviar = document.getElementById("btnEnviar");
+    const btnCancelar = document.getElementById("btnCancelar");
     const textarea = document.getElementById("mensaje");
 
     // Al pulsar "Escribir mensaje"
@@ -212,6 +226,12 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
       zonaMensaje.classList.remove("hidden");
       btnMostrar.classList.add("hidden");
       textarea.focus();
+    });
+
+    // Al pulsar "Cancelar"
+    btnCancelar.addEventListener("click", () => {
+      zonaMensaje.classList.add("hidden");
+      btnMostrar.classList.remove("hidden");
     });
 
     // Al pulsar "Enviar mensaje"

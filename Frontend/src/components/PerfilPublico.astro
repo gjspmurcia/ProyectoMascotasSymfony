@@ -199,7 +199,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 
         document.getElementById("btnChat").addEventListener("click", () => {
           const mensajeChat = encodeURIComponent("Hola " + data.nombre_usuario + ", he encontrado a tu mascota " + data.nombre_mascota);
-          const urlChat = `https://wa.me/${data.telefono_usuario}?text=${mensajeChat}`;
+          const urlChat = `https://wa.me/34${data.telefono_usuario}?text=${mensajeChat}`;
           window.open(urlChat, '_blank');
         });
 

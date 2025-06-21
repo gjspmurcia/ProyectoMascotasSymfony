@@ -45,7 +45,7 @@ final class ApiQRController extends AbstractController{
         ], 201, [], ['groups' => 'qr:read']);
     }
 
-    #[Route('/descargar/qr/{mascota}', name: 'descargar_qr')]
+    #[Route('/descargar/qr/{id}', name: 'descargar_qr')]
     public function descargarQr(Mascota $mascota): Response
     {
         $contenidoQR = $this->getParameter('url') . '/mascota/' . $mascota->getId();

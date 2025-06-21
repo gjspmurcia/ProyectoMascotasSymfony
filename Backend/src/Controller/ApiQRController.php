@@ -14,6 +14,9 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -42,6 +45,36 @@ final class ApiQRController extends AbstractController{
         ], 201, [], ['groups' => 'qr:read']);
     }
 
+    #[Route('/descargar/qr/{mascota}', name: 'descargar_qr')]
+    public function descargarQr(Mascota $mascota): Response
+    {
+        $contenidoQR = $this->getParameter('url') . '/mascota/' . $mascota->getId();
+        $urlQr = 'https://quickchart.io/qr?text=' . urlencode($contenidoQR) . '&size=350';
+
+        // Crear un archivo temporal
+        $tempFile = tempnam(sys_get_temp_dir(), 'QR_' . $mascota->getNombre()) . '.png';
+
+        // Descargar el QR desde la URL
+        file_put_contents($tempFile, file_get_contents($urlQr));
+
+        // Verificar que se haya descargado correctamente
+        if (!file_exists($tempFile)) {
+            throw $this->createNotFoundException('No se pudo descargar el código QR.');
+        }
+
+        // Crear la respuesta de descarga
+        $response = new BinaryFileResponse($tempFile);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'QR_' . $mascota->getNombre() . '.png'
+        );
+
+        // Eliminar el archivo temporal después de enviar la respuesta
+        $response->deleteFileAfterSend(true);
+
+        return $response;
+    }
+
     //MUESTRA EL PERFIL PUBLICO DE LA MASCOTA
     #[Route('/mostrar/qr/{id}', name: 'api_qr_mostrar', methods: ['GET'])]
     public function mostrarQr(int $id, MascotaRepository $mascotaRepo, MailerInterface $mailer, LoggerInterface $logger): JsonResponse
@@ -60,15 +93,14 @@ final class ApiQRController extends AbstractController{
         $emailMessage = (new Email())
             ->from('infoproyectomascotas@gmail.com')
             ->to($usuario->getEmail())
-            ->subject('Aviso QR escaneado')
+            ->subject('Aviso: código QR de ' . $nombreMascota . ' escaneado')
             ->html(
                 "<p>Hola <strong>{$nombreUsuario}</strong>,</p>".
                 "<p>¿Tu mascota se ha perdido? </p>".
                 "<p>Acabamos de detectar que alguien ha escaneado el código QR de <strong>{$nombreMascota}</strong>.</p>".
                 "<p>Si no fuiste tú, es posible que te contacte alguien. Estate atento.</p>".
                 "<p>Si es un error, ignora este mensaje.</p>".
-                "<p>Un saludo de Equipo MiHuellaAPP.</p>"
-                
+                "<p>Un saludo de Equipo Mi Huella APP.</p>"
         );
 
         try {
@@ -111,14 +143,13 @@ final class ApiQRController extends AbstractController{
         $emailMessage = (new Email())
             ->from('infoproyectomascotas@gmail.com')
             ->to($usuario->getEmail())
-            ->subject('Alerta: han escaneado el código QR de tu mascota')
+            ->subject('Mensaje recibido: han escaneado el código QR de ' . $nombreMascota)
             ->html(
                 "<p>Hola <strong>{$nombreUsuario}</strong>,</p>".
-                "<p>Alguien ha escaneado el código QR de <strong>{$nombreMascota}</strong>.</p>".
+                "<p>La persona que ha escaneado el código QR de <strong>{$nombreMascota}</strong> te ha escrito un mensaje.</p>".
                 "<p>Mensaje de esa persona:</p>".
                 "<blockquote>{$mensajeUsuario}</blockquote>".
-
-                "<p>Un saludo de Equipo MiHuellaAPP.</p>"
+                "<p>Un saludo de Equipo Mi Huella APP.</p>"
             );
         
         try {

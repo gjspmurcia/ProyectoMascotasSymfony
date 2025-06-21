@@ -72,7 +72,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
       </div>
 
       <div class="flex flex-col md:flex-row gap-4 mt-4">
-        <button type="submit" class="transition duration-300">Registrar</button>
+        <button type="submit" class="grow transition duration-300">Registrar</button>
       </div>
 
       <p id="mensaje" class="text-red-600 mt-2"></p>
@@ -184,10 +184,10 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
     nuevaMascota.classList.add("text-gray-700","mb-8");
     botonNuevaMascota.textContent= "Registrar mascota"
     botonNuevaMascota.addEventListener("click", () => { window.location.href = '/registro-mascota'; });
-    visitaPerfil.textContent = "También puedes visitar tu perfil para ver tus datos:"
+    visitaPerfil.textContent = "También puedes acceder a tu área privada:"
     visitaPerfil.classList.add("text-gray-700","mb-8", "mt-8");
-    botonPerfil.textContent = "Visitar perfil"
-    botonPerfil.addEventListener("click", () => { window.location.href = '/mi-perfil'; });
+    botonPerfil.textContent = "Área privada"
+    botonPerfil.addEventListener("click", () => { window.location.href = '/area-privada'; });
     divConfirmacion.classList.add("bg-white", "w-full", "max-w-xl", "mx-auto", "mt-6", "mb-6", "p-8", "rounded-xl", "shadow-xl", "border", "border-gray-300");
 
     divConfirmacion.append(

@@ -12,18 +12,25 @@ import Modal from './Modal.astro';
       </p>
     </div>
 
+    <!-- Listado mascotas -->
+    <div class="flex flex-col items-center">
+      <div id="mascota-container" class="grid gap-8 grid-cols-1 min-w-64">
+        <!-- Las mascotas se cargarán aquí dinámicamente -->
+      </div>
+    </div>
+
     <!-- Añadir mascota -->
-    <div id="divBotonRegistroMascota" class="mb-12 flex flex-col items-center ">
+    <div id="divBotonRegistroMascota" class="mt-12 flex flex-col items-center hidden">
       <div class="bg-white rounded-xl p-8 text-center  shadow-xl/20 hover:shadow-lg/35 hover:scale-101 transition-all duration-200">
-        <div class="flex items-center justify-center w-16 h-16 bg-primary rounded-full mx-auto mb-4">
+        <div class="flex items-center justify-center w-16 h-16 bg-primary rounded-full mx-auto mb-4 transition-all duration-300 transform hover:scale-105">
           <a href="/registro-mascota">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
           </a>
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">¿Tu primera mascota?</h3>
-        <p class="text-gray-500 mb-6">Registra una nueva mascota y genera su código QR único</p>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">¿Quieres añadir una mascota?</h3>
+        <p class="text-gray-500 mb-6">Registra una nueva mascota para generar su código QR único</p>
         <a href="/registro-mascota" 
            id="botonNuevaMascota"
            class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">
@@ -34,13 +41,6 @@ import Modal from './Modal.astro';
         </a>
       </div>
     </div>
-
-    <!-- Listado mascotas -->
-    <div class="flex flex-col items-center">
-      <div id="mascota-container" class="grid gap-8 grid-cols-1 min-w-64">
-        <!-- Las mascotas se cargarán aquí dinámicamente -->
-      </div>
-    </div>
   </div>
 </section>
 
@@ -48,12 +48,22 @@ import Modal from './Modal.astro';
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    const divBotonRegistroMascota = document.getElementById("divBotonRegistroMascota");
     const mascotasContainer: HTMLElement | null = document.getElementById('mascota-container');
 
     if (!mascotasContainer) {
       console.error("No se encontró el contenedor de mascotas");
       return;
     }
+
+    mascotasContainer.innerHTML = `
+      <div class="col-span-full text-center py-12">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-primary mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+        <h3 class="text-lg font-medium text-gray-900">Cargando tus mascotas...</h3>
+      </div>
+    `;
 
     async function fetchMascotaProfile() {
       try {
@@ -152,13 +162,20 @@ import Modal from './Modal.astro';
                       <img src="${mascota.qr.imgQr}" 
                         alt="QR de ${mascota.nombre}" 
                         class="w-28 h-28 mx-auto mb-3 border rounded" />
-                      <a href="${mascota.qr.imgQr}" 
-                        download="QR_${mascota.nombre}.png"
-                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary hover:text-primary-light transition-all duration-300">
+                      <a href="${import.meta.env.PUBLIC_API_URL}/descargar/qr/${mascota.id}"
+                        class="inline-flex items-center justify-center grow px-4 py-2 mb-3 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary hover:text-primary-light transition-all duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        Descargar
+                        Descargar QR
+                      </a>
+                      <br/>
+                      <a href="${import.meta.env.PUBLIC_URL}/mascota/${mascota.id}" target="_blank"
+                        class="inline-flex items-center justify-center grow px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary hover:text-primary-light transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
+                        </svg>
+                        Visualizar Perfil
                       </a>
                     </div>` 
                     : 
@@ -172,16 +189,16 @@ import Modal from './Modal.astro';
                   }
 
                   <!-- Botones de acción -->
-                  <div class="flex flex-col sm:flex-row gap-3">
+                  <div class="flex flex-col sm:flex-row">
                     <button id="botonEditarMascota${mascota.id}"
-                        class="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-all duration-300">
+                        class="flex-1 inline-flex items-center justify-center grow px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-all duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                       Editar
                     </button>
                     <button id="botonEliminarMascota${mascota.id}"
-                        class="warning flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md transition-all duration-300">
+                        class="warning flex-1 inline-flex items-center justify-center grow px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md transition-all duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
@@ -235,6 +252,7 @@ import Modal from './Modal.astro';
           </div>
         `;
       }
+      divBotonRegistroMascota.classList.remove("hidden");
     }
 
     fetchMascotaProfile();

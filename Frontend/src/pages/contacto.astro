@@ -7,12 +7,11 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout>
 
-<section class="min-h-3/5 py-12 px-4 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68% flex flex-col items-center justify-center">
+<section class="min-h-3/5 py-12 px-6 bg-gradient-to-br from-[#ac63d377] to-[#e5d04bad] via-[#6cb4d177] via-at-29% via-[#71e8a376] via-at-68% flex flex-col items-center justify-center">
+  <h1 class="mt-8 text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">¿Tienes dudas o sugerencias?</h1>
+  <h2 class="text-center text-gray-700 text-md md:text-xl mb-6">Rellena el siguiente formulario y nos pondremos en contacto contigo lo antes posible.</h2>
+  
   <div class="max-w-2xl w-full mx-auto bg-white rounded-xl shadow-xl hover:shadow-lg/40 border border-gray-200 p-8">
-    <h2 class="text-3xl font-extrabold text-primary text-center mb-2">¿Tienes dudas o sugerencias?</h2>
-    <p class="text-base text-gray-600 text-center mb-6">
-      Rellena el siguiente formulario y nos pondremos en contacto contigo lo antes posible.
-    </p>
     <form id="contactoForm" class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
         <label for="nombre" class="text-teal-800 font-semibold flex items-center">Nombre:</label>
@@ -45,7 +44,10 @@ import Layout from '../layouts/Layout.astro';
   document.querySelector("form").addEventListener("submit", (event) => { 
     event.preventDefault();
     setTimeout(() => {
-      document.getElementById("mensajeContacto").classList.remove("hidden");
+      const mensajeContacto = document.getElementById("mensajeContacto");
+      mensajeContacto.classList.add("text-red-700");
+      mensajeContacto.textContent = "Error: no se ha enviado el mensaje.";
+      mensajeContacto.classList.remove("hidden","text-green-700");
       document.querySelector("form").reset();
     }, 2000);
   });

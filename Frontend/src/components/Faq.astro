@@ -2,14 +2,10 @@
 const { expandAll = true } = Astro.props;
 ---
 
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-  <div class="text-center">
-    <p class="text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">
-       Preguntas frecuentes
-    </p>
-  </div>
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <h1 class="text-3xl text-center font-extrabold text-primary sm:text-4xl sm:tracking-tight">Preguntas frecuentes</h1>
 
-  <div id="faq" class="mt-12 grid gap-8 grid-cols-1 lg:grid-cols-2 items-start">
+  <div id="faq" class="mt-12 mb-12 grid gap-8 grid-cols-1 lg:grid-cols-2 items-start">
     {[
       {
         question: "¿Cómo registro una nueva mascota?",

@@ -127,7 +127,7 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
                     </button>
 
                     <!-- Textarea y Botón 2: envío, ocultos inicialmente -->
-                    <div id="zonaMensaje" class="hidden mt-2">
+                    <div id="zonaMensaje" class="opacity-0 max-h-0 overflow-hidden transition-all duration-1000 ease-in-out mt-2">
                       <textarea id="mensaje"
                         placeholder="Escribe un mensaje para el dueño."
                         class="w-full h-32 p-4 mt-2 border border-gray-300 rounded-lg shadow-sm resize-none"></textarea>
@@ -234,15 +234,20 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
 
     // Al pulsar "Escribir mensaje"
     btnMostrar.addEventListener("click", () => {
-      zonaMensaje.classList.remove("hidden");
+      zonaMensaje.classList.remove("opacity-0", "max-h-0", "overflow-hidden");
+      zonaMensaje.classList.add("opacity-100", "max-h-[500px]");
       btnMostrar.classList.add("hidden");
-      textarea.focus();
+      setTimeout(() => textarea.focus(), 500);
     });
 
     // Al pulsar "Cancelar"
     btnCancelar.addEventListener("click", () => {
-      zonaMensaje.classList.add("hidden");
-      btnMostrar.classList.remove("hidden");
+      zonaMensaje.classList.remove("opacity-100", "max-h-[500px]");
+      zonaMensaje.classList.add("opacity-0", "max-h-0", "overflow-hidden");
+      setTimeout(() => {
+        btnMostrar.classList.remove("hidden");
+      }, 500);
+      textarea.value = "";
     });
 
     // Al pulsar "Enviar mensaje"
@@ -275,9 +280,12 @@ const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
         window.showModal({message: "¡Mensaje enviado con éxito!",
         onConfirm: () => {
           // Limpiar textarea y ocultar zona de mensaje
+          zonaMensaje.classList.remove("opacity-100", "max-h-[500px]");
+          zonaMensaje.classList.add("opacity-0", "max-h-0", "overflow-hidden");
           textarea.value = "";
-          zonaMensaje.classList.add("hidden");
-          btnMostrar.classList.remove("hidden");
+          setTimeout(() => {
+            btnMostrar.classList.remove("hidden");
+          }, 500);
         }});
       } catch (err) {
         console.error("Error al enviar:", err);
